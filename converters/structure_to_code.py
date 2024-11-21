@@ -1,6 +1,7 @@
-from typing import Dict, List
-from jinja2 import Template
 import os
+from jinja2 import Template
+from typing import Dict, List
+from models.relationship_model import Relationship
 
 def generate_java_code(class_data: Dict, template: Template) -> str:
     """Génère le code Java à partir des données de classe structurées"""

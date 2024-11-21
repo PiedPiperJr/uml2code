@@ -1,8 +1,20 @@
-public class {{ class_data.name | capitalize}} {
+{% if class_data.import_list %}import java.util.List; {% endif %}
+
+public class {{ class_data.name | capitalize }} {% if class_data.parent %} extends {{ class_data.parent | capitalize }} {% endif %} {
 
     // Attributs
     {% for attr in class_data.attributes %}
     {{ attr.visibility }} {{ attr.type }} {{ attr.name }};
+    {% endfor %}
+
+    // Aggregation: List of related elements
+    {% for aggregation in class_data.aggregations %}
+    {{ aggregation.visibility }} List<{{ aggregation.type }}> {{ aggregation.name }};
+    {% endfor %}
+    
+    // Composition: List of owned elements
+    {% for composition in class_data.compositions %}
+    {{ composition.visibility }} List<{{ composition.type | capitalize }}> {{ composition.name }};
     {% endfor %}
     
     // Constructeur
