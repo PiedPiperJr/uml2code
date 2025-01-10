@@ -1,0 +1,45 @@
+package route.domain.entities;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import java.time.LocalDateTime;
+import java.util.*;
+
+
+
+@Entity
+@Data
+@Getter
+@Setter
+public class {{ class_data.name | capitalize}} {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    {% for attr in class_data.attributes %}
+    {{attr.visibility}} {{ attr.type }} {{ attr.name }};
+    {% endfor %}
+
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+
+
+    public {{ class_data.name | capitalize}}(
+        {% for attr in class_data.attributes if attr.name not in ['id', 'createdAt', 'updatedAt'] %}
+        {{ attr.type }} {{ attr.name }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    ) {
+        {% for attr in class_data.attributes if attr.name not in ['id', 'createdAt', 'updatedAt'] %}
+        this.{{ attr.name }} = {{ attr.name }};
+        {% endfor %}
+    }
+}
