@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% if class_data.import_list %}import java.util.List; {% endif %}
 
 public class {{ class_data.name | capitalize }} {% if class_data.parent %} extends {{ class_data.parent | capitalize }} {% endif %} {
@@ -82,4 +83,36 @@ public class {{ class_data.name | capitalize }} {% if class_data.parent %} exten
         // To implement
     }
     {% endfor %}
+=======
+{% if class_data.import_list %}import java.util.List; {% endif %}
+
+public class {{ class_data.name | capitalize }} {% if class_data.parent %} extends {{ class_data.parent | capitalize }} {% endif %} {
+
+    // Attributs
+    {% for attr in class_data.attributes %}
+    {{ attr.visibility }} {{ attr.type }} {{ attr.name }};
+    {% endfor %}
+
+    // Aggregation: List of related elements
+    {% for aggregation in class_data.aggregations %}
+    {{ aggregation.visibility }} List<{{ aggregation.type }}> {{ aggregation.name }};
+    {% endfor %}
+    
+    // Composition: List of owned elements
+    {% for composition in class_data.compositions %}
+    {{ composition.visibility }} List<{{ composition.type | capitalize }}> {{ composition.name }};
+    {% endfor %}
+    
+    // Constructeur
+    public {{ class_data.name | capitalize}}() {
+        // Initialisation par défaut
+    }
+    
+    // Méthodes
+    {% for method in class_data.methods %}
+    {{ method.visibility }} {{ method.type }} {{ method.name }}({% for arg in method.args %}{{ arg.type }} {{ arg.name }}{% if not loop.last %}, {% endif %}{% endfor %}) {
+        // À compléter
+    }
+    {% endfor %}
+>>>>>>> d598bcdb5763c0553a737c71d46b5b100a15560d
 }

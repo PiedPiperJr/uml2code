@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 Jinja2==3.1.4
 MarkupSafe==3.0.2
 xmltodict==0.14.2
 google-generativeai
 flask
 flask-cors
+=======
+Jinja2==3.1.4
+MarkupSafe==3.0.2
+xmltodict==0.14.2
+google-generativeai
+>>>>>>> d598bcdb5763c0553a737c71d46b5b100a15560d
