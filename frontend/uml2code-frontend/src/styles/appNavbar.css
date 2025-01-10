@@ -1,0 +1,34 @@
+.custom-navbar {
+    background-color: #00aaff; /* Light blue color */
+    border-radius: 25px; /* Rounded edges */
+    margin: 10px; /* Add spacing around Navbar */
+    padding: 10px 20px; /* Add padding */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.custom-navbar .navbar-brand {
+    color: #ffffff; /* White brand text */
+    font-weight: bold;
+    font-size: 1.5rem;
+    font-family: 'Poppins', sans-serif; /* Use a modern font */
+}
+
+.custom-navbar .navbar-nav .nav-link {
+    color: #ffffff; /* White navigation link text */
+    font-size: 1rem;
+    margin-left: 15px; /* Spacing between links */
+    font-family: 'Poppins', sans-serif;
+    transition: color 0.3s ease;
+}
+
+.custom-navbar .navbar-nav .nav-link:hover {
+    color: #ffd700; /* Yellow hover effect */
+    text-decoration: none;
+}
+
+.custom-navbar .navbar-toggler {
+    background-color: #ffffff; /* White toggle button */
+    border: none;
+    padding: 5px 10px;
+    border-radius: 15px;
+}

@@ -1,8 +1,10 @@
-import json
 from config import *
+from utils.validators import validate_data_types
 from converters.xml_to_json import convert_xml_to_json
-from converters.json_to_structure import convert_json_to_structure
 from converters.structure_to_code import write_java_files
+from injectors.relationship_injector import inject_relationships
+from converters.json_to_structure import convert_json_to_structure
+from extractors.relationship_extractor import extract_relationships
 
 def main():
     # Lecture du fichier XML
@@ -11,20 +13,22 @@ def main():
     
     # Étape 1: Conversion XML vers JSON
     initial_json_data = convert_xml_to_json(xml_data)
-    with open(INITIAL_JSON_FILE_PATH, 'w') as f:
-        json.dump(initial_json_data, f, indent=4)
     
     # Étape 2: Structuration du JSON
     structured_data = convert_json_to_structure(initial_json_data)
-    with open(STRUCTURED_JSON_FILE_PATH, 'w') as f:
-        json.dump(structured_data, f, indent=4)
     
-    # Étape 3: Pour l'instant, on passe directement à la génération
+    # Step 3: Extract relationships between classes (at now, only heritage is fully managed)
+    relationships = extract_relationships(structured_data)
+    
+    # Étape 4: Code generation
     interpreted_data = list(structured_data["classes"].values())
-    with open(INTERPRETED_JSON_FILE_PATH, 'w') as f:
-        json.dump(interpreted_data, f, indent=4)
-    
-    # Étape 4: Génération du code
+    # Step 4.5: We check with google gemini if datatypes are good for the given language
+    validate_data_types(interpreted_data, GEMINI_API_KEY)
+
+    # Step 6: Adding relationships to interpreted datas
+    inject_relationships(interpreted_data, relationships)
+
+    # Étape 5: Génération du code
     write_java_files(interpreted_data, SIMPLE_JAVA_CLASS_TEMPLATE, APP_FOLDER)
 
 if __name__ == "__main__":

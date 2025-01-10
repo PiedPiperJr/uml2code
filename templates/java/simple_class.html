@@ -1,19 +1,85 @@
-public class {{ class_data.name | capitalize}} {
+{% if class_data.import_list %}import java.util.List; {% endif %}
 
-    // Attributs
+public class {{ class_data.name | capitalize }} {% if class_data.parent %} extends {{ class_data.parent | capitalize }} {% endif %} {
+
+    // Attributes
     {% for attr in class_data.attributes %}
-    {{ attr.visibility }} {{ attr.type }} {{ attr.name }};
+    private {{ attr.type }} {{ attr.name }};
+    {% endfor %}
+
+    // Aggregation: List of related elements
+    {% for aggregation in class_data.aggregations %}
+    private List<{{ aggregation.type }}> {{ aggregation.name }};
     {% endfor %}
     
-    // Constructeur
-    public {{ class_data.name | capitalize}}() {
-        // Initialisation par défaut
-    }
+    // Composition: List of owned elements
+    {% for composition in class_data.compositions %}
+    private List<{{ composition.type | capitalize }}> {{ composition.name }};
+    {% endfor %}
     
-    // Méthodes
+    // Default constructor
+    public {{ class_data.name | capitalize}}() {
+        // Default initialization
+    }
+
+    // Constructor with all arguments
+    public {{ class_data.name | capitalize}}(
+        {% for attr in class_data.attributes %}
+        {{ attr.type }} {{ attr.name }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+        {% for aggregation in class_data.aggregations %}
+        , List<{{ aggregation.type }}> {{ aggregation.name }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+        {% for composition in class_data.compositions %}
+        , List<{{ composition.type | capitalize }}> {{ composition.name }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    ) {
+        {% for attr in class_data.attributes %}
+        this.{{ attr.name }} = {{ attr.name }};
+        {% endfor %}
+        {% for aggregation in class_data.aggregations %}
+        this.{{ aggregation.name }} = {{ aggregation.name }};
+        {% endfor %}
+        {% for composition in class_data.compositions %}
+        this.{{ composition.name }} = {{ composition.name }};
+        {% endfor %}
+    }
+
+    // Getters and Setters
+    {% for attr in class_data.attributes %}
+    public {{ attr.type }} get{{ attr.name | capitalize }}() {
+        return {{ attr.name }};
+    }
+
+    public void set{{ attr.name | capitalize }}({{ attr.type }} {{ attr.name }}) {
+        this.{{ attr.name }} = {{ attr.name }};
+    }
+    {% endfor %}
+
+    {% for aggregation in class_data.aggregations %}
+    public List<{{ aggregation.type }}> get{{ aggregation.name | capitalize }}() {
+        return {{ aggregation.name }};
+    }
+
+    public void set{{ aggregation.name | capitalize }}(List<{{ aggregation.type }}> {{ aggregation.name }}) {
+        this.{{ aggregation.name }} = {{ aggregation.name }};
+    }
+    {% endfor %}
+
+    {% for composition in class_data.compositions %}
+    public List<{{ composition.type | capitalize }}> get{{ composition.name | capitalize }}() {
+        return {{ composition.name }};
+    }
+
+    public void set{{ composition.name | capitalize }}(List<{{ composition.type | capitalize }}> {{ composition.name }}) {
+        this.{{ composition.name }} = {{ composition.name }};
+    }
+    {% endfor %}
+    
+    // Methods
     {% for method in class_data.methods %}
     {{ method.visibility }} {{ method.type }} {{ method.name }}({% for arg in method.args %}{{ arg.type }} {{ arg.name }}{% if not loop.last %}, {% endif %}{% endfor %}) {
-        // À compléter
+        // To implement
     }
     {% endfor %}
 }

@@ -12,7 +12,7 @@ def find_root_ids(json_data: List[Dict]) -> Tuple[str, str]:
 def create_class_structure(mxcell: Dict) -> Dict:
     return {
         "name": mxcell.get("@value"),
-        "type": "classe",
+        "type": "class",
         "attributes": [],
         "methods": []
     }
@@ -28,6 +28,17 @@ def create_relationship_structure(mxcell: Dict) -> Dict:
         "multiplicity": ""
     }
 
+def fix_relationship_attribs(relationship: Dict, initial_json_data: List[Dict]) -> None:
+    # fix bad source and target in relationships 
+    if "diamondthin" in relationship['style']:    
+        for mxcell in initial_json_data:
+            parent = mxcell.get('@parent')
+            if relationship['source'].lower() == mxcell.get('@id'):
+                relationship['source'] = parent if (not parent is None) else relationship['source']
+            
+            if relationship['target'].lower() == mxcell.get('@id'):
+                relationship['target'] = parent if (not parent is None) else relationship['target']
+
 def convert_json_to_structure(initial_json_data: List[Dict]) -> Dict:
     """Convertit le JSON initial en structure hiérarchique"""
     structured_data = {"classes": {}, "relationships": []}
@@ -42,7 +53,9 @@ def convert_json_to_structure(initial_json_data: List[Dict]) -> Dict:
         if is_class(mxcell, sub_root_id):
             structured_data["classes"][mxcell.get("@id")] = create_class_structure(mxcell)
         elif is_relation(mxcell, sub_root_id):
-            structured_data["relationships"].append(create_relationship_structure(mxcell))
+            relationship = create_relationship_structure(mxcell)
+            fix_relationship_attribs(relationship, initial_json_data)
+            structured_data["relationships"].append(relationship)
         else:
             remaining_cells.append(mxcell)
     
@@ -53,13 +66,22 @@ def convert_json_to_structure(initial_json_data: List[Dict]) -> Dict:
             continue
             
         if is_method(mxcell, sub_root_id):
-            visibility, name, type_, args = parse_method_value(mxcell.get("@value", ""))
+            visibility, name, type_, _args = parse_method_value(mxcell.get("@value", ""))
+            args = []
+            for arg in _args:
+                values = arg.strip().split()
+                if len(values) >= 2:
+                    args.append({'type':values[0], 'name':values[1]})
+                else:
+                    args.append({'type':'Object', 'name':values[0]})
+
             structured_data["classes"][parent_id]["methods"].append({
                 "visibility": interpret_visibility(visibility),
                 "name": name.strip(),
                 "type": type_.strip(),
                 "args": args
             })
+
         elif is_attribute(mxcell, sub_root_id):
             visibility, name, type_ = parse_attribute_value(mxcell.get("@value", ""))
             structured_data["classes"][parent_id]["attributes"].append({

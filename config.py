@@ -1,5 +1,8 @@
 import os
 
+# Type checker AI
+GEMINI_API_KEY = ""
+
 # Chemins de base
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
