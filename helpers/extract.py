@@ -10,7 +10,8 @@ def unzip_file(zip_path, extract_to):
     """
     # Vérifier si le fichier ZIP existe
     if not os.path.exists(zip_path):
-        return
+        print("none")
+        return 
 
     # Créer le dossier cible s'il n'existe pas
     os.makedirs(extract_to, exist_ok=True)
