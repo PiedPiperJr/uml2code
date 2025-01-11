@@ -1,0 +1,14 @@
+package {{route}}.domain.dto;
+
+import lombok.*;
+import java.util.*;
+
+@Data
+public class {{ dto_data.name | capitalize}} {
+    {% for attr in dto_data.attributes %}
+        {%for decorator in attr.decorators%}
+            @{{decorator.name | capitalize}}(message = decorator.message)
+        {% endfor %}
+        {{attr.visibility}} {{ attr.type }} {{ attr.name }};
+    {% endfor %}
+}
