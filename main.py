@@ -1,12 +1,13 @@
-import json
 from config import *
 from utils.validators import validate_data_types
-from utils.dumper import dump
+from utils.utils import dump
 from converters.xml_to_json import convert_xml_to_json
-from converters.structure_to_code import write_java_files
+from code_generators.java_pojo import write_java_files
+from code_generators.java_clean import generate_clean_project
 from converters.json_to_structure import convert_json_to_structure, interpret_relationships
 from extractors.relationship_extractor import extract_relationships
 from models.relationship_model import RelationshipType
+from models.project_model import Project
 
 
 def main(xml_data=None, enable_type_validation=False):
@@ -36,8 +37,12 @@ def main(xml_data=None, enable_type_validation=False):
 
     dump(INTERPRETED_JSON_FILE_PATH, interpreted_data)
 
+    project: Project = Project("org.enspy.4gi", interpreted_data, [])
+
+    generate_clean_project(project, CLEAN_JAVA_APP_TEMPLATE, CLEAN_APP_FOLDER)
+
     # Étape 6: Code Generation
-    write_java_files(interpreted_data, SIMPLE_JAVA_CLASS_TEMPLATE, APP_FOLDER)
+    # write_java_files(interpreted_data, SIMPLE_JAVA_CLASS_TEMPLATE, CLEAN_APP_FOLDER)
 
 
 if __name__ == "__main__":

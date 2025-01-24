@@ -14,6 +14,8 @@ INITIAL_JSON_FILE_PATH = os.path.join(DATA_DIR, "json_files", "[0] - initial_dia
 STRUCTURED_JSON_FILE_PATH = os.path.join(DATA_DIR, "json_files", "[1] - structured_diagram.json")
 INTERPRETED_JSON_FILE_PATH = os.path.join(DATA_DIR, "json_files", "[2] - interpreted_diagram.json")
 APP_FOLDER = os.path.join(DATA_DIR, "generated_app")
+CLEAN_APP_FOLDER = os.path.join(DATA_DIR, "clean_app")
 
 # Templates
 SIMPLE_JAVA_CLASS_TEMPLATE = os.path.join(TEMPLATES_DIR, "java", "simple_class.html")
+CLEAN_JAVA_APP_TEMPLATE = os.path.join(TEMPLATES_DIR, "java-clean")

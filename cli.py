@@ -8,7 +8,7 @@ from typing import Optional
 from config import *
 from converters.xml_to_json import convert_xml_to_json
 from converters.json_to_structure import convert_json_to_structure
-from converters.structure_to_code import write_java_files
+from code_generators.java_pojo import write_java_files
 
 def setup_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(

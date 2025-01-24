@@ -2,7 +2,7 @@
 
 public class {{ class_data.name | capitalize }} {% if class_data.parent %} extends {{ class_data.parent | capitalize }} {% endif %} {
 
-    // Attributs
+    // Attributes
     {% for attr in class_data.attributes %}
     {{ attr.visibility }} {{ attr.type }} {{ attr.name }};
     {% endfor %}
@@ -19,13 +19,13 @@ public class {{ class_data.name | capitalize }} {% if class_data.parent %} exten
     
     // Constructeur
     public {{ class_data.name | capitalize}}() {
-        // Initialisation par défaut
+        // Default Initialisation
     }
     
-    // Méthodes
+    // Methods
     {% for method in class_data.methods %}
     {{ method.visibility }} {{ method.type }} {{ method.name }}({% for arg in method.args %}{{ arg.type }} {{ arg.name }}{% if not loop.last %}, {% endif %}{% endfor %}) {
-        // À compléter
+        // To implement
     }
     {% endfor %}
 }
