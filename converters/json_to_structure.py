@@ -2,7 +2,7 @@ from typing import Dict, List, Tuple
 from utils.validators import is_class, is_relation, is_attribute, is_method
 from utils.parsers import parse_attribute_value, parse_method_value, interpret_visibility
 from models.relationship_model import RelationshipType
-
+from utils.utils import capitalize
 
 def find_root_ids(json_data: List[Dict]) -> Tuple[str, str]:
     """Trouve les IDs root et sub_root"""
@@ -109,17 +109,17 @@ def interpret_relationships(interpreted_data, relationships):
 
                     case RelationshipType.AGGREGATION:
                         class_data['aggregations'].append({'visibility':'private', 
-                                                           'type':relationship.target_name.capitalize(),
+                                                           'type':capitalize(relationship.target_name),
                                                            'name':relationship.target_name.lower() + 's'})
 
                     case RelationshipType.COMPOSITION:
                         class_data['compositions'].append({'visibility':'private', 
-                                                           'type':relationship.target_name.capitalize(),
+                                                           'type':capitalize(relationship.target_name),
                                                            'name':relationship.target_name.lower() + 's'})
                     
                     case RelationshipType.ATTRIBUTE:
                         class_data['attributes'].append({'visibility':'private', 
-                                                         'type':relationship.target_name.capitalize(),
+                                                         'type':capitalize(relationship.target_name),
                                                          'name':relationship.target_name.lower()})
 
                     case RelationshipType.NONE:

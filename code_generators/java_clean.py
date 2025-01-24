@@ -3,13 +3,18 @@ from typing import List
 from pathlib import Path
 from jinja2 import Template
 import os
-from utils.utils import snake_to_pascal
+from utils.utils import snake_to_pascal, capitalize
 
 
 def generate_clean_project(project: Project, template_path: str, output_dir: str):
+    
+    for cls in project.classes:
+        cls["name"] = capitalize(cls["name"])
+    for usc in project.useCases:
+        usc["name"] = capitalize(usc["name"])
+
     project_path = Path(output_dir)
     templates = Path(template_path)
-
     # Generate the domain layer
     generate_domain_layer(project, templates / "domain",
                           project_path / "domain")
@@ -69,8 +74,8 @@ def generate_single_file(project: Project, template_path: Path, output_path: Pat
     file_path.write_text(java_code)
 
 def generate_infra_repositories(project: Project, template_path: Path, output_path: Path):
-    render_templates(project, template_path, output_path,
-                     lambda class_data: f"{class_data['name'].capitalize()}Repository.java")
+    render_templates_class(project, template_path, output_path,
+                     lambda class_data: f"{capitalize(class_data['name'])}Repository.java")
 
 
 
@@ -79,23 +84,43 @@ def generate_domain_layer(project: Project, domain_template: Path, domain_output
         "entities": {"template": domain_template / "entities/entities_class.html", "output": domain_output / "entities", "generator": generate_entities},
         "exceptions": {"template": domain_template / "exceptions", "output": domain_output / "exceptions", "generator": generate_exceptions},
         "repositories": {"template": domain_template / "repositories/repositories.html", "output": domain_output / "repositories", "generator": generate_domain_repositories},
-        # TODO usecases, sercices, dto, resource
+        "usecases": {"template": domain_template / "usecases", "output": domain_output / "usecases", "generator": generate_usecases},
+        # TODO sercices, dto, resource
     }
 
     for layer_name, layer_info in layers.items():
         layer_info["generator"](
             project, layer_info["template"], layer_info["output"])
 
+    
+
     pass
 
+
+def generate_usecases(project: Project, template_path: Path, output_path: Path):
+
+    #generate interface 
+    generate_single_file(project, template_path/"usecase_interface.html", output_path, "UseCase.java" )
+
+    # generate use cases
+    os.makedirs(output_path, exist_ok=True)
+    template = Template((template_path/"usecase_class.html").read_text("utf-8"))
+
+
+    for usecase in project.useCases:
+        java_code = template.render(route=project.route, usecase=usecase)
+        file_path = output_path / capitalize(f"{usecase['name']}.java")
+        file_path.write_text(java_code)
+        
+
 def generate_domain_repositories(project: Project, template_path: Path, output_path: Path):
-    render_templates(project, template_path, output_path,
-                     lambda class_data: f"I{class_data['name'].capitalize()}Repository.java")
+    render_templates_class(project, template_path, output_path,
+                     lambda class_data: f"I{capitalize(class_data['name'])}Repository.java")
 
 
 def generate_entities(project: Project, template_path: Path, output_path: Path):
-    render_templates(project, template_path, output_path,
-                     lambda class_data: f"{class_data['name'].capitalize()}.java")
+    render_templates_class(project, template_path, output_path,
+                     lambda class_data: f"{capitalize(class_data['name'])}.java")
 
 
 def generate_exceptions(project: Project, template_path: Path, output_path: Path):
@@ -116,15 +141,15 @@ def generate_exceptions(project: Project, template_path: Path, output_path: Path
         # Generate entity-specific exceptions
         entity_template = current_template_path / \
             f"entity_{exception}_exception.html"
-        render_templates(project, entity_template, current_output_path,
-                         lambda class_data: f"{class_data['name'].capitalize()}{snake_to_pascal(exception)}Exception.java")
+        render_templates_class(project, entity_template, current_output_path,
+                         lambda class_data: f"{capitalize(class_data['name'])}{snake_to_pascal(exception)}Exception.java")
 
 
-def render_templates(project: Project, template_path: Path, output_path: Path, file_naming_function):
+def render_templates_class(project: Project, template_path: Path, output_path: Path, file_naming_function):
     os.makedirs(output_path, exist_ok=True)
     template = Template(template_path.read_text("utf-8"))
 
     for class_data in project.classes:
-        java_code = template.render(route=project.route, class_data=class_data)
+        java_code = template.render(route=project.route, data=class_data)
         file_path = output_path / file_naming_function(class_data)
         file_path.write_text(java_code)

@@ -1,0 +1,127 @@
+{
+    "use_cases": [
+        {
+            "name": "AuthentificationUtilisateur",
+            "actors": [
+                "Utilisateur",
+                "système d'authentification"
+            ],
+            "preconditions": [
+                "L'utilisateur doit disposer d'un compte valide."
+            ],
+            "postconditions": [
+                "L'utilisateur est authentifié et redirigé vers son tableau de bord."
+            ],
+            "scenarios": {
+                "principal": [
+                    "L'utilisateur saisit son nom d'utilisateur et son mot de passe.",
+                    "Le système vérifie les informations fournies.",
+                    "L'utilisateur est redirigé vers son espace personnel."
+                ],
+                "alternatif": [
+                    "L'utilisateur saisit un mot de passe incorrect.",
+                    "Le système affiche un message d'erreur et propose de réessayer ou de réinitialiser le mot de passe."
+                ]
+            }
+        },
+        {
+            "name": "PassageDuneCommande",
+            "actors": [
+                "Client",
+                "système de gestion des commandes"
+            ],
+            "preconditions": [
+                "Le client doit être connecté à son compte."
+            ],
+            "postconditions": [
+                "La commande est enregistrée et confirmée."
+            ],
+            "scenarios": {
+                "principal": [
+                    "Le client ajoute des produits au panier.",
+                    "Le client confirme le panier et passe au paiement.",
+                    "Le système enregistre la commande et affiche une confirmation."
+                ],
+                "alternatif": [
+                    "Le client tente de commander un produit indisponible.",
+                    "Le système informe le client de l'indisponibilité et propose des alternatives."
+                ]
+            }
+        },
+        {
+            "name": "ReservationDunBilletEnLigne",
+            "actors": [
+                "Utilisateur",
+                "système de réservation"
+            ],
+            "preconditions": [
+                "Les horaires et les trajets doivent être disponibles dans le système."
+            ],
+            "postconditions": [
+                "La réservation est confirmée et un billet électronique est généré."
+            ],
+            "scenarios": {
+                "principal": [
+                    "L'utilisateur choisit une destination et une date de voyage.",
+                    "Le système affiche les options disponibles.",
+                    "L'utilisateur sélectionne une option, saisit ses informations personnelles et effectue le paiement.",
+                    "Le système génère un billet électronique."
+                ],
+                "alternatif": [
+                    "L'utilisateur tente de réserver pour une date sans disponibilité.",
+                    "Le système propose d'autres options ou permet à l'utilisateur de modifier ses critères."
+                ]
+            }
+        },
+        {
+            "name": "PublicationDeContenu",
+            "actors": [
+                "Auteur",
+                "éditeur",
+                "système de publication"
+            ],
+            "preconditions": [
+                "L'auteur doit être connecté à son compte."
+            ],
+            "postconditions": [
+                "L'article est publié et visible pour les lecteurs."
+            ],
+            "scenarios": {
+                "principal": [
+                    "L'auteur rédige un article et le soumet pour validation.",
+                    "L'éditeur valide l'article.",
+                    "Le système publie l'article sur la plateforme."
+                ],
+                "alternatif": [
+                    "L'article soumis contient des erreurs importantes.",
+                    "L'éditeur rejette l'article et fournit des commentaires pour correction."
+                ]
+            }
+        },
+        {
+            "name": "RecuperationDeMotDePasse",
+            "actors": [
+                "Utilisateur",
+                "système d'authentification"
+            ],
+            "preconditions": [
+                "L'utilisateur doit avoir une adresse e-mail associée à son compte."
+            ],
+            "postconditions": [
+                "Le mot de passe est réinitialisé avec succès."
+            ],
+            "scenarios": {
+                "principal": [
+                    "L'utilisateur clique sur \"Mot de passe oublié\".",
+                    "Le système envoie un e-mail avec un lien de réinitialisation.",
+                    "L'utilisateur clique sur le lien et définit un nouveau mot de passe.",
+                    "Le système confirme la réinitialisation."
+                ],
+                "alternatif": [
+                    "L'utilisateur entre une adresse e-mail incorrecte ou non associée à un compte.",
+                    "Le système informe l'utilisateur de l'échec et propose de réessayer."
+                ]
+            }
+        }
+    ]
+}

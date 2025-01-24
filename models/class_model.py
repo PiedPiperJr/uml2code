@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Dict
+from utils.utils import capitalize
 
 @dataclass
 class Attribute:
@@ -27,3 +28,7 @@ class Class:
         instance.attributes = [Attribute(**attr) for attr in data['attributes']]
         instance.methods = [Method(**method) for method in data['methods']]
         return instance
+
+    @classmethod
+    def capitalize(cls):
+        capitalize(cls(name=capitalize(cls.name)))

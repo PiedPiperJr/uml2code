@@ -11,13 +11,13 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class {{ class_data.name | capitalize }} {
+public class {{ data.name | capitalize }} {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    {% for attr in class_data.attributes %}
+    {% for attr in data.attributes %}
     {% if attr.name != 'id' %}
     @Column(nullable = true) // Add specific constraints if needed
     private {{ attr.type }} {{ attr.name }};

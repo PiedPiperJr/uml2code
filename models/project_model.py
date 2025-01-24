@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Literal
 from models.class_model import Class
+from utils.utils import capitalize
 
 
 @dataclass
@@ -74,10 +75,16 @@ class UseCase:
     services: List[Service]
     resource: Resource
     repositories: List[Repository]
+
+    @classmethod
+    def capitalize(cls):
+        capitalize(cls(name=capitalize(cls.name)))
+
     
 @dataclass
 class Project:
     route: str
     classes: List[Class]
     useCases: List[UseCase]
+
     

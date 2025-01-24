@@ -1,29 +1,29 @@
-{% if class_data.import_list %}import java.util.List; {% endif %}
+{% if data.import_list %}import java.util.List; {% endif %}
 
-public class {{ class_data.name | capitalize }} {% if class_data.parent %} extends {{ class_data.parent | capitalize }} {% endif %} {
+public class {{ data.name | capitalize }} {% if data.parent %} extends {{ data.parent | capitalize }} {% endif %} {
 
     // Attributes
-    {% for attr in class_data.attributes %}
+    {% for attr in data.attributes %}
     {{ attr.visibility }} {{ attr.type }} {{ attr.name }};
     {% endfor %}
 
     // Aggregation: List of related elements
-    {% for aggregation in class_data.aggregations %}
+    {% for aggregation in data.aggregations %}
     {{ aggregation.visibility }} List<{{ aggregation.type }}> {{ aggregation.name }};
     {% endfor %}
     
     // Composition: List of owned elements
-    {% for composition in class_data.compositions %}
+    {% for composition in data.compositions %}
     {{ composition.visibility }} List<{{ composition.type | capitalize }}> {{ composition.name }};
     {% endfor %}
     
     // Constructeur
-    public {{ class_data.name | capitalize}}() {
+    public {{ data.name | capitalize}}() {
         // Default Initialisation
     }
     
     // Methods
-    {% for method in class_data.methods %}
+    {% for method in data.methods %}
     {{ method.visibility }} {{ method.type }} {{ method.name }}({% for arg in method.args %}{{ arg.type }} {{ arg.name }}{% if not loop.last %}, {% endif %}{% endfor %}) {
         // To implement
     }
