@@ -1,8 +1,10 @@
 import google.generativeai as genai
 from config import *
 import json
-from typing import List
+from typing import List, Dict
 from utils.utils import dump
+from models.project_model import UseCase
+
 
 def use_cases_to_json(use_cases: str):
     # CONFIGURATION DE GEMINI
@@ -23,3 +25,15 @@ def use_cases_to_json(use_cases: str):
 
     return json_store
 
+
+def interprete_usecase(usecases: List[Dict]) -> UseCase:
+    """
+        Cette methode permet de parser la description textuelle des cas d(utilisations (retourné pas la fonction just au dessus))
+        et remplir les autres champs liés à un cas d'utilisation
+        
+        Regarder la structure du type UseCase pour plus d'infos !        
+    """
+    
+
+    # TODO implement this 
+    pass

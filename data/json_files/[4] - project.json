@@ -207,10 +207,10 @@
     ],
     "usecases": [
         {
-            "name": "authentificationUtilisateur",
+            "name": "AuthentificationUtilisateur",
             "actors": [
                 "Utilisateur",
-                "syst\u00e8me d'authentification"
+                "Syst\u00e8me d'authentification"
             ],
             "preconditions": [
                 "L'utilisateur doit disposer d'un compte valide."
@@ -231,10 +231,10 @@
             }
         },
         {
-            "name": "passageDuneCommande",
+            "name": "PassageDuneCommande",
             "actors": [
                 "Client",
-                "syst\u00e8me de gestion des commandes"
+                "Syst\u00e8me de gestion des commandes"
             ],
             "preconditions": [
                 "Le client doit \u00eatre connect\u00e9 \u00e0 son compte."
@@ -255,10 +255,10 @@
             }
         },
         {
-            "name": "reservationDunBilletEnLigne",
+            "name": "ReservationDunBilletEnLigne",
             "actors": [
                 "Utilisateur",
-                "syst\u00e8me de r\u00e9servation"
+                "Syst\u00e8me de r\u00e9servation"
             ],
             "preconditions": [
                 "Les horaires et les trajets doivent \u00eatre disponibles dans le syst\u00e8me."
@@ -280,11 +280,11 @@
             }
         },
         {
-            "name": "publicationDeContenu",
+            "name": "PublicationDeContenu",
             "actors": [
                 "Auteur",
-                "\u00e9diteur",
-                "syst\u00e8me de publication"
+                "\u00c9diteur",
+                "Syst\u00e8me de publication"
             ],
             "preconditions": [
                 "L'auteur doit \u00eatre connect\u00e9 \u00e0 son compte."
@@ -305,10 +305,10 @@
             }
         },
         {
-            "name": "recuperationDeMotDePasse",
+            "name": "RecuperationDeMotDePasse",
             "actors": [
                 "Utilisateur",
-                "syst\u00e8me d'authentification"
+                "Syst\u00e8me d'authentification"
             ],
             "preconditions": [
                 "L'utilisateur doit avoir une adresse e-mail associ\u00e9e \u00e0 son compte."

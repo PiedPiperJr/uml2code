@@ -59,8 +59,8 @@ def class_diagram_interpreter(xml_data, enable_type_validation: bool = False):
 
 if __name__ == "__main__":
 
-    # with open(USECASES_JSON_FILE_PATH, 'r') as f:
-    #     usecase = json.loads(f.read())
+    with open(USECASES_JSON_FILE_PATH, 'r') as f:
+        usecase = json.loads(f.read())
     
 
-    main()
+    main(usc = usecase)

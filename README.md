@@ -43,9 +43,8 @@ python cli.py diagram.drawio --keep-temp
 ---
 
 ## 🚀 **Feuille de route**  
-1. Passage au template de clean archi
-2. Prise en compte des descriptions textuelles de cas d'utilisation
-3. 
+1. Interpretation des descriptions textuelles de cas d'utilisation pour en déduire les dto, Resources, Action..... --- Utilisation de Gemini
+2. Finaliser la generation du projet avec les classes manquantes
 ---
 
 ## 📂 **Structure du projet**  
