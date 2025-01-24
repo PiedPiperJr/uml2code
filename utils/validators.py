@@ -28,6 +28,7 @@ def is_method(object: Dict, sub_root_id: str) -> bool:
     value: str = object.get("@value", "")
     return "(" in value and ")" in value
 
+# TODO pour eviter de surconsommer les clés d'API gemini, creer plusieurs clés d'API, creer plusieurs 
 def validate_data_types(interpreted_data: Dict | List, api_key: str, language: str = "java") -> None:
     """use google gemini ai for attribute type verification"""
 

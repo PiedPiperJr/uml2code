@@ -39,18 +39,13 @@ python cli.py diagram.drawio --keep-temp
 ---
 
 ## 🛑 **Limitations actuelles**  
-- ⚠️ Types de données limités mal supportés
-- 🔗 Relations entre classes non supportées
-- 📝 Arguments de méthodes non pris en charge
 
 ---
 
 ## 🚀 **Feuille de route**  
-1. Support complet des types de données
-2. Gestion des relations entre classes
-3. Support multilangage
-4. Amélioration de la gestion des méthodes
-
+1. Passage au template de clean archi
+2. Prise en compte des descriptions textuelles de cas d'utilisation
+3. 
 ---
 
 ## 📂 **Structure du projet**  

@@ -1,7 +1,7 @@
 import os
 
 # Type checker AI
-GEMINI_API_KEY = ""
+GEMINI_API_KEY = "AIzaSyBfCOw1YjmEB-Ed-AonWIpF7BjhE60_aL8"
 
 # Chemins de base
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))

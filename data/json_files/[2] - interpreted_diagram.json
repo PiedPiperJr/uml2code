@@ -26,7 +26,9 @@
                 "type": "void",
                 "args": []
             }
-        ]
+        ],
+        "aggregations": [],
+        "compositions": []
     },
     {
         "name": "student",
@@ -66,7 +68,9 @@
                     }
                 ]
             }
-        ]
+        ],
+        "aggregations": [],
+        "compositions": []
     },
     {
         "name": "professor",
@@ -91,9 +95,23 @@
                 "visibility": "public",
                 "name": "numberofclasses",
                 "type": "int"
+            },
+            {
+                "visibility": "private",
+                "type": "Student",
+                "name": "student"
             }
         ],
-        "methods": []
+        "methods": [],
+        "aggregations": [],
+        "compositions": [
+            {
+                "visibility": "private",
+                "type": "Adresses",
+                "name": "adressess"
+            }
+        ],
+        "import_list": true
     },
     {
         "name": "address",
@@ -138,7 +156,9 @@
                 "type": "str",
                 "args": []
             }
-        ]
+        ],
+        "aggregations": [],
+        "compositions": []
     },
     {
         "name": "adresses",
@@ -178,6 +198,8 @@
                 "type": "str",
                 "args": []
             }
-        ]
+        ],
+        "aggregations": [],
+        "compositions": []
     }
 ]
