@@ -40,7 +40,7 @@ use_cases:
     preconditions:
       - "L'administrateur doit être authentifié."
     postconditions:
-      - "Les informations de l'utilisateur sont mises à jour."
+      - "postconditionLes informations de l'utilisateur sont mises à jour."
     scenarios:
       principal:
         - "L'administrateur recherche un utilisateur."
