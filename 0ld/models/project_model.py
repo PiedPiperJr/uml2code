@@ -1,7 +1,7 @@
+from dataclasses import dataclass, field
 from typing import List, Literal
-from dataclasses import dataclass
-from helpers.utils import capitalize
 from models.class_model import Class
+from utils.utils import capitalize
 
 
 @dataclass
@@ -86,3 +86,5 @@ class Project:
     route: str
     classes: List[Class]
     useCases: List[UseCase]
+
+    

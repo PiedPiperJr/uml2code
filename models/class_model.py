@@ -1,31 +1,23 @@
 from dataclasses import dataclass, field
 from typing import List, Dict
-from utils.utils import capitalize
+from helpers.utils import capitalize
+from models.attribute_model import Attribute
+from models.method_model import Method
 
-@dataclass
-class Attribute:
-    visibility: str
-    name: str
-    type: str
-
-@dataclass
-class Method:
-    visibility: str
-    name: str
-    type: str
-    args: List[str]
 
 @dataclass
 class Class:
     name: str
-    type: str = "classe"
-    attributes: List[Attribute] = field(default_factory=list)
-    methods: List[Method] = field(default_factory=list)
+    attributes: List[Attribute]
+    methods: List[Method]
+    aggregations: List[Attribute]
+    compositions: List[Attribute]
 
     @classmethod
     def from_dict(cls, data: Dict) -> 'Class':
         instance = cls(name=data['name'])
-        instance.attributes = [Attribute(**attr) for attr in data['attributes']]
+        instance.attributes = [Attribute(**attr)
+                               for attr in data['attributes']]
         instance.methods = [Method(**method) for method in data['methods']]
         return instance
 
