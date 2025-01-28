@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
 from typing import List, Dict
-from helpers.utils import capitalize
+from helpers.utils import Utils
 from models.attribute_model import Attribute
 from models.method_model import Method
 
 
 @dataclass
-class Class:
+class Class(object):
     name: str
     attributes: List[Attribute]
     methods: List[Method]
@@ -23,4 +23,4 @@ class Class:
 
     @classmethod
     def capitalize(cls):
-        capitalize(cls(name=capitalize(cls.name)))
+        cls(name=Utils.capitalize(cls.name))

@@ -1,0 +1,9 @@
+package {{route}}.domain.exceptions.not_found;
+
+import {{route}}.domain.exceptions.EntityNotFoundException;
+
+public class {{data.name | capitalize}}NotFoundException extends EntityNotFoundException {
+public {{data.name | capitalize}}NotFoundException(String message) {
+        super(message);
+    }
+}

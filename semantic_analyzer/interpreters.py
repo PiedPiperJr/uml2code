@@ -71,8 +71,9 @@ class Interpreter:
                                                                      'type': Utils.capitalize(relationship.target_name),
                                                                      'name': relationship.target_name.lower() + 's'})
                     match(relationship._type):
-                        case RelationshipType.INHERITANCE:
-                            _class['parent'] = relationship.target_name
+                        # TODO rewrite this
+                        # case RelationshipType.INHERITANCE:
+                        #     _class['parent'] = relationship.target_name
 
                         case RelationshipType.AGGREGATION:
                             _class.aggregations.append(attribute)

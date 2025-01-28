@@ -1,0 +1,15 @@
+package {{route}}.infrastructure.repositories;
+
+import {{route}}.domain.entities.{{ data.name | capitalize}};
+import {{route}}.domain.repositories.I{{ data.name | capitalize}}Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.*;
+
+@Repository
+public interface {{ data.name | capitalize}}JpaRepository extends JpaRepository< {{data.name | capitalize}}, UUID>, I{{
+    data.name | capitalize}}Repository< {{data.name | capitalize}}, UUID>
+{
+    //TODO: Implement the repository logic here base on the AI
+}

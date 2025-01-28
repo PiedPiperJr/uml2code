@@ -2,9 +2,8 @@ from typing import Dict, List
 from models.attribute_model import Attribute
 from models.class_model import Class
 from models.arg_model import Arg
-from models.project_model import Method
+from models.method_model import Method
 from models.relationship_model import Relationship
-from semantic_analyzer.interpreters import Interpreter
 
 
 class ModelsFactory:
@@ -14,10 +13,16 @@ class ModelsFactory:
         return Relationship(relationship['name'],
                             relationship['source'],
                             relationship['target'],
-                            Interpreter.interpret_relationship_style(
-                                relationship['style']),
-                            structured_data['classes'][relationship["source"]]['name'],
-                            structured_data['classes'][relationship["target"]]['name'])
+                            relationship['style'],
+                            ModelsFactory._get_class_name_by_id(
+                                structured_data['classes'], relationship["source"]),
+                            ModelsFactory._get_class_name_by_id(structured_data['classes'], relationship["target"]))
+
+    @staticmethod
+    def _get_class_name_by_id(classes: Dict, id: str):
+        if classes.get(id) is None:
+            return ""
+        return classes.get(id)["name"]
 
     @staticmethod
     def build_arg_model(arg: Dict) -> Arg:
@@ -46,4 +51,4 @@ class ModelsFactory:
         for method in _class['methods']:
             methods.append(ModelsFactory.build_method_model(method))
 
-        return Class(_class['name'], attributes, methods)
+        return Class(_class['name'], attributes, methods, [], [])

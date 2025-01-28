@@ -1,0 +1,10 @@
+package {{route}}.domain.repositories;
+
+import {{route}}.domain.entities.{{ data.name | capitalize}};
+import org.springframework.stereotype.Component;
+
+import java.util.*;
+
+@Component
+public interface I{{ data.name | capitalize}}Repository< {{data.name | capitalize}}, UUID>
+{}
