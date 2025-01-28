@@ -1,6 +1,6 @@
 {
-  "name": "pw-no-spaghetti",
-  "version": "0.0.2",
+  "name": "front-argo",
+  "version": "1.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

@@ -1,0 +1,201 @@
+<!-- spring-boot-form.component.html -->
+  <div class="bg-white  p-6">
+    <div class="space-y-2">
+      <label for="framework" class="text-sm font-medium text-gray-700 block">Choose Framework</label>
+      <select
+        id="framework"
+        name="framework"
+        [(ngModel)]="selectedFramework"
+        (change)="onFrameworkChange($event)"
+        required
+        class="px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      >
+        <option value="" disabled>Select a framework</option>
+        <option value="springboot">Spring Boot</option>
+        <option value="laravel">Laravel</option>
+      </select>
+    </div>
+
+    <div *ngIf="selectedFramework === 'springboot'" class="mt-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="mt-1 text-lg font-medium mb-4">Spring Boot Configuration</h3>
+        <app-spring-modal></app-spring-modal>
+        <button
+          type="button"
+          (click)="resetForm()"
+          class="mr-4 px-2 py-1 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          Reset
+        </button>
+      </div>
+      <form #setupForm="ngForm" class="space-y-2">
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Group -->
+        <div class="">
+          <label for="group" class="text-sm font-medium text-gray-700">Group</label>
+          <input
+            id="group"
+            name="group"
+            [(ngModel)]="formData.group"
+            #group="ngModel"
+            required
+            type="text"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="com.example"
+          />
+          <p *ngIf="group.errors?.['required'] && group.touched"
+             class="text-red-500 text-xs mt-1">
+            Group is required
+          </p>
+        </div>
+
+        <!-- Artifact -->
+        <div class="">
+          <label for="artifact" class="text-sm font-medium text-gray-700">Artifact</label>
+          <input
+            id="artifact"
+            name="artifact"
+            [(ngModel)]="formData.artifact"
+            (ngModelChange)="onFieldChange()"
+            #artifact="ngModel"
+            required
+            type="text"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="demo"
+          />
+          <p *ngIf="artifact.errors?.['required'] && artifact.touched"
+             class="text-red-500 text-xs mt-1">
+            Artifact is required
+          </p>
+        </div>
+
+        <!-- Name -->
+        <div class="">
+          <label for="name" class="text-sm font-medium text-gray-700">Name</label>
+          <input
+            id="name"
+            name="name"
+            [(ngModel)]="formData.name"
+            (ngModelChange)="onFieldChange()"
+            #name="ngModel"
+            required
+            type="text"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="demo"
+          />
+          <p *ngIf="name.errors?.['required'] && name.touched"
+             class="text-red-500 text-xs mt-1">
+            Name is required
+          </p>
+        </div>
+
+        <!-- Package Name -->
+        <div class="">
+          <label for="packageName" class="text-sm font-medium text-gray-700">Package Name</label>
+          <input
+            id="packageName"
+            name="packageName"
+            [(ngModel)]="formData.packageName"
+            (ngModelChange)="onFieldChange()"
+            #packageName="ngModel"
+            required
+            type="text"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="com.example.demo"
+          />
+          <p *ngIf="packageName.errors?.['required'] && packageName.touched"
+             class="text-red-500 text-xs mt-1">
+            Package name is required
+          </p>
+        </div>
+
+        <!-- Packaging -->
+        <div class="">
+          <label for="packaging" class="text-sm font-medium text-gray-700">Packaging</label>
+          <select
+            id="packaging"
+            name="packaging"
+            [(ngModel)]="formData.packaging"
+            (ngModelChange)="onFieldChange()"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+          >
+            <option *ngFor="let option of packagingOptions" [value]="option.value">
+              {{option.label}}
+            </option>
+          </select>
+        </div>
+
+        <!-- Java Version -->
+        <div class="">
+          <label for="javaVersion" class="text-sm font-medium text-gray-700">Java Version</label>
+          <select
+            id="javaVersion"
+            name="javaVersion"
+            [(ngModel)]="formData.javaVersion"
+            (ngModelChange)="onFieldChange()"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+          >
+            <option *ngFor="let option of javaVersionOptions" [value]="option.value">
+              {{option.label}}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="space-y-2">
+        <label for="description" class="text-sm font-medium text-gray-700">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          [(ngModel)]="formData.description"
+          (ngModelChange)="onFieldChange()"
+          #description="ngModel"
+          rows="3"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Demo project for Spring Boot"
+        ></textarea>
+      </div>
+
+<!--      <div class="flex justify-end pt-4">-->
+<!--        <button-->
+<!--          type="button"-->
+<!--          (click)="resetForm()"-->
+<!--          class="mr-4 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"-->
+<!--        >-->
+<!--          Reset-->
+<!--        </button>-->
+<!--&lt;!&ndash;        <button&ndash;&gt;-->
+<!--&lt;!&ndash;          type="submit"&ndash;&gt;-->
+<!--&lt;!&ndash;          [disabled]="!setupForm.valid"&ndash;&gt;-->
+<!--&lt;!&ndash;          class="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"&ndash;&gt;-->
+<!--&lt;!&ndash;        >&ndash;&gt;-->
+<!--&lt;!&ndash;          Generate Project&ndash;&gt;-->
+<!--&lt;!&ndash;        </button>&ndash;&gt;-->
+<!--      </div>-->
+    </form>
+
+    </div>
+
+    <div *ngIf="selectedFramework === 'laravel'" class="mt-6">
+      <h3 class="text-lg font-medium text-gray-700">Laravel project</h3>
+      <p class="text-gray-600">After processing of your diagram, your will download the .zip file, extract it and run composer ...</p>
+      <form #laravelForm="ngForm">
+        <label for="projectName" class="block text-sm font-medium text-gray-700">
+          Project Name:
+        </label>
+        <input
+          id="projectName"
+          type="text"
+          name="projectName"
+          [(ngModel)]="laravelProjectName"
+          (change)="onLaravelProjectNameChange($event)"
+          class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          placeholder="Enter your Laravel project name"
+          required
+        />
+      </form>
+
+    </div>
+
+  </div>

@@ -1,0 +1,11 @@
+{
+  "/api": {
+    "target": "https://start.spring.io",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api": ""
+    }
+  }
+}

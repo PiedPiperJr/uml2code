@@ -6,8 +6,6 @@
 // };
 
 export const environment = {
-  production: true,
-  apiUrl: 'https://myfashion.osc-fr1.scalingo.io/api',
-  imageUrl:'https://myfashion.osc-fr1.scalingo.io',
-  apiMens : 'http://localhost:8001'
+  production: false,
+  apiUrl: 'http://127.0.0.1:5000/',
 };

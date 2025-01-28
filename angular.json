@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "pw-no-spaghetti": {
+    "front-argo": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/pw-no-spaghetti",
+            "outputPath": "dist/front-argo",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -61,13 +61,16 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "pw-no-spaghetti:build:production"
+              "buildTarget": "front-argo:build:production"
             },
             "development": {
-              "buildTarget": "pw-no-spaghetti:build:development"
+              "buildTarget": "front-argo:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"

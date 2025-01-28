@@ -1,0 +1,34 @@
+/* Style moderne pour la scrollbar */
+.custom-scrollbar {
+  /* Style pour Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #6366f1 #f3f4f6;
+}
+
+/* Styles pour Webkit (Chrome, Safari, Edge) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;  /* Largeur pour scrollbar verticale */
+  height: 6px; /* Hauteur pour scrollbar horizontale */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 8px;
+  margin: 4px 0; /* Ajoute un petit espace en haut et en bas */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #6366f1, #8b5cf6);
+  border-radius: 8px;
+  border: none;
+  transition: background 0.3s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #4f46e5, #7c3aed);
+}
+
+/* Cache les boutons de défilement sur certains navigateurs */
+.custom-scrollbar::-webkit-scrollbar-button {
+  display: none;
+}

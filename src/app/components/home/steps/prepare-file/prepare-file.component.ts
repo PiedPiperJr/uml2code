@@ -17,18 +17,31 @@ export class PrepareFileComponent {
   dropZoneClass = 'border-2 border-dashed border-gray-300 rounded-lg p-12 text-center cursor-pointer hover:border-indigo-500 transition-colors';
 
   onSelectFile(): void {
+    this.createAndClickFileInput('.drawio', true, false);
+  }
+
+  onSelectUseCase(): void {
+    this.createAndClickFileInput('.drawio', true, true);
+  }
+
+  onSelectDescription(): void {
+    this.createAndClickFileInput('.txt,.doc,.docx,.pdf', false, false);
+  }
+
+  private createAndClickFileInput(accept: string, multiple: boolean, isUseCase: boolean): void {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = '.drawio';
-    fileInput.multiple = true;
+    fileInput.accept = accept;
+    fileInput.multiple = multiple;
     fileInput.onchange = (event: Event) => {
       const target = event.target as HTMLInputElement;
       if (target.files) {
-        this.handleFiles(Array.from(target.files));
+        this.handleFiles(Array.from(target.files), isUseCase);
       }
     };
     fileInput.click();
   }
+
 
   onDragOver(event: DragEvent): void {
     event.preventDefault();
@@ -48,7 +61,9 @@ export class PrepareFileComponent {
     this.dropZoneClass = 'border-2 border-dashed border-gray-300 rounded-lg p-12 text-center cursor-pointer hover:border-indigo-500 transition-colors';
 
     if (event.dataTransfer?.files) {
-      this.handleFiles(Array.from(event.dataTransfer.files));
+      const files = Array.from(event.dataTransfer.files);
+      const isUseCase = files.some(file => file.name.endsWith('.drawio'));
+      this.handleFiles(files, isUseCase);
     }
   }
 
@@ -57,31 +72,28 @@ export class PrepareFileComponent {
     this.filesChange.emit(this.files);
   }
 
-  protected handleFiles(files: File[]): void {
-    const newFiles = files.map(file => ({
-      id: crypto.randomUUID(),
-      file: file
-    }));
+  protected handleFiles(files: File[], isUseCase: boolean): void {
+    const newFiles = files.map(file => {
+      const isDrawioFile = file.name.endsWith('.drawio');
+      return {
+        id: crypto.randomUUID(),
+        file: file,
+        useCase: isUseCase && isDrawioFile,
+        descriptionFile: !isDrawioFile && this.isDescriptionFile(file.name),
+        // isClassDiagram: this.files.length === 0 && isDrawioFile
+      };
+    });
+
     this.files = [...this.files, ...newFiles];
     this.filesChange.emit(this.files);
   }
 
+  private isDescriptionFile(fileName: string): boolean {
+    const descriptionExtensions = ['.txt', '.doc', '.docx', '.pdf'];
+    return descriptionExtensions.some(ext => fileName.toLowerCase().endsWith(ext));
+  }
   trackByFn(index: number, item: UploadedFile): string {
     return item.id;
-  }
-
-  onSelectDescription(): void {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = '.txt,.doc,.docx,.pdf';
-    fileInput.multiple = false;
-    fileInput.onchange = (event: Event) => {
-      const target = event.target as HTMLInputElement;
-      if (target.files) {
-        this.handleFiles(Array.from(target.files));
-      }
-    };
-    fileInput.click();
   }
 
   formatFileSize(bytes: number): string {
@@ -94,5 +106,6 @@ export class PrepareFileComponent {
 
   removeFile(fileId: string): void {
     this.files = this.files.filter(file => file.id !== fileId);
+    this.filesChange.emit(this.files);
   }
 }

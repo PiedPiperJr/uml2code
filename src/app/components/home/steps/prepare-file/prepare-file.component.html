@@ -19,18 +19,18 @@
 
     <div class="mt-6 space-y-4" *ngIf="files.length > 0">
       <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6">
-        <h3 class="text-xl font-semibold text-gray-800">Selected Files ({{ files.length }})</h3>
+        <h3 class="font-semibold text-gray-800">Selected Files ({{ files.length }})</h3>
 
         <div class="mt-4 sm:mt-0 flex flex-wrap gap-4">
-          <button (click)="onSelectFile()" class="btn-secondary flex items-center px-4 py-2 rounded-lg shadow-md bg-indigo-600 text-white hover:bg-indigo-700 transition duration-300">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button (click)="onSelectUseCase()" class="btn-secondary flex items-center px-2 py-1 rounded-md shadow-md bg-indigo-600 text-white text-sm hover:bg-indigo-700 transition duration-300">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
             </svg>
-            Add Diagram
+            Add Use Case Diagram
           </button>
-          <button (click)="onSelectDescription()" class="btn-secondary flex items-center px-4 py-2 rounded-lg shadow-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-300">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button (click)="onSelectDescription()" class="btn-secondary flex items-center px-2 py-1 rounded-md shadow-md bg-gray-200 text-gray-700 text-sm hover:bg-gray-300 transition duration-300">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
@@ -61,18 +61,13 @@
           </button>
         </div>
 
-        <div *ngIf="file.diagramUrl" class="mt-4">
-          <img [src]="file.diagramUrl" [alt]="file.file.name"
-               class="max-w-full rounded-lg border border-gray-200">
-        </div>
-
-        <div *ngIf="file.descriptionFileName" class="mt-4">
+        <div *ngIf="file.descriptionFile" class="mt-4">
           <div class="flex items-center space-x-2 text-sm text-gray-600">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
             </svg>
-            <span>{{ file.descriptionFileName }}</span>
+            <span>{{ file.file.name }}</span>
           </div>
         </div>
       </div>

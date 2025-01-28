@@ -10,6 +10,8 @@ import {
   ProcessingProgressComponent
 } from '../../components/home/steps/processing-progress/processing-progress.component';
 import {UploadProgressComponent} from '../../components/home/steps/upload-progress/upload-progress.component';
+import {SpringSetupComponent} from '../../components/home/steps/spring-setup/spring-setup.component';
+import {SpringBootFormData} from '../../models/spring-boot-form-data';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +22,8 @@ import {UploadProgressComponent} from '../../components/home/steps/upload-progre
     StepperComponent,
     DownloadFilesComponent,
     ProcessingProgressComponent,
-    UploadProgressComponent
+    UploadProgressComponent,
+    SpringSetupComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
@@ -33,6 +36,17 @@ export class HomeComponent {
   fileProgresses: { [key: string]: number } = {};
   processingProgresses: { [key: string]: number } = {};
   layout: 'horizontal' | 'vertical' = 'horizontal';
+  formData : SpringBootFormData = {
+    group: '',
+    artifact: '',
+    name: '',
+    packageName: '',
+    packaging: 'jar',
+    javaVersion: '17',
+    description: ''
+  };
+  selectedFramework: string = "";
+  laravelProjectName: string = '';
 
   constructor(private stepService: StepService) {}
 
@@ -44,22 +58,41 @@ export class HomeComponent {
     this.files = files;
   }
 
+  setup() :void {
+    console.log('Settings')
+    this.currentStep = 2
+  }
+
+  onFormDataChange(newData: SpringBootFormData): void {
+    console.log('Données mises à jour:', newData);
+  }
+
+  onFrameworkChange(framework:string): void {
+    console.log('... Framework')
+  }
+
   uploadFiles(): void {
-    this.currentStep = 2;
-    this.files.forEach(file => {
-      this.fileProgresses[file.file.name] = 0;
-      const interval = setInterval(() => {
-        if (this.fileProgresses[file.file.name] < 100) {
-          this.fileProgresses[file.file.name] += 10;
-        } else {
-          clearInterval(interval);
-          if (Object.values(this.fileProgresses).every(progress => progress === 100)) {
-            this.currentStep = 3;
-            this.processFiles();
+    console.log('Uploading files...', this.files);
+    if(this.currentStep === 1) {
+      this.currentStep = 2;
+    } else {
+      this.currentStep = 3;
+      this.files.forEach(file => {
+        this.fileProgresses[file.file.name] = 0;
+        const interval = setInterval(() => {
+          if (this.fileProgresses[file.file.name] < 100) {
+            this.fileProgresses[file.file.name] += 10;
+          } else {
+            clearInterval(interval);
+            if (Object.values(this.fileProgresses).every(progress => progress === 100)) {
+              this.currentStep = 4;
+              this.processFiles();
+            }
           }
-        }
-      }, 500);
-    });
+        }, 500);
+      });
+    }
+
   }
 
   processFiles(): void {
@@ -102,20 +135,22 @@ export class HomeComponent {
 
   cancelCurrentStep(): void {
     switch (this.currentStep) {
-      case 2:
+      case 3:
         this.fileProgresses = {};
         console.log("Upload annulé.");
         break;
 
-      case 3:
+      case 4:
         this.processingProgresses = {};
         console.log("Processing annulé.");
         break;
 
-      case 4:
+      case 5:
         this.downloadLinks = [];
         console.log("Téléchargement annulé.");
         break;
     }
   }
+
+  laravelProjectNameChange($event: any) {}
 }
