@@ -9,6 +9,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import {{route}}.infrastructure.helpers.LocalDateTimeDeserializer;
+import {{route}}.infrastructure.helpers.LocalDateTimeSerializer;
 
 @Entity
 @Data
@@ -38,17 +43,24 @@ public class {{ data.name | capitalize }} {% if data.parent %} extends {{ data.p
     {{ composition.visibility }} List<{{ composition._type | capitalize }}> {{ composition.name }};
     {% endfor %}
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    // Methods
-    {% for method in data.methods %}
+     // Methods
+    /*
+     {% for method in data.methods %}
     {{ method.visibility }} {{ method._type }} {{ method.name }}({% for arg in method.args %}{{ arg._type }} {{ arg.name }}{% if not loop.last %}, {% endif %}{% endfor %}) {
         // To implement
+        throw new UnsupportedOperationException("Not supported yet.");
+
     }
-    {% endfor %}
+    {% endfor %} */
 
 }

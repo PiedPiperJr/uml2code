@@ -38,7 +38,7 @@ class CleanCodeGenerator:
             },
             "infrastructure": {
                 "repositories": {"template": "repositories/jpa_repositories.html", "output":  "repositories", "generator": self.generate_infra_repositories},
-                "utils": {"template":  "utils/utils.html", "output":  "utils", "generator": self.generate_utils},
+                "helpers": {"template":  "helpers", "output":  "helpers", "generator": self.generate_utils},
                 "services": {"template": "services/crud/crud_service.html", "output": "services/crud", "generator": self.generate_infrastructure_crud_service},
                 "config": {"template": "config/config.html", "output": "config", "generator": self.generate_config},
                 # TODO services
@@ -76,7 +76,7 @@ class CleanCodeGenerator:
             file_path = output_path / \
                 Utils.capitalize(f"{usecase.name}.java")
             file_path.write_text(java_code)
-    
+
     def generate_domain_crud_service(self, template_path: Path, output_path: Path):
         self.render_templates_class(template_path, output_path,
                                     lambda class_data: f"I{Utils.capitalize(class_data.name)}CrudService.java")
@@ -110,7 +110,7 @@ class CleanCodeGenerator:
                 (current_template_path / f"{exception}_exception.html").read_text("utf-8"))
             main_code = main_template.render(route=self.project.route)
             (current_output_path /
-             f"{Utils.snake_to_pascal(exception)}Exception.java").write_text(main_code)
+             f"Entity{Utils.snake_to_pascal(exception)}Exception.java").write_text(main_code)
 
             # Generate entity-specific exceptions
             entity_template = current_template_path / \
@@ -129,7 +129,12 @@ class CleanCodeGenerator:
             file_path.write_text(java_code)
 
     def generate_utils(self,  template_path: Path, output_path: Path):
-        self.generate_single_file(template_path, output_path, "Utils.java")
+        self.generate_single_file(
+            template_path/"utils.html", output_path, "Utils.java")
+        self.generate_single_file(
+            template_path/"LocalDateTimeDeserializer.html", output_path, "LocalDateTimeDeserializer.java")
+        self.generate_single_file(
+            template_path/"LocalDateTimeSerializer.html", output_path, "LocalDateTimeSerializer.java")
 
     def generate_config(self, template_path: Path, output_path: Path):
         self.generate_single_file(template_path, output_path, "Config.java")

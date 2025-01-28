@@ -10,7 +10,7 @@ import java.util.UUID;
 import java.util.List;
 
 @Repository
-public interface {{data.name | capitalize}}JpaRepository extends JpaRepository<{{data.name | capitalize}}, UUID>, 
+public interface {{data.name | capitalize}}Repository extends JpaRepository<{{data.name | capitalize}}, UUID>, 
     I{{data.name | capitalize}}Repository<{{data.name | capitalize}}, UUID> {
     
     {% for attr in data.attributes %}

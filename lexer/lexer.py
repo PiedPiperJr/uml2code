@@ -54,9 +54,7 @@ class Lexer:
                 self.structured_data["classes"][mxcell.get("@id")] = Factories.create_class_structure(mxcell)
             elif Validators.is_relation(mxcell, self.sub_root_id):
                 relationship = Factories.create_relationship_structure(mxcell)
-                print(relationship, '--')
                 self._fix_relationship_attribs(relationship, self.initial_json_data)
-                print(relationship, '\n')
 
                 self.structured_data["relationships"].append(relationship)
             else:

@@ -1,9 +1,0 @@
-package {{route}}.domain.resources;
-
-import java.util.*;
-
-public class {{ resource_data.name | capitalize}} {
-    {% for attr in resource_data.attributes %}
-        {{attr.visibility}} {{ attr.type }} {{ attr.name }};
-    {% endfor %}
-}

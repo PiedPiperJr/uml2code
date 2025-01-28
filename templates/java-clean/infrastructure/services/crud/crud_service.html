@@ -1,9 +1,9 @@
 // Service Implementation Template
-package {{route}}.infrastructure.service.crud;
+package {{route}}.infrastructure.services.crud;
 
 import {{route}}.domain.entities.{{data.name | capitalize}};
-import {{route}}.domain.service.crud.I{{data.name | capitalize}}CrudService;
-import {{route}}.infrastructure.repositories.{{data.name | capitalize}}JpaRepository;
+import {{route}}.domain.services.crud.I{{data.name | capitalize}}CrudService;
+import {{route}}.infrastructure.repositories.{{data.name | capitalize}}Repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +16,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class {{data.name | capitalize}}Service implements I{{data.name | capitalize}}CrudService {
+public class {{data.name | capitalize}}CrudService implements I{{data.name | capitalize}}CrudService {
     
-    private final {{data.name | capitalize}}JpaRepository repository;
+    private final {{data.name | capitalize}}Repository repository;
     
     @Override
     public {{data.name | capitalize}} create({{data.name | capitalize}} entity) {

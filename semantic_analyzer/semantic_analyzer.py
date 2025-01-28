@@ -25,10 +25,8 @@ class SemanticAnalyzer:
                 classes, self.api_key, self.language)
 
         relationships = self.build_relationships()
-        print(relationships)
         classes = Interpreter.interpret_relationships(classes, relationships)
 
-        print(classes)
         return classes
 
     def build_relationships(self) -> List[Relationship]:

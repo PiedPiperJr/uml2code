@@ -71,7 +71,6 @@ class Interpreter:
                     attribute = ModelsFactory.build_attribute_model({'visibility': 'private',
                                                                      'type': Utils.capitalize(relationship.target_name),
                                                                      'name': relationship.target_name.lower() + 's'})
-                    print(relationship._type)
                     match(relationship._type):
                         case RelationshipType.INHERITANCE:
                             _class.parent = relationship.target_name
@@ -80,12 +79,10 @@ class Interpreter:
                             _class.aggregations.append(attribute)
 
                         case RelationshipType.COMPOSITION:
-                            print('composition')
                             _class.compositions.append(attribute)
 
-                        case RelationshipType.ATTRIBUTE:
-                            print('attribute')
-                            _class.attributes.append(attribute)
+                        # case RelationshipType.ATTRIBUTE:
+                        #     _class.attributes.append(attribute)
 
                         case RelationshipType.NONE:
                             pass
