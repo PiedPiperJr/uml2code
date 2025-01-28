@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Dict
+from typing import List, Dict, Optional
 from helpers.utils import Utils
 from models.attribute_model import Attribute
 from models.method_model import Method
@@ -12,6 +12,7 @@ class Class(object):
     methods: List[Method]
     aggregations: List[Attribute]
     compositions: List[Attribute]
+    parent: Optional[str]
 
     @classmethod
     def from_dict(cls, data: Dict) -> 'Class':

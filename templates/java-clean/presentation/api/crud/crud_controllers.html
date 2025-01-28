@@ -1,0 +1,59 @@
+package {{route}}.presentation.controller.crud;
+
+import {{route}}.domain.entities.{{data.name }};
+import {{route}}.domain.service.I{{data.name }}CrudService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import java.util.UUID;
+import jakarta.validation.Valid;
+
+@Validated
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/{{data.name.lower()}}")
+public class {{data.name }}Controller {
+    
+    private final I{{data.name }}CrudService service;
+    
+    @PostMapping
+    public ResponseEntity<{{data.name }}> create(@Valid @RequestBody {{data.name }} entity) {
+        return ResponseEntity.ok(service.create(entity));
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<{{data.name }}> findById(@PathVariable UUID id) {
+        return ResponseEntity.ok(service.findById(id));
+    }
+    
+    @GetMapping
+    public ResponseEntity<Page<{{data.name }}>> findAll(Pageable pageable) {
+        return ResponseEntity.ok(service.findAll(pageable));
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<{{data.name }}> update(
+        @PathVariable UUID id,
+        @Valid @RequestBody {{data.name }} entity
+    ) {
+        return ResponseEntity.ok(service.update(id, entity));
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+    
+    {% for attr in data.attributes %}
+    {% if attr.searchable %}
+    @GetMapping("/search/by-{{attr.name.lower()}}")
+    public ResponseEntity<List<{{data.name }}>> findBy{{attr.name }}(@RequestParam {{attr.type}} {{attr.name.lower()}}) {
+        return ResponseEntity.ok(service.findBy{{attr.name }}({{attr.name.lower()}}));
+    }
+    {% endif %}
+    {% endfor %}
+}

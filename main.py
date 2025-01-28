@@ -24,8 +24,12 @@ def main():
     pojo_generator = PoJoCodeGenerator(classes, "0ld/templates/java/simple_class.html", "out")
     
     pojo_generator.execute()
+    # print(classes)
 
-    project = Project("org.enspy.4gi", classes, [])
+    project = Project("mwm", classes, [])
     clean_generator = CleanCodeGenerator(project, "templates/java-clean", "out_clean")
     clean_generator.execute()
-main()
+
+
+if __name__ == '__main__':
+    main()

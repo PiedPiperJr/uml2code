@@ -1,15 +1,36 @@
 package {{route}}.infrastructure.repositories;
 
-import {{route}}.domain.entities.{{ data.name | capitalize}};
-import {{route}}.domain.repositories.I{{ data.name | capitalize}}Repository;
+import {{route}}.domain.entities.{{data.name | capitalize}};
+import {{route}}.domain.repositories.I{{data.name | capitalize}}Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.*;
+import java.util.UUID;
+import java.util.List;
 
 @Repository
-public interface {{ data.name | capitalize}}JpaRepository extends JpaRepository< {{data.name | capitalize}}, UUID>, I{{
-    data.name | capitalize}}Repository< {{data.name | capitalize}}, UUID>
-{
-    //TODO: Implement the repository logic here base on the AI
+public interface {{data.name | capitalize}}JpaRepository extends JpaRepository<{{data.name | capitalize}}, UUID>, 
+    I{{data.name | capitalize}}Repository<{{data.name | capitalize}}, UUID> {
+    
+    {% for attr in data.attributes %}
+    {% if attr.searchable %}
+    {% if attr.type == "String" %}
+    @Query("SELECT e FROM {{data.name | capitalize}} e WHERE LOWER(e.{{attr.name}}) LIKE LOWER(CONCAT('%', :{{attr.name}}, '%'))")
+    List<{{data.name | capitalize}}> findBy{{attr.name | capitalize}}(@Param("{{attr.name}}") String {{attr.name}});
+    {% else %}
+    List<{{data.name | capitalize}}> findBy{{attr.name | capitalize}}({{attr.type}} {{attr.name}});
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    
+    {% for composition in data.compositions %}
+    @Query("SELECT e FROM {{data.name | capitalize}} e LEFT JOIN FETCH e.{{composition.name}} WHERE e.id = :id")
+    Optional<{{data.name | capitalize}}> findByIdWith{{composition.name | capitalize}}(@Param("id") UUID id);
+    {% endfor %}
+    
+    {% for aggregation in data.aggregations %}
+    @Query("SELECT e FROM {{data.name | capitalize}} e LEFT JOIN FETCH e.{{aggregation.name}} WHERE e.id = :id")
+    Optional<{{data.name | capitalize}}> findByIdWith{{aggregation.name | capitalize}}(@Param("id") UUID id);
+    {% endfor %}
 }

@@ -32,17 +32,20 @@ class CleanCodeGenerator:
                 "entities": {"template": "entities/entities_class.html", "output": "entities", "generator": self.generate_entities},
                 "exceptions": {"template": "exceptions", "output": "exceptions", "generator": self.generate_exceptions},
                 "repositories": {"template": "repositories/repositories.html", "output": "repositories", "generator": self.generate_domain_repositories},
+                "services": {"template": "services/crud/crud_service.html", "output": "services/crud", "generator": self.generate_domain_crud_service},
                 "usecases": {"template": "usecases", "output": "usecases", "generator": self.generate_usecases},
                 # TODO sercices, dto, resource
             },
             "infrastructure": {
                 "repositories": {"template": "repositories/jpa_repositories.html", "output":  "repositories", "generator": self.generate_infra_repositories},
                 "utils": {"template":  "utils/utils.html", "output":  "utils", "generator": self.generate_utils},
+                "services": {"template": "services/crud/crud_service.html", "output": "services/crud", "generator": self.generate_infrastructure_crud_service},
                 "config": {"template": "config/config.html", "output": "config", "generator": self.generate_config},
                 # TODO services
             },
             "presentation": {
                 "api": {"template": "api", "output": "api", "generator": self.generate_api},
+                "crud_repo": {"template": "api/crud/crud_controllers.html", "output": "api/crud", "generator": self.generate_crud_controller},
                 # TODO
             },
         }
@@ -73,6 +76,18 @@ class CleanCodeGenerator:
             file_path = output_path / \
                 Utils.capitalize(f"{usecase.name}.java")
             file_path.write_text(java_code)
+    
+    def generate_domain_crud_service(self, template_path: Path, output_path: Path):
+        self.render_templates_class(template_path, output_path,
+                                    lambda class_data: f"I{Utils.capitalize(class_data.name)}CrudService.java")
+
+    def generate_crud_controller(self, template_path: Path, output_path: Path):
+        self.render_templates_class(template_path, output_path,
+                                    lambda class_data: f"{Utils.capitalize(class_data.name)}Controller.java")
+
+    def generate_infrastructure_crud_service(self, template_path: Path, output_path: Path):
+        self.render_templates_class(template_path, output_path,
+                                    lambda class_data: f"{Utils.capitalize(class_data.name)}CrudService.java")
 
     def generate_domain_repositories(self, template_path: Path, output_path: Path):
         self.render_templates_class(template_path, output_path,
