@@ -69,7 +69,6 @@ class UseCase:
 
     # After interpratation
     dto: Dto
-    uses: List['UseCase']
     extends: List['UseCase']
     include: List['UseCase']
     services: List[Service]

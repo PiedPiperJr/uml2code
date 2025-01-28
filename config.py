@@ -68,3 +68,19 @@ use_cases:
         - "Le contenu est rejeté par l'éditeur."
 
 """
+
+USECASE_LINK = """
+
+  -name: "Le titre du cas d'utilisation A"
+  
+  -extends:
+    -name: "Titre du cas d'utilisation B, de la liste, qui est une option de A (qui étend A)"
+    -name: "Titre du cas d'utilisation C, de la liste, qui est une option de A (qui étend A)"
+    ...
+    
+  -include:
+    -name: "Titre du cas d'utilisation D, de la liste, qui est une sous-partie de A"
+    -name: "Titre du cas d'utilisation E, de la liste, qui est une sous-partie de A"
+    ...
+
+"""
