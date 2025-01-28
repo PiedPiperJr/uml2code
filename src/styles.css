@@ -1,0 +1,12 @@
+@import 'ngx-toastr/toastr';
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+* {
+  margin: 0;
+  padding: 0 0 0 0;
+  box-sizing: border-box;
+}

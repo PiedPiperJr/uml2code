@@ -1,0 +1,63 @@
+<div
+  class="relative flex"
+  [ngClass]="{
+    'flex-col': layout === 'vertical',
+    'flex-row justify-between w-full': layout === 'horizontal'
+  }"
+>
+  <!-- Ligne de progression horizontale -->
+  <div
+    *ngIf="layout === 'horizontal'"
+    class="absolute top-5 left-0 w-full h-0.5 bg-gray-200"
+  >
+    <div
+      class="h-full bg-indigo-500 transition-all duration-300"
+      [style.width]="getProgress()"
+    ></div>
+  </div>
+
+  <!-- Étapes -->
+  <div
+    *ngFor="let step of steps; let index = index"
+    class="relative flex z-10"
+    [ngClass]="{
+      'flex-row items-center': layout === 'vertical',
+      'flex-col items-center': layout === 'horizontal',
+      'mb-8 last:mb-0': layout === 'vertical'
+    }"
+  >
+    <!-- Ligne de connexion verticale -->
+    <div
+      *ngIf="layout === 'vertical' && index < steps.length - 1"
+      class="absolute left-5 top-10 w-0.5 h-16 -z-10 bg-gray-200"
+    >
+      <div
+        class="w-full bg-indigo-500 transition-all duration-300"
+        [style.height]="isStepCompleted(index) ? '100%' : '0%'"
+      ></div>
+    </div>
+
+    <!-- Indicateur d'étape -->
+    <app-stepper-dot
+      [step]="step?.icon"
+      [isActive]="isStepActive(index)"
+      [isCompleted]="isStepCompleted(index)"
+    ></app-stepper-dot>
+
+    <!-- Libellé de l'étape -->
+    <div
+      class="min-w-[80px] text-center"
+      [ngClass]="{ 'ml-4': layout === 'vertical', 'mt-2': layout === 'horizontal' }"
+    >
+      <span
+        class="text-sm font-medium"
+        [ngClass]="{
+          'text-indigo-500': isStepActive(index) || isStepCompleted(index),
+          'text-gray-500': !isStepActive(index) && !isStepCompleted(index)
+        }"
+      >
+        {{ step.label }}
+      </span>
+    </div>
+  </div>
+</div>

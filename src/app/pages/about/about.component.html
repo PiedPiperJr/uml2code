@@ -1,0 +1,106 @@
+<section class="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-32 pb-16 px-4 relative overflow-hidden">  <!-- Decorative Elements -->
+  <div class="absolute top-0 left-0 w-full h-full pointer-events-none">
+    <div class="absolute top-20 left-10 w-64 h-64 bg-indigo-100 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+    <div class="absolute top-40 right-10 w-64 h-64 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70"></div>
+  </div>
+
+  <!-- Introduction -->
+  <div class="max-w-4xl mx-auto text-center relative" @fadeIn>
+    <h1 class="mt-2 text-3xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
+      About UML2Code
+    </h1>
+    <p class="mt-6 text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+      Discover the vision and purpose behind UML2Code, an innovative platform bridging the gap between UML modeling and code generation.
+    </p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="mt-20 max-w-5xl mx-auto space-y-16 relative">
+    <!-- Context Section -->
+    <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12" @fadeIn>
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Context</h2>
+      <div class="mt-6 space-y-6 text-gray-600 leading-relaxed">
+        <p>
+          In today's technological ecosystem, tools that shape our digital world often emerge from pressing needs encountered by industry professionals. In software development, developers repeatedly face a common challenge after system modeling: writing the structural code that forms the backbone of their applications.
+        </p>
+        <p>
+          Each framework and technology imposes its unique structure, requiring developers to reproduce similar patterns and adapt variables and configurations. This repetitive process raises a fundamental question about automation, a core principle of optimization in computing.
+        </p>
+      </div>
+    </div>
+
+    <!-- Problem Statement Section -->
+    <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12" @fadeIn>
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Problem Statement</h2>
+      <div class="mt-6 space-y-6 text-gray-600 leading-relaxed">
+        <p>
+          Given the apparent redundancy in creating project skeletons, a key question arises: how can we design a system capable of automatically generating structured and relevant code from a UML diagram? The challenge is twofold: to accelerate the initial development phase significantly and to allow developers to focus on the business logic of their applications, where true value lies.
+        </p>
+        <div class="mt-8">
+          <p class="font-medium text-gray-900 mb-4">This leads to additional considerations:</p>
+          <ul class="space-y-3 list-none pl-6">
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-indigo-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>How can UML modeling be effectively transformed into functional code?</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-indigo-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>What mechanisms ensure the coherence and quality of the generated code?</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-indigo-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>How can the system remain flexible to accommodate different architectures and frameworks?</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Objectives Section -->
+    <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12" @fadeIn>
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Objectives</h2>
+      <div class="mt-6 space-y-6 text-gray-600 leading-relaxed">
+        <p class="font-medium text-gray-900">This study aims to:</p>
+        <ul class="space-y-3 list-none pl-6">
+          <li class="flex items-start">
+            <svg class="h-6 w-6 text-indigo-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span>Deeply analyze current practices in code generation from UML models.</span>
+          </li>
+          <li class="flex items-start">
+            <svg class="h-6 w-6 text-indigo-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span>Design an automated solution addressing identified needs.</span>
+          </li>
+          <li class="flex items-start">
+            <svg class="h-6 w-6 text-indigo-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span>Propose a concrete implementation demonstrating the approach's feasibility.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center pt-8" @fadeIn>
+      <a
+        routerLink="/services"
+        class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-full text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+      >
+        <span>Discover Our Services</span>
+        <svg class="ml-2 -mr-1 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>

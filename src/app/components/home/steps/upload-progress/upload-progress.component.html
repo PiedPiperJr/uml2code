@@ -1,0 +1,11 @@
+<div class="space-y-2">
+  <div *ngFor="let file of files" class="flex items-center space-x-2">
+    <div class="flex-grow">
+      <div class="flex justify-between items-center mb-1">
+        <p class="text-sm font-medium">{{ file.file.name }}</p>
+        <span class="text-xs">{{ fileProgresses[file.file.name] || 0 }}%</span>
+      </div>
+      <app-progress-bar [progress]="fileProgresses[file.file.name] || 0" [isUploading]="true"></app-progress-bar>
+    </div>
+  </div>
+</div>

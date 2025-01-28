@@ -1,0 +1,74 @@
+<div class="min-h-screen w-full flex items-center justify-center bg-gray-50 p-4">
+  <div class="w-full max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
+    <div class="flex" [ngClass]="layout === 'vertical' ? 'flex-row gap-12' : 'flex-col gap-8'">
+      <div class="flex flex-col w-full">
+        <h3 class="text-xl font-semibold">{{ steps[currentStep - 1].label }}</h3>
+        <p class="text-sm text-gray-600 mt-2">{{ steps[currentStep - 1].content }}</p>
+
+        <!-- Step 1: File Upload -->
+        <app-prepare-file
+          *ngIf="currentStep === 1"
+          [files]="files"
+          (filesChange)="onFilesChange($event)"
+          (startUpload)="uploadFiles()"
+        ></app-prepare-file>
+
+        <!-- Step 2: Upload Progress -->
+        <app-upload-progress
+          *ngIf="currentStep === 2"
+          [files]="files"
+          [fileProgresses]="fileProgresses"
+        ></app-upload-progress>
+
+        <!-- Step 3: Processing Progress -->
+        <app-processing-progress
+          *ngIf="currentStep === 3"
+          [files]="files"
+          [processingProgresses]="processingProgresses"
+        ></app-processing-progress>
+
+        <!-- Step 4: Download Files -->
+        <app-download-files
+          *ngIf="currentStep === 4"
+          [files]="files"
+          [downloadLinks]="downloadLinks"
+        ></app-download-files>
+      </div>
+
+      <div class="flex flex-col gap-4 w-full">
+        <app-stepper
+          [steps]="steps"
+          [currentStep]="currentStep"
+          [layout]="layout"
+        ></app-stepper>
+
+        <div class="flex justify-center items-center gap-4">
+          <button
+            *ngIf="currentStep > 1"
+            (click)="goToPreviousStep()"
+            class="px-4 py-2 rounded-md bg-gray-300 text-gray-700 border border-gray-400 hover:bg-gray-400"
+          >
+            Previous
+          </button>
+
+          <button
+            *ngIf="currentStep === 1"
+            (click)="uploadFiles()"
+            [disabled]="files.length === 0"
+            class="px-4 py-2 rounded-md bg-indigo-500 text-white"
+            [ngClass]="{ 'opacity-50 cursor-not-allowed': files.length === 0, 'hover:bg-indigo-600': files.length > 0 }"
+          >
+            Start Upload
+          </button>
+          <button
+            *ngIf="currentStep > 1"
+            (click)="handleReset()"
+            class="px-4 py-2 rounded-md bg-red-500 text-white border border-red-300 hover:bg-red-600"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

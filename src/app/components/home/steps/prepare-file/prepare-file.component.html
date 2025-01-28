@@ -1,0 +1,80 @@
+<div class="flex flex-col w-full">
+    <div class="mt-2" *ngIf="files.length === 0"
+         (dragover)="onDragOver($event)"
+         (dragleave)="onDragLeave($event)"
+         (drop)="onDrop($event)">
+      <div [class]="dropZoneClass"
+           (click)="onSelectFile()">
+        <div class="flex flex-col items-center">
+          <svg class="w-16 h-16 text-indigo-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+          </svg>
+          <h3 class="text-lg font-medium text-gray-700">Drag & Drop files here</h3>
+          <p class="text-sm text-gray-500 mt-1">or click to select files</p>
+          <p class="text-xs text-gray-400 mt-2">Supported formats: .drawio</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 space-y-4" *ngIf="files.length > 0">
+      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6">
+        <h3 class="text-xl font-semibold text-gray-800">Selected Files ({{ files.length }})</h3>
+
+        <div class="mt-4 sm:mt-0 flex flex-wrap gap-4">
+          <button (click)="onSelectFile()" class="btn-secondary flex items-center px-4 py-2 rounded-lg shadow-md bg-indigo-600 text-white hover:bg-indigo-700 transition duration-300">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            Add Diagram
+          </button>
+          <button (click)="onSelectDescription()" class="btn-secondary flex items-center px-4 py-2 rounded-lg shadow-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-300">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            Add Description
+          </button>
+        </div>
+      </div>
+
+      <div *ngFor="let file of files; trackBy: trackByFn"
+           class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-3">
+            <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <div>
+              <p class="font-medium text-gray-800">{{ file.file.name }}</p>
+              <p class="text-sm text-gray-500">{{ formatFileSize(file.file.size) }}</p>
+            </div>
+          </div>
+          <button (click)="removeFile(file.id)"
+                  class="text-gray-400 hover:text-red-500 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
+        </div>
+
+        <div *ngIf="file.diagramUrl" class="mt-4">
+          <img [src]="file.diagramUrl" [alt]="file.file.name"
+               class="max-w-full rounded-lg border border-gray-200">
+        </div>
+
+        <div *ngIf="file.descriptionFileName" class="mt-4">
+          <div class="flex items-center space-x-2 text-sm text-gray-600">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <span>{{ file.descriptionFileName }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

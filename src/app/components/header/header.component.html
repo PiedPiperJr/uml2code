@@ -1,0 +1,75 @@
+<header class="fixed top-0 left-0 w-full bg-indigo-600 text-white shadow-md z-50">
+  <div class="container mx-auto flex justify-between items-center py-4 px-6">
+    <!-- Logo -->
+    <a href="/" class="text-2xl font-bold">UML2Code</a>
+
+    <!-- Navigation Desktop -->
+    <nav class="hidden md:flex space-x-6">
+      <a routerLink="/" routerLinkActive="text-gray-200" [routerLinkActiveOptions]="{exact: true}" class="hover:text-gray-200 transition">
+        Home
+      </a>
+      <a routerLink="/features" routerLinkActive="text-gray-200" class="hover:text-gray-200 transition">
+        Features
+      </a>
+<!--      <a routerLink="/services" routerLinkActive="text-gray-200" class="hover:text-gray-200 transition">-->
+<!--        Services-->
+<!--      </a>-->
+      <a routerLink="/about" routerLinkActive="text-gray-200" class="hover:text-gray-200 transition">
+        About
+      </a>
+    </nav>
+
+    <!-- Bouton menu mobile -->
+    <button
+      class="md:hidden focus:outline-none"
+      (click)="toggleMenu()"
+      aria-label="Ouvrir le menu"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Overlay (fermeture en cliquant en dehors du menu) -->
+  <div
+    *ngIf="menuOpen"
+    class="fixed inset-0 bg-black bg-opacity-25 z-40"
+    (click)="closeMenu()">
+  </div>
+
+  <!-- Menu mobile -->
+  <div
+    *ngIf="menuOpen"
+    class="fixed top-0 left-0 bg-white w-3/4 h-full z-50 shadow-md transform transition-transform duration-300 ease-in-out"
+    [class.translate-x-0]="menuOpen"
+    [class.-translate-x-full]="!menuOpen">
+
+    <div class="flex justify-between items-center p-4 border-b">
+      <span class="text-xl font-bold text-gray-800">Menu</span>
+      <button
+        class="focus:outline-none"
+        (click)="closeMenu()"
+        aria-label="Fermer le menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="flex flex-col space-y-4 py-4 px-4">
+      <a routerLink="/" routerLinkActive="text-indigo-500" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()" class="hover:text-indigo-500 text-gray-600">
+        Home
+      </a>
+      <a routerLink="/features" routerLinkActive="text-indigo-500" (click)="closeMenu()" class="hover:text-indigo-500 text-gray-600">
+        Features
+      </a>
+<!--      <a routerLink="/services" routerLinkActive="text-indigo-500" (click)="closeMenu()" class="hover:text-indigo-500 text-gray-600">-->
+<!--        Services-->
+<!--      </a>-->
+      <a routerLink="/about" routerLinkActive="text-indigo-500" (click)="closeMenu()" class="hover:text-indigo-500 text-gray-600">
+        About
+      </a>
+    </nav>
+  </div>
+</header>
