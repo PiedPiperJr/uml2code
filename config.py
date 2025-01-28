@@ -49,38 +49,289 @@ use_cases:
       alternatif:
         - "L'administrateur tente de supprimer un utilisateur administrateur."
         - "Le système refuse la demande."
-  - name: "Gestion des contenus"
+        
+    extends:
+      name: "Titre du cas d'utilisation B, de la liste, qui est une option de A (qui étend A)"
+      name: "Titre du cas d'utilisation C, de la liste, qui est une option de A (qui étend A)"
+      ...
+      
+    include:
+      name: "Titre du cas d'utilisation D, de la liste, qui est une sous-partie de A"
+      name: "Titre du cas d'utilisation E, de la liste, qui est une sous-partie de A"
+      ...
+
+    dto:
+      name: "NomDuDto"
+      attributes:
+        attribute:
+          name: "nomAttribut"
+          visibility: "public|private|protected"
+          type: "typeAttribut"
+          decorators:
+            -decorator:
+              name: "nomDecorateur"
+              message: "messageDecorateur"
+        attribute:
+          name: "autreAttribut"
+          visibility: "public|private|protected"
+          type: "typeAttribut"
+          decorators:
+            decorator:
+              name: "nomDecorateur"
+              message: "messageDecorateur"
+        ...
+      name: "AutreDto"
+      attributes:
+        attribute:
+          name: "nomAttribut"
+          visibility: "public|private|protected"
+          type: "typeAttribut"
+          decorators:
+            decorator:
+              name: "nomDecorateur"
+              message: "messageDecorateur"
+        attribute:
+          name: "autreAttribut"
+          visibility: "public|private|protected"
+          type: "typeAttribut"
+          decorators:
+            -decorator:
+              name: "nomDecorateur"
+              message: "messageDecorateur"
+        ...
+      ...
+    resource:
+      name: "ResourceName"
+      attributes:
+        name: "NomAttribut"
+        visibility: "public|private|protected"
+        type: "attributType"
+              
+        name: "autreAttribut"
+        visibility: "public|private|protected"
+        type: "attributType"
+        ...
+    services:
+
+      name: "ServiceName"
+      methods:
+
+        name: "methodName"
+        visibility: "public|private|protected"
+        type: "returnType"
+        args:
+
+          name: "argName"
+          visibility: "public|private|protected"
+          type: "argType"
+          
+        name: "autreMethodName"
+        visibility: "public|private|protected"
+        type: "returnType"
+        args:
+
+          name: "argName"
+          visibility: "public|private|protected"
+          type: "argType"
+        ...
+      
+      name: "autreNomService"
+      methods:
+
+        name: "methodName"
+        visibility: "public|private|protected"
+        type: "returnType"
+        args:
+
+          name: "argName"
+          visibility: "public|private|protected"
+          type: "argType"
+          
+        name: "autreMethodName"
+        visibility: "public|private|protected"
+        type: "returnType"
+        args:
+
+          name: "argName"
+          visibility: "public|private|protected"
+          type: "argType"
+        ...
+
+    repositories:
+
+      entity: "NomEntité"
+      methods:
+
+        name: "methodName"
+        visibility: "public|private|protected"
+        type: "returnType"
+        args:
+
+          name: "argName"
+          visibility: "public|private|protected"
+          type: "argType"
+          
+      entity: "AutreNomEntité"
+      methods:
+
+        name: "methodName"
+        visibility: "public|private|protected"
+        type: "returnType"
+        args:
+
+          name: "argName"
+          visibility: "public|private|protected"
+          type: "argType"
+  
+  - name: "Le titre d'un autre cas d'utilisation"
     actors:
-      - "Auteur"
-      - "Éditeur"
-      - "Lecteur"
+      - "Acteur 3"
+      - "Acteur 4"
     preconditions:
-      - "L'auteur doit être connecté."
+      - "L'administrateur doit être authentifié."
     postconditions:
-      - "Le contenu est publié et accessible aux lecteurs."
+      - "postconditionLes informations de l'utilisateur sont mises à jour."
     scenarios:
       principal:
-        - "L'auteur crée un nouveau contenu."
-        - "L'éditeur valide le contenu."
-        - "Le contenu est publié."
+        - "L'administrateur recherche un utilisateur."
+        - "L'administrateur modifie les informations de l'utilisateur."
+        - "Le système enregistre les modifications."
       alternatif:
-        - "L'auteur soumet un contenu de mauvaise qualité."
-        - "Le contenu est rejeté par l'éditeur."
+        - "L'administrateur tente de supprimer un utilisateur administrateur."
+        - "Le système refuse la demande."
+        
+    extends:
+      name: "Titre du cas d'utilisation B, de la liste, qui est une option de A (qui étend A)"
+      name: "Titre du cas d'utilisation C, de la liste, qui est une option de A (qui étend A)"
+      ...
+      
+    include:
+      name: "Titre du cas d'utilisation D, de la liste, qui est une sous-partie de A"
+      name: "Titre du cas d'utilisation E, de la liste, qui est une sous-partie de A"
+      ...
 
-"""
+    dto:
+      name: "NomDuDto"
+      attributes:
+        attribute:
+          name: "nomAttribut"
+          visibility: "public|private|protected"
+          type: "typeAttribut"
+          decorators:
+            -decorator:
+              name: "nomDecorateur"
+              message: "messageDecorateur"
+        attribute:
+          name: "autreAttribut"
+          visibility: "public|private|protected"
+          type: "typeAttribut"
+          decorators:
+            decorator:
+              name: "nomDecorateur"
+              message: "messageDecorateur"
+        ...
+      name: "AutreDto"
+      attributes:
+        attribute:
+          name: "nomAttribut"
+          visibility: "public|private|protected"
+          type: "typeAttribut"
+          decorators:
+            decorator:
+              name: "nomDecorateur"
+              message: "messageDecorateur"
+        attribute:
+          name: "autreAttribut"
+          visibility: "public|private|protected"
+          type: "typeAttribut"
+          decorators:
+            -decorator:
+              name: "nomDecorateur"
+              message: "messageDecorateur"
+        ...
+      ...
+    resource:
+      name: "ResourceName"
+      attributes:
+        name: "NomAttribut"
+        visibility: "public|private|protected"
+        type: "attributType"
+              
+        name: "autreAttribut"
+        visibility: "public|private|protected"
+        type: "attributType"
+        ...
+    services:
 
-USECASE_LINK = """
+      name: "ServiceName"
+      methods:
 
-  -name: "Le titre du cas d'utilisation A"
-  
-  -extends:
-    -name: "Titre du cas d'utilisation B, de la liste, qui est une option de A (qui étend A)"
-    -name: "Titre du cas d'utilisation C, de la liste, qui est une option de A (qui étend A)"
-    ...
-    
-  -include:
-    -name: "Titre du cas d'utilisation D, de la liste, qui est une sous-partie de A"
-    -name: "Titre du cas d'utilisation E, de la liste, qui est une sous-partie de A"
-    ...
+        name: "methodName"
+        visibility: "public|private|protected"
+        type: "returnType"
+        args:
+
+          name: "argName"
+          visibility: "public|private|protected"
+          type: "argType"
+          
+        name: "autreMethodName"
+        visibility: "public|private|protected"
+        type: "returnType"
+        args:
+
+          name: "argName"
+          visibility: "public|private|protected"
+          type: "argType"
+        ...
+      
+      name: "autreNomService"
+      methods:
+
+        name: "methodName"
+        visibility: "public|private|protected"
+        type: "returnType"
+        args:
+
+          name: "argName"
+          visibility: "public|private|protected"
+          type: "argType"
+          
+        name: "autreMethodName"
+        visibility: "public|private|protected"
+        type: "returnType"
+        args:
+
+          name: "argName"
+          visibility: "public|private|protected"
+          type: "argType"
+        ...
+
+    repositories:
+
+      entity: "NomEntité"
+      methods:
+
+        name: "methodName"
+        visibility: "public|private|protected"
+        type: "returnType"
+        args:
+
+          name: "argName"
+          visibility: "public|private|protected"
+          type: "argType"
+          
+      entity: "AutreNomEntité"
+      methods:
+
+        name: "methodName"
+        visibility: "public|private|protected"
+        type: "returnType"
+        args:
+
+          name: "argName"
+          visibility: "public|private|protected"
+          type: "argType"
+  ...
 
 """

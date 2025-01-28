@@ -68,7 +68,7 @@ class UseCase:
     postconditions: List[str]
 
     # After interpratation
-    dto: Dto
+    dto: List[Dto]
     extends: List['UseCase']
     include: List['UseCase']
     services: List[Service]
