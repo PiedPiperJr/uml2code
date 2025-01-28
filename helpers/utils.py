@@ -14,8 +14,6 @@ class Utils:
         else:
             return data
     
-    import json
-
     @staticmethod
     def dump(file_path, data):
         with open(file_path, 'w') as f:
@@ -27,5 +25,7 @@ class Utils:
 
     @staticmethod
     def capitalize(input_str:str):
+        if input_str == "":
+            return input_str
         return input_str[0].upper() + input_str[1:]
 

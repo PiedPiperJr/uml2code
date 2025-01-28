@@ -27,9 +27,6 @@ class Factories:
     @staticmethod
     def create_attribute_structure(visibility: str, name: str, type_: str):
         return {
-            # TODO do this in semantic analysis
-
-            # "visibility": Parsers.interpret_visibility(visibility),
             "visibility": visibility,
             "name": name.strip(),
             "type": type_.strip()
@@ -38,8 +35,6 @@ class Factories:
     @staticmethod
     def create_method_structure(visibility: str, name: str, type_: str, args: List[str]):
         return {
-            # TODO do this in semantic analysis
-            # "visibility": Parsers.interpret_visibility(visibility),
             "visibility": visibility,
             "name": name.strip(),
             "type": type_.strip(),

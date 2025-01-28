@@ -1,5 +1,8 @@
 package {{route}}.domain.entities;
 
+{% if data.parent %} 
+import {{route}}.domain.entities.{{ data.parent | capitalize }}; 
+{% endif %}
 import lombok.*;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,7 +14,7 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class {{ data.name | capitalize }} {
+public class {{ data.name | capitalize }} {% if data.parent %} extends {{ data.parent | capitalize }} {% endif %} {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -25,11 +28,27 @@ public class {{ data.name | capitalize }} {
     {% endfor %}
 
     // TODO: Add relationships here
+    // Aggregation: List of related elements
+    {% for aggregation in data.aggregations %}
+    {{ aggregation.visibility }} List<{{ aggregation._type }}> {{ aggregation.name }};
+    {% endfor %}
+    
+    // Composition: List of owned elements
+    {% for composition in data.compositions %}
+    {{ composition.visibility }} List<{{ composition._type | capitalize }}> {{ composition.name }};
+    {% endfor %}
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    // Methods
+    {% for method in data.methods %}
+    {{ method.visibility }} {{ method._type }} {{ method.name }}({% for arg in method.args %}{{ arg._type }} {{ arg.name }}{% if not loop.last %}, {% endif %}{% endfor %}) {
+        // To implement
+    }
+    {% endfor %}
 
 }

@@ -25,14 +25,16 @@ class SemanticAnalyzer:
                 classes, self.api_key, self.language)
 
         relationships = self.build_relationships()
-        Interpreter.interpret_relationships(classes, relationships)
+        print(relationships)
+        classes = Interpreter.interpret_relationships(classes, relationships)
 
+        print(classes)
         return classes
 
     def build_relationships(self) -> List[Relationship]:
         relationships: List[Relationship] = list()
         for relationship in self.structured_data['relationships']:
-            relationship["style"] = Interpreter.interpret_relationship_style(relationship["style"])
+            relationship["_type"] = Interpreter.interpret_relationship_style(relationship["style"])
             relationships.append(ModelsFactory.build_relationship_model(
                 relationship, self.structured_data))
 
