@@ -14,13 +14,16 @@ import {SpringModalComponent} from './spring-modal/spring-modal.component';
 })
 export class SpringSetupComponent {
   @ViewChild('setupForm') setupForm!: NgForm;
-  @Input() formData : SpringBootFormData = {};
+  @Input() formData : SpringBootFormData = {
+    dependencies : "",
+  };
   @Output() formDataChange = new EventEmitter<SpringBootFormData>();
   @Input() selectedFramework: string = "";
   @Output() selectedFrameworkChange = new EventEmitter<string>();
 
   @Input() laravelProjectName: string = "";
   @Output() laravelProjectNameChange = new EventEmitter<string>();
+
 
   onFieldChange() {
     this.formDataChange.emit(this.formData);
@@ -56,6 +59,11 @@ export class SpringSetupComponent {
     if (this.setupForm.valid) {
       console.log('Form submitted:', this.formData);
     }
+  }
+
+  onDependenciesChange(updatedDependencies: string): void {
+    console.log('Updated dependencies from child:', updatedDependencies);
+    this.formData.dependencies = updatedDependencies;
   }
 
   resetForm() {

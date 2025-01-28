@@ -12,6 +12,7 @@ import {
 import {UploadProgressComponent} from '../../components/home/steps/upload-progress/upload-progress.component';
 import {SpringSetupComponent} from '../../components/home/steps/spring-setup/spring-setup.component';
 import {SpringBootFormData} from '../../models/spring-boot-form-data';
+import {ServerInput} from '../../models/server-input';
 
 @Component({
   selector: 'app-home',
@@ -37,16 +38,22 @@ export class HomeComponent {
   processingProgresses: { [key: string]: number } = {};
   layout: 'horizontal' | 'vertical' = 'horizontal';
   formData : SpringBootFormData = {
-    group: '',
-    artifact: '',
+    groupId: '',
+    artifactId: '',
     name: '',
     packageName: '',
     packaging: 'jar',
     javaVersion: '17',
-    description: ''
+    description: '',
+    dependencies: '',
   };
   selectedFramework: string = "";
   laravelProjectName: string = '';
+  serverInputFile : ServerInput = {
+    files: [],
+    type : '',
+    params : ''
+  }
 
   constructor(private stepService: StepService) {}
 
@@ -92,7 +99,24 @@ export class HomeComponent {
         }, 500);
       });
     }
+  }
 
+  parsingFiles() : void {
+    if (this.selectedFramework === 'laravel'){
+      this.serverInputFile = {
+        files : this.files,
+        type: 'laravel',
+        params: this.laravelProjectName
+      }
+    } else {
+      if (this.selectedFramework === 'springboot'){
+        this.serverInputFile = {
+          files : this.files,
+          type : 'springboot',
+          params: this.formData
+        }
+      }
+    }
   }
 
   processFiles(): void {
@@ -105,7 +129,7 @@ export class HomeComponent {
           clearInterval(interval);
           if (Object.values(this.processingProgresses).every(progress => progress === 100)) {
             this.generateDownloadLinks();
-            this.currentStep = 4;
+            this.currentStep = 5;
           }
         }
       }, 500);
@@ -128,29 +152,11 @@ export class HomeComponent {
 
     goToPreviousStep(): void {
       if (this.currentStep > 1) {
-        this.cancelCurrentStep();
         this.currentStep--;
       }
     }
 
-  cancelCurrentStep(): void {
-    switch (this.currentStep) {
-      case 3:
-        this.fileProgresses = {};
-        console.log("Upload annulé.");
-        break;
-
-      case 4:
-        this.processingProgresses = {};
-        console.log("Processing annulé.");
-        break;
-
-      case 5:
-        this.downloadLinks = [];
-        console.log("Téléchargement annulé.");
-        break;
-    }
+  laravelProjectNameChange(name: string): void {
+    console.log("laravel project name : " + name);
   }
-
-  laravelProjectNameChange($event: any) {}
 }

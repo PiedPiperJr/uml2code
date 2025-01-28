@@ -19,7 +19,10 @@
     <div *ngIf="selectedFramework === 'springboot'" class="mt-6">
       <div class="flex justify-between items-center mb-4">
         <h3 class="mt-1 text-lg font-medium mb-4">Spring Boot Configuration</h3>
-        <app-spring-modal></app-spring-modal>
+        <app-spring-modal
+        [(dependencies)] = "formData.dependencies"
+        (dependenciesChange)="onDependenciesChange($event)"
+        ></app-spring-modal>
         <button
           type="button"
           (click)="resetForm()"
@@ -35,8 +38,8 @@
           <label for="group" class="text-sm font-medium text-gray-700">Group</label>
           <input
             id="group"
-            name="group"
-            [(ngModel)]="formData.group"
+            name="groupId"
+            [(ngModel)]="formData.groupId"
             #group="ngModel"
             required
             type="text"
@@ -54,8 +57,8 @@
           <label for="artifact" class="text-sm font-medium text-gray-700">Artifact</label>
           <input
             id="artifact"
-            name="artifact"
-            [(ngModel)]="formData.artifact"
+            name="artifactId"
+            [(ngModel)]="formData.artifactId"
             (ngModelChange)="onFieldChange()"
             #artifact="ngModel"
             required
@@ -150,7 +153,6 @@
           name="description"
           [(ngModel)]="formData.description"
           (ngModelChange)="onFieldChange()"
-          #description="ngModel"
           rows="3"
           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           placeholder="Demo project for Spring Boot"
@@ -174,13 +176,18 @@
 <!--&lt;!&ndash;        </button>&ndash;&gt;-->
 <!--      </div>-->
     </form>
+<!--      <div *ngIf="formData.dependencies !== '' ">-->
+<!--        <p *ngFor="let dependency of formData.dependencies" class="mt-2">-->
+<!--          <span class="text-gray-600">{{dependency}}, </span>-->
+<!--        </p>-->
+<!--      </div>-->
 
     </div>
 
     <div *ngIf="selectedFramework === 'laravel'" class="mt-6">
       <h3 class="text-lg font-medium text-gray-700">Laravel project</h3>
       <p class="text-gray-600">After processing of your diagram, your will download the .zip file, extract it and run composer ...</p>
-      <form #laravelForm="ngForm">
+      <form>
         <label for="projectName" class="block text-sm font-medium text-gray-700">
           Project Name:
         </label>
@@ -195,7 +202,5 @@
           required
         />
       </form>
-
     </div>
-
   </div>
