@@ -9,6 +9,6 @@ public class {{ dto_data.name | capitalize}} {
         {%for decorator in attr.decorators%}
             @{{decorator.name | capitalize}}(message = decorator.message)
         {% endfor %}
-        {{attr.visibility}} {{ attr.type }} {{ attr.name }};
+        {{attr.visibility}} {{ attr._type }} {{ attr.name }};
     {% endfor %}
 }

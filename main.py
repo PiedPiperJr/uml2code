@@ -1,66 +1,60 @@
-from config import *
-from utils.validators import validate_data_types
-from utils.utils import dump
-from converters.xml_to_json import convert_xml_to_json
-from code_generators.java_pojo import write_java_files
-from code_generators.java_clean import generate_clean_project
-from converters.json_to_structure import convert_json_to_structure, interpret_relationships
-from extractors.relationship_extractor import extract_relationships
-from models.relationship_model import RelationshipType
-from models.project_model import Project
-from converters.use_cases_converter import use_cases_to_json
+from code_generator.clean.clean_code_generator import CleanCodeGenerator
+from code_generator.pojo.pojo_code_generator import PoJoCodeGenerator
+from lexer.lexer import Lexer
+from pathlib import Path
 import json
 
-def main(usc = None, use_cases_data: str = None, xml_data: str = None,  enable_type_validation: bool = False):
-    # Lecture du fichier XML
-    if use_cases_data is None:
-        with open(USECASE_EXAMPLE_FILE_PATH, "r") as file:
-            use_cases_data = file.read()
-
-    if xml_data is None:
-        with open(XML_FILE_PATH, "r") as xml_file:
-            xml_data = xml_file.read()
-
-    # TODO remove usc in prod
-    class_diagram_interpretation = class_diagram_interpreter(xml_data, False)
-    if usc is None:
-        use_case_interpretation = use_cases_to_json(use_cases_data)["useCases"]
-        dump(USECASES_JSON_FILE_PATH, use_case_interpretation)
-    else:
-        use_case_interpretation = usc
+from models.project_model import Project
+from semantic_analyzer.semantic_analyzer import SemanticAnalyzer
+import os
+import shutil
 
 
-    project: Project = Project(
-        "org.enspy.4gi", class_diagram_interpretation, use_case_interpretation)
-    
-    dump(PROJECT_JSON_FILE_PATH, {
-         "route": project.route, "classes": project.classes, "usecases": project.useCases})
-    
-    generate_clean_project(project, CLEAN_JAVA_APP_TEMPLATE, CLEAN_APP_FOLDER)
-    # write_java_files(interpreted_data, SIMPLE_JAVA_CLASS_TEMPLATE, CLEAN_APP_FOLDER)
+def main():
+
+    diagram = Path("data/class-diagram-example.drawio")
+    lexer = Lexer(diagram.read_text("utf-8"))
+
+    result = Path("lexer.json")
+    lexer_result = lexer.execute()
+    result.write_text(json.dumps(lexer_result))
+
+    semantic_analyzer = SemanticAnalyzer(lexer_result)
+    classes = semantic_analyzer.execute()
+
+    pojo_generator = PoJoCodeGenerator(
+        classes, "templates/java/simple_class.html", "out")
+
+    pojo_generator.execute()
+
+    project = Project("org.enspy.snappy.server", classes, [])
+    shutil.rmtree("demo\src\main\java\org\enspy\snappy\server\domain")
+    shutil.rmtree("demo\src\main\java\org\enspy\snappy\server\infrastructure")
+    shutil.rmtree("demo\src\main\java\org\enspy\snappy\server\presentation")
+    clean_generator = CleanCodeGenerator(
+        project, "templates/java-clean", "demo\src\main\java\org\enspy\snappy\server")
+
+    clean_generator.execute()
 
 
-def class_diagram_interpreter(xml_data, enable_type_validation: bool = False):
-    initial_json_data = convert_xml_to_json(xml_data)
-    dump(INITIAL_JSON_FILE_PATH, initial_json_data)
-    structured_data = convert_json_to_structure(initial_json_data)
-    dump(STRUCTURED_JSON_FILE_PATH, structured_data)
-    relationships = extract_relationships(structured_data)
-    classes = list(structured_data["classes"].values())
-    interpreted_data = interpret_relationships(classes, relationships)
+"""pom.xml
 
-    if enable_type_validation:
-        validate_data_types(interpreted_data, GEMINI_API_KEY)
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.17.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+"""
 
-    dump(INTERPRETED_JSON_FILE_PATH, interpreted_data)
 
-    return interpreted_data
-
-
-if __name__ == "__main__":
-
-    with open(USECASES_JSON_FILE_PATH, 'r') as f:
-        usecase = json.loads(f.read())
-    
-
-    main(usc = usecase)
+if __name__ == '__main__':
+    main()

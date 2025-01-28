@@ -1,34 +1,27 @@
 from dataclasses import dataclass, field
-from typing import List, Dict
-from utils.utils import capitalize
+from typing import List, Dict, Optional
+from helpers.utils import Utils
+from models.attribute_model import Attribute
+from models.method_model import Method
+
 
 @dataclass
-class Attribute:
-    visibility: str
+class Class(object):
     name: str
-    type: str
-
-@dataclass
-class Method:
-    visibility: str
-    name: str
-    type: str
-    args: List[str]
-
-@dataclass
-class Class:
-    name: str
-    type: str = "classe"
-    attributes: List[Attribute] = field(default_factory=list)
-    methods: List[Method] = field(default_factory=list)
+    attributes: List[Attribute]
+    methods: List[Method]
+    aggregations: List[Attribute]
+    compositions: List[Attribute]
+    parent: Optional[str]
 
     @classmethod
     def from_dict(cls, data: Dict) -> 'Class':
         instance = cls(name=data['name'])
-        instance.attributes = [Attribute(**attr) for attr in data['attributes']]
+        instance.attributes = [Attribute(**attr)
+                               for attr in data['attributes']]
         instance.methods = [Method(**method) for method in data['methods']]
         return instance
 
     @classmethod
     def capitalize(cls):
-        capitalize(cls(name=capitalize(cls.name)))
+        cls(name=Utils.capitalize(cls.name))

@@ -1,20 +1,20 @@
-{% if data.import_list %}import java.util.List; {% endif %}
+import java.util.List;
 
 public class {{ data.name | capitalize }} {% if data.parent %} extends {{ data.parent | capitalize }} {% endif %} {
 
     // Attributes
     {% for attr in data.attributes %}
-    {{ attr.visibility }} {{ attr.type }} {{ attr.name }};
+    {{ attr.visibility }} {{ attr._type }} {{ attr.name }};
     {% endfor %}
 
     // Aggregation: List of related elements
     {% for aggregation in data.aggregations %}
-    {{ aggregation.visibility }} List<{{ aggregation.type }}> {{ aggregation.name }};
+    {{ aggregation.visibility }} List<{{ aggregation._type }}> {{ aggregation.name }};
     {% endfor %}
     
     // Composition: List of owned elements
     {% for composition in data.compositions %}
-    {{ composition.visibility }} List<{{ composition.type | capitalize }}> {{ composition.name }};
+    {{ composition.visibility }} List<{{ composition._type | capitalize }}> {{ composition.name }};
     {% endfor %}
     
     // Constructeur
@@ -24,7 +24,7 @@ public class {{ data.name | capitalize }} {% if data.parent %} extends {{ data.p
     
     // Methods
     {% for method in data.methods %}
-    {{ method.visibility }} {{ method.type }} {{ method.name }}({% for arg in method.args %}{{ arg.type }} {{ arg.name }}{% if not loop.last %}, {% endif %}{% endfor %}) {
+    {{ method.visibility }} {{ method._type }} {{ method.name }}({% for arg in method.args %}{{ arg._type }} {{ arg.name }}{% if not loop.last %}, {% endif %}{% endfor %}) {
         // To implement
     }
     {% endfor %}
