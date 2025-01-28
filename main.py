@@ -26,7 +26,7 @@ def main():
     pojo_generator.execute()
     # print(classes)
 
-    project = Project("org.enspy.uml2code", classes, [])
+    project = Project("mwm", classes, [])
     clean_generator = CleanCodeGenerator(project, "templates/java-clean", "out_clean")
     clean_generator.execute()
 
