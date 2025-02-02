@@ -49,11 +49,7 @@ export class HomeComponent {
   };
   selectedFramework: string = "";
   laravelProjectName: string = '';
-  serverInputFile : ServerInput = {
-    files: [],
-    type : '',
-    params : ''
-  }
+  serverInputFile : ServerInput | undefined;
 
   constructor(private stepService: StepService) {}
 
@@ -108,14 +104,15 @@ export class HomeComponent {
       this.serverInputFile = {
         files : this.files,
         type: 'laravel',
-        params: this.laravelProjectName
+        project_name: this.laravelProjectName
       }
     } else {
       if (this.selectedFramework === 'springboot'){
         this.serverInputFile = {
           files : this.files,
           type : 'springboot',
-          params: "https://start.spring.io/pom.xml?groupId=" + this.formData.groupId + "&artifactId=" + this.formData.artifactId + "&name=" + this.formData.name + "&packageName=" + this.formData.packageName + "&packaging=" + this.formData.packaging + "&javaVersion=" + this.formData.javaVersion + "&description=" + this.formData.description + "&dependencies=" + this.formData.dependencies
+          pomxml_url: "https://start.spring.io/pom.xml?groupId=" + this.formData.groupId + "&artifactId=" + this.formData.artifactId + "&name=" + this.formData.name + "&packageName=" + this.formData.packageName + "&packaging=" + this.formData.packaging + "&javaVersion=" + this.formData.javaVersion + "&description=" + this.formData.description + "&dependencies=" + this.formData.dependencies,
+          spring_data : this.formData
         }
       }
     }
