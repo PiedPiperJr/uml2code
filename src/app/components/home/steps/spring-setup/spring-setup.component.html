@@ -176,12 +176,9 @@
 <!--&lt;!&ndash;        </button>&ndash;&gt;-->
 <!--      </div>-->
     </form>
-<!--      <div *ngIf="formData.dependencies !== '' ">-->
-<!--        <p *ngFor="let dependency of formData.dependencies" class="mt-2">-->
-<!--          <span class="text-gray-600">{{dependency}}, </span>-->
-<!--        </p>-->
-<!--      </div>-->
-
+      <div *ngIf="formData?.dependencies?.length">
+        <strong>Dependencies  : </strong><span class="text-gray-600">{{ formData.dependencies }}</span>.
+      </div>
     </div>
 
     <div *ngIf="selectedFramework === 'laravel'" class="mt-6">

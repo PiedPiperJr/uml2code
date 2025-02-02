@@ -67,9 +67,12 @@ export class SpringSetupComponent {
   }
 
   resetForm() {
+    this.formData = {
+      dependencies: '',
+    };
     this.setupForm.resetForm({
       packaging: 'jar',
-      javaVersion: '17'
+      javaVersion: '17',
     });
   }
 }
