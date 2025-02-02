@@ -113,7 +113,7 @@ export class HomeComponent {
         this.serverInputFile = {
           files : this.files,
           type : 'springboot',
-          params: this.formData
+          params: "https://start.spring.io/pom.xml?groupId=" + this.formData.groupId + "&artifactId=" + this.formData.artifactId + "&name=" + this.formData.name + "&packageName=" + this.formData.packageName + "&packaging=" + this.formData.packaging + "&javaVersion=" + this.formData.javaVersion + "&description=" + this.formData.description + "&dependencies=" + this.formData.dependencies
         }
       }
     }
