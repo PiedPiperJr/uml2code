@@ -78,11 +78,13 @@ export class HomeComponent {
     console.log('... Framework')
   }
 
+
   uploadFiles(): void {
     console.log('Uploading files...', this.files);
     if(this.currentStep === 1) {
       this.currentStep = 2;
     } else {
+      this.parsingFiles();
       this.currentStep = 3;
       this.files.forEach(file => {
         this.fileProgresses[file.file.name] = 0;
