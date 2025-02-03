@@ -2,11 +2,12 @@ import os
 import json
 import time
 import uuid
+import shutil
 import tempfile
 from werkzeug.utils import secure_filename
 
 from services.network import download_file
-from services.file_processor import process_file
+from services.file_processor import process_file, copy_tree
 from services.project_builder import create_spring_boot_project
 from flask import Blueprint, request, send_file, jsonify, after_this_request
 
@@ -58,9 +59,10 @@ def process_drawio_file():
             package_name=package_name
         )
         print('zip path = ', zip_path)
-        # time.sleep(10000)
         
     elif data['type'] == 'laravel':
+        # copy laravel project structure to the tmp folder
+        copy_tree('./build/laravel', output_dir)
         zip_path = process_file(
             diagram_path=file_path,
             ouput_dir=output_dir,

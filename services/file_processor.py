@@ -76,3 +76,13 @@ def zip_folder(dir: str, zip_name: str) -> str:
         shutil.move(f"{tmp_file.name}.zip", zip_path)
     
     return zip_path
+
+def copy_tree(source_folder: str, destination_folder: str):
+    for item in os.listdir(source_folder):
+        source_item = os.path.join(source_folder, item)
+        destination_item = os.path.join(destination_folder, item)
+        
+        if os.path.isdir(source_item):
+            shutil.copytree(source_item, destination_item)  # Copy subdirectories
+        else:
+            shutil.copy2(source_item, destination_item)  # Copy files
