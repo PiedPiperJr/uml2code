@@ -1,0 +1,67 @@
+// Service Implementation Template
+package {{route}}.infrastructure.services.crud;
+
+import {{route}}.domain.entities.{{data.name | capitalize}};
+import {{route}}.domain.services.crud.I{{data.name | capitalize}}CrudService;
+import {{route}}.infrastructure.repositories.{{data.name | capitalize}}Repository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import jakarta.persistence.EntityNotFoundException;
+import java.util.UUID;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class {{data.name | capitalize}}CrudService implements I{{data.name | capitalize}}CrudService {
+    
+    private final {{data.name | capitalize}}Repository repository;
+    
+    @Override
+    public {{data.name | capitalize}} create({{data.name | capitalize}} entity) {
+        return repository.save(entity);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public {{data.name | capitalize}} findById(UUID id) {
+        return repository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("{{data.name}} not found with id: " + id));
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public Page<{{data.name | capitalize}}> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+    
+    @Override
+    public {{data.name | capitalize}} update(UUID id, {{data.name | capitalize}} entity) {
+        if (!repository.existsById(id)) {
+            throw new EntityNotFoundException("{{data.name}} not found with id: " + id);
+        }
+        entity.setId(id);
+        return repository.save(entity);
+    }
+    
+    @Override
+    public void delete(UUID id) {
+        if (!repository.existsById(id)) {
+            throw new EntityNotFoundException("{{data.name}} not found with id: " + id);
+        }
+        repository.deleteById(id);
+    }
+    
+    {% for attr in data.attributes %}
+    {% if attr.searchable %}
+    @Override
+    @Transactional(readOnly = true)
+    public List<{{data.name | capitalize}}> findBy{{attr.name | capitalize}}({{attr.type}} {{attr.name}}) {
+        return repository.findBy{{attr.name | capitalize}}({{attr.name}});
+    }
+    {% endif %}
+    {% endfor %}
+}

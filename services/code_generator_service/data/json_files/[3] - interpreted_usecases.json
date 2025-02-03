@@ -1,0 +1,125 @@
+[
+    {
+        "name": "AuthentificationUtilisateur",
+        "actors": [
+            "Utilisateur",
+            "Syst\u00e8me d'authentification"
+        ],
+        "preconditions": [
+            "L'utilisateur doit disposer d'un compte valide."
+        ],
+        "postconditions": [
+            "L'utilisateur est authentifi\u00e9 et redirig\u00e9 vers son tableau de bord."
+        ],
+        "scenarios": {
+            "principal": [
+                "L'utilisateur saisit son nom d'utilisateur et son mot de passe.",
+                "Le syst\u00e8me v\u00e9rifie les informations fournies.",
+                "L'utilisateur est redirig\u00e9 vers son espace personnel."
+            ],
+            "alternatif": [
+                "L'utilisateur saisit un mot de passe incorrect.",
+                "Le syst\u00e8me affiche un message d'erreur et propose de r\u00e9essayer ou de r\u00e9initialiser le mot de passe."
+            ]
+        }
+    },
+    {
+        "name": "PassageDuneCommande",
+        "actors": [
+            "Client",
+            "Syst\u00e8me de gestion des commandes"
+        ],
+        "preconditions": [
+            "Le client doit \u00eatre connect\u00e9 \u00e0 son compte."
+        ],
+        "postconditions": [
+            "La commande est enregistr\u00e9e et confirm\u00e9e."
+        ],
+        "scenarios": {
+            "principal": [
+                "Le client ajoute des produits au panier.",
+                "Le client confirme le panier et passe au paiement.",
+                "Le syst\u00e8me enregistre la commande et affiche une confirmation."
+            ],
+            "alternatif": [
+                "Le client tente de commander un produit indisponible.",
+                "Le syst\u00e8me informe le client de l'indisponibilit\u00e9 et propose des alternatives."
+            ]
+        }
+    },
+    {
+        "name": "ReservationDunBilletEnLigne",
+        "actors": [
+            "Utilisateur",
+            "Syst\u00e8me de r\u00e9servation"
+        ],
+        "preconditions": [
+            "Les horaires et les trajets doivent \u00eatre disponibles dans le syst\u00e8me."
+        ],
+        "postconditions": [
+            "La r\u00e9servation est confirm\u00e9e et un billet \u00e9lectronique est g\u00e9n\u00e9r\u00e9."
+        ],
+        "scenarios": {
+            "principal": [
+                "L'utilisateur choisit une destination et une date de voyage.",
+                "Le syst\u00e8me affiche les options disponibles.",
+                "L'utilisateur s\u00e9lectionne une option, saisit ses informations personnelles et effectue le paiement.",
+                "Le syst\u00e8me g\u00e9n\u00e8re un billet \u00e9lectronique."
+            ],
+            "alternatif": [
+                "L'utilisateur tente de r\u00e9server pour une date sans disponibilit\u00e9.",
+                "Le syst\u00e8me propose d'autres options ou permet \u00e0 l'utilisateur de modifier ses crit\u00e8res."
+            ]
+        }
+    },
+    {
+        "name": "PublicationDeContenu",
+        "actors": [
+            "Auteur",
+            "\u00c9diteur",
+            "Syst\u00e8me de publication"
+        ],
+        "preconditions": [
+            "L'auteur doit \u00eatre connect\u00e9 \u00e0 son compte."
+        ],
+        "postconditions": [
+            "L'article est publi\u00e9 et visible pour les lecteurs."
+        ],
+        "scenarios": {
+            "principal": [
+                "L'auteur r\u00e9dige un article et le soumet pour validation.",
+                "L'\u00e9diteur valide l'article.",
+                "Le syst\u00e8me publie l'article sur la plateforme."
+            ],
+            "alternatif": [
+                "L'article soumis contient des erreurs importantes.",
+                "L'\u00e9diteur rejette l'article et fournit des commentaires pour correction."
+            ]
+        }
+    },
+    {
+        "name": "RecuperationDeMotDePasse",
+        "actors": [
+            "Utilisateur",
+            "Syst\u00e8me d'authentification"
+        ],
+        "preconditions": [
+            "L'utilisateur doit avoir une adresse e-mail associ\u00e9e \u00e0 son compte."
+        ],
+        "postconditions": [
+            "Le mot de passe est r\u00e9initialis\u00e9 avec succ\u00e8s."
+        ],
+        "scenarios": {
+            "principal": [
+                "L'utilisateur clique sur \"Mot de passe oubli\u00e9\".",
+                "Le syst\u00e8me envoie un e-mail avec un lien de r\u00e9initialisation.",
+                "L'utilisateur clique sur le lien et d\u00e9finit un nouveau mot de passe.",
+                "Le syst\u00e8me confirme la r\u00e9initialisation."
+            ],
+            "alternatif": [
+                "L'utilisateur entre une adresse e-mail incorrecte ou non associ\u00e9e \u00e0 un compte.",
+                "Le syst\u00e8me informe l'utilisateur de l'\u00e9chec et propose de r\u00e9essayer."
+            ]
+        }
+    }
+]

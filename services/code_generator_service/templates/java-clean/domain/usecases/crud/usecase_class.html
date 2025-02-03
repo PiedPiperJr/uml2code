@@ -1,0 +1,15 @@
+package {{route}}.domain.usecases;
+
+import {{route}}.domain.usecases.UseCase;
+import {{route}}.domain.dto.{{usecase.name | capitalize}}Dto;
+import {{route}}.domain.responses.{{usecase.name | capitalize}}Response;
+
+public class {{class.name}}UseCase implements UseCase<{{usecase.name}}Dto,{{usecase.name}}Response> {
+    
+    @Override
+    public {{usecase.name }}Response execute({{usecase.name}}Dto dto) {
+        //TODO: Implement the use case logic here base on the AI
+        System.out.println("{{usecase.name | capitalize}}UseCase.execute");
+        return new {{usecase.name | capitalize}}Response();
+    }
+}

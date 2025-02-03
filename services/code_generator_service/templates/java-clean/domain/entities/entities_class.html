@@ -1,0 +1,66 @@
+package {{route}}.domain.entities;
+
+{% if data.parent %} 
+import {{route}}.domain.entities.{{ data.parent | capitalize }}; 
+{% endif %}
+import lombok.*;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import java.time.LocalDateTime;
+import java.util.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import {{route}}.infrastructure.helpers.LocalDateTimeDeserializer;
+import {{route}}.infrastructure.helpers.LocalDateTimeSerializer;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class {{ data.name | capitalize }} {% if data.parent %} extends {{ data.parent | capitalize }} {% endif %} {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    {% for attr in data.attributes %}
+    {% if attr.name != 'id' %}
+    @Column(nullable = true) // Add specific constraints if needed
+    private {{ attr._type }} {{ attr.name }};
+    {% endif %}
+    {% endfor %}
+
+    // TODO: Add relationships here
+    // Aggregation: List of related elements
+    {% for aggregation in data.aggregations %}
+    {{ aggregation.visibility }} List<{{ aggregation._type }}> {{ aggregation.name }};
+    {% endfor %}
+    
+    // Composition: List of owned elements
+    {% for composition in data.compositions %}
+    {{ composition.visibility }} List<{{ composition._type | capitalize }}> {{ composition.name }};
+    {% endfor %}
+
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+     // Methods
+    /*
+     {% for method in data.methods %}
+    {{ method.visibility }} {{ method._type }} {{ method.name }}({% for arg in method.args %}{{ arg._type }} {{ arg.name }}{% if not loop.last %}, {% endif %}{% endfor %}) {
+        // To implement
+        throw new UnsupportedOperationException("Not supported yet.");
+
+    }
+    {% endfor %} */
+
+}

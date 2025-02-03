@@ -1,0 +1,8 @@
+package {{route}}.domain.exceptions.already_exists;
+
+
+public class {{data.name | capitalize}}AlreadyExistsException extends EntityAlreadyExistsException {
+public {{data.name | capitalize}}AlreadyExistsException(String message) {
+        super(message);
+    }
+}
