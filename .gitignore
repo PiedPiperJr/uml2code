@@ -1,0 +1,87 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Virtual environment
+.vscode/
+.idea/
+*.venv/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# pytest
+.cache/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+
+# Pyre
+.pyre/
+
+# Pycharm
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VSCode
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ntuser.dat
+Desktop.ini
+
+# Logs
+logs/
+*.log
+
+# Local configuration
+.env
+*.ini
+*.cfg
+
+# Python virtual environment
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Testing
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Profiling data
+*.prof
+*.pstats
+
+# SQLite database
+*.sqlite3
+
+# Celery
+celerybeat-schedule
+
+# Django stuff
+*.mo
+*.pot
+__pypackages__/
