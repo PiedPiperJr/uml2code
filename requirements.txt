@@ -1,0 +1,8 @@
+Jinja2==3.1.4
+MarkupSafe==3.0.2
+xmltodict==0.14.2
+google-generativeai
+Flask
+flask-cors
+requests
+Werkzeug
