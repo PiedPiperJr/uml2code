@@ -46,7 +46,7 @@ def process_file(diagram_path: str,
 
 
 def generate_laravel(classes: List[Class], ouput_dir: str, zip_name: str, folder_to_zip: Optional[str] = None) -> str:
-    class_data_file_path = os.path.join(ouput_dir, 'class_data.json')
+    class_data_file_path = os.path.join(ouput_dir, 'data.json')
     Utils.dump(class_data_file_path, [_class.to_dict() for _class in classes])
     
     folder_to_zip = ouput_dir if folder_to_zip is None else folder_to_zip
