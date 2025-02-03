@@ -78,7 +78,7 @@ def process_drawio_file():
     def cleanup(response):
         try:
             # os.remove(file_path)
-            os.remove(zip_path)
+            os.remove(new_zip_path)
             # os.rmdir(output_dir)
             # os.rmdir(temp_dir)
         except Exception as e:
@@ -86,11 +86,15 @@ def process_drawio_file():
         return response
     
     # Send the zip file
+    name = data['project_name'] if data['type'] == 'laravel' else data['spring_data']['name']
+    new_zip_path = os.path.join(os.path.dirname(zip_path), f"{name}.zip")
+    os.rename(zip_path, new_zip_path)
+    print(new_zip_path)
     return send_file(
-        zip_path,
+        new_zip_path,
         mimetype='application/zip',
         as_attachment=True,
-        download_name=f"{zip_name}.zip"
+        download_name=os.path.basename(new_zip_path),
     )
         
     # except ValueError as e:
