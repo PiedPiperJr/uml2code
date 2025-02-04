@@ -14,7 +14,7 @@ from flask import Blueprint, request, send_file, jsonify, after_this_request
 
 bp = Blueprint('routes', __name__)
 
-@app.route('/hello', methods=['GET'])
+@bp.route('/', methods=['GET'])
 def hello_world():
     return "Hello, World!", 200
 
@@ -106,4 +106,3 @@ def process_drawio_file():
     
     # except Exception as e:
     #     return jsonify({"error": f"Processing failed: {str(e)}"}), 500
-
