@@ -1,8 +1,9 @@
-const fetch = require('node-fetch');
-const FormData = require('form-data');
-const busboy = require('busboy');
+import { VercelRequest, VercelResponse } from '@vercel/node';
+import fetch from 'node-fetch';
+import FormData from 'form-data';
+import busboy from 'busboy';
 
-module.exports = async (req, res) => {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Gérer CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -20,12 +21,12 @@ module.exports = async (req, res) => {
   const bb = busboy({ headers: req.headers });
   const formData = new FormData();
 
-  let serverInputData = null;
+  let serverInputData: string | null = null;
 
   // Traiter les champs et fichiers
   bb.on('file', (name, file, info) => {
     const { filename, encoding, mimeType } = info;
-    const chunks = [];
+    const chunks: Buffer[] = [];
 
     file.on('data', (data) => {
       chunks.push(data);
@@ -66,9 +67,14 @@ module.exports = async (req, res) => {
       const buffer = await response.buffer();
 
       // Transférer les en-têtes importants
-      res.setHeader('Content-Type', contentType);
+      if (contentType) {
+        res.setHeader('Content-Type', contentType);
+      }
       if (response.headers.has('content-disposition')) {
-        res.setHeader('Content-Disposition', response.headers.get('content-disposition'));
+        const disposition = response.headers.get('content-disposition');
+        if (disposition) {
+          res.setHeader('Content-Disposition', disposition);
+        }
       }
 
       // Envoyer la réponse
@@ -82,4 +88,4 @@ module.exports = async (req, res) => {
 
   // Passer la requête à busboy
   req.pipe(bb);
-};
+}

@@ -1,5 +1,10 @@
 {
   "rewrites": [
     { "source": "/api/process", "destination": "/api/process" }
-  ]
+  ],
+  "functions": {
+    "api/*.ts": {
+      "runtime": "vercel-node@latest"
+    }
+  }
 }
