@@ -26,6 +26,7 @@
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
     "@mdi/font": "^7.4.47",
+    "http-proxy-middleware": "^3.0.3",
     "ngx-toastr": "^19.0.0",
     "pw-no-spaghetti": "file:",
     "rxjs": "~7.8.0",
