@@ -1,10 +1,10 @@
 {
-  "rewrites": [
-    { "source": "/api/process", "destination": "/api/process" }
-  ],
   "functions": {
     "api/*.ts": {
-      "runtime": "vercel-node@latest"
+      "runtime": "@vercel/node@2.15.8"
     }
-  }
+  },
+  "rewrites": [
+    { "source": "/api/process", "destination": "/api/process" }
+  ]
 }
