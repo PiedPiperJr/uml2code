@@ -14,10 +14,14 @@ export interface UploadProgress {
   providedIn: 'root'
 })
 export class UploadServiceService {
-  private readonly API_URL = `${environment.apiUrl}/process`;
+  private readonly API_URL = `/api/process`;
 
   constructor(private http: HttpClient) {}
 
+  // TODO faire une requ te get vers la route /api
+  async getApiStatus(): Promise<any> {
+    return await this.http.get('/api');
+  }
   uploadFileWithProgress(file: File, serverInput: ServerInput): Observable<UploadProgress> {
     const formData = new FormData();
     formData.append('file', file);
@@ -33,7 +37,7 @@ export class UploadServiceService {
           case HttpEventType.UploadProgress:
             const progress = event.total ? Math.round(100 * event.loaded / event.total) : 0;
             return { progress };
-            
+
           case HttpEventType.Response:
             if (event instanceof HttpResponse && event.body) {
               const blob = new Blob([event.body], { type: 'application/zip' });
@@ -41,7 +45,7 @@ export class UploadServiceService {
               return { progress: 100, downloadUrl };
             }
             return { progress: 100 };
-            
+
           default:
             return { progress: 0 };
         }
