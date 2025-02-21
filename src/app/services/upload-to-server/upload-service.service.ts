@@ -18,7 +18,6 @@ export class UploadServiceService {
 
   constructor(private http: HttpClient) {}
 
-  // TODO faire une requ te get vers la route /api
   async getApiStatus(): Promise<any> {
     return await this.http.get('/api');
   }
