@@ -6,6 +6,6 @@
 // };
 
 export const environment = {
-  production: false,
+  production: true,
   apiUrl: 'http://13.61.100.122:5000',
 };
