@@ -1,15 +1,5 @@
 {
   "rewrites": [
-    { "source": "/api/:path*", "destination": "http://13.61.100.122:5000/:path*" }
-  ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
-        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization" }
-      ]
-    }
+    { "source": "/api/process", "destination": "/api/process" }
   ]
 }
