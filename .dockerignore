@@ -1,0 +1,12 @@
+demo/
+out
+out_clean
+services/services_code_generator_service/out
+services/services_code_generator_service/out_clean
+venv
+.git
+__*/
+**/__*
+**/**/__*
+**/**/**/__*
+*.java

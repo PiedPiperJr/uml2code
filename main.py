@@ -27,10 +27,11 @@ def main():
 
     pojo_generator.execute()
 
-    project = Project("org.enspy.snappy.server", classes, [])
     shutil.rmtree("demo\src\main\java\org\enspy\snappy\server\domain")
     shutil.rmtree("demo\src\main\java\org\enspy\snappy\server\infrastructure")
     shutil.rmtree("demo\src\main\java\org\enspy\snappy\server\presentation")
+    
+    project = Project("org.enspy.snappy.server", classes, [])
     clean_generator = CleanCodeGenerator(
         project, "templates/java-clean", "demo\src\main\java\org\enspy\snappy\server")
 
