@@ -1,18 +1,18 @@
-
+import java.util.List;
 
 public class Address  {
 
     // Attributes
     
-    public str street;
+    public String street;
     
-    public str city;
+    public String city;
     
-    public str state;
+    public String state;
     
     public int postalCode;
     
-    public str country;
+    public String country;
     
 
     // Aggregation: List of related elements
@@ -28,11 +28,7 @@ public class Address  {
     
     // Methods
     
-    private bool Validate() {
-        // To implement
-    }
-    
-    public str outputAsLabel() {
+    public String outputAsLabel() {
         // To implement
     }
     

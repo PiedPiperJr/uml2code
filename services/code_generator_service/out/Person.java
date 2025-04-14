@@ -1,16 +1,14 @@
-
+import java.util.List;
 
 public class Person  {
 
     // Attributes
     
-    public str name;
+    public String name;
     
-    public str phoneNumber;
+    public String phoneNumber;
     
-    public str emailAddress;
-    
-    private Address addresss;
+    public String emailAddress;
     
 
     // Aggregation: List of related elements

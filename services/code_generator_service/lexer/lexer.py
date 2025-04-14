@@ -89,15 +89,28 @@ class Lexer:
         return self.root_id, self.sub_root_id
     
     def _fix_relationship_attribs(self, relationship: Dict, initial_json_data: List[Dict]) -> None:
-        # fix bad source and target in relationships 
+        """
+        Corrige les attributs source et target des relations.
+        
+        Si une relation pointe vers un élément qui n'est pas une classe (comme un attribut ou une méthode),
+        remplace la référence par son parent (la classe contenant cet élément).
+        """
         for mxcell in initial_json_data:
-            parent = mxcell.get('@parent')
-            if not Validators.is_class(mxcell, self.sub_root_id):
-                if relationship['source'].lower() == mxcell.get('@id') :
-                    relationship['source'] = parent if not parent is None else relationship['source']
-
-            if not Validators.is_class(mxcell, self.sub_root_id):
-                if relationship['target'].lower() == mxcell.get('@id'):
-                    relationship['target'] = parent if not parent is None else relationship['target']
-        
-        
+            # Ignorer les cellules qui sont des classes
+            if Validators.is_class(mxcell, self.sub_root_id):
+                continue
+                
+            cell_id = mxcell.get('@id')
+            parent_id = mxcell.get('@parent')
+            
+            # Ignorer les cellules sans parent
+            if parent_id is None:
+                continue
+                
+            # Corriger la source si elle pointe vers cette cellule
+            if relationship['source'].lower() == cell_id.lower():
+                relationship['source'] = parent_id
+                
+            # Corriger la cible si elle pointe vers cette cellule
+            if relationship['target'].lower() == cell_id.lower():
+                relationship['target'] = parent_id

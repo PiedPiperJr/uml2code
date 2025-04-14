@@ -21,20 +21,21 @@ def main():
 
     semantic_analyzer = SemanticAnalyzer(lexer_result)
     classes = semantic_analyzer.execute()
+    print(classes)
 
-    pojo_generator = PoJoCodeGenerator(
-        classes, "templates/java/simple_class.html", "out")
+    # pojo_generator = PoJoCodeGenerator(
+    #     classes, "templates/java/simple_class.html", "out")
 
-    pojo_generator.execute()
+    # pojo_generator.execute()
 
-    project = Project("org.enspy.snappy.server", classes, [])
-    shutil.rmtree("demo\src\main\java\org\enspy\snappy\server\domain")
-    shutil.rmtree("demo\src\main\java\org\enspy\snappy\server\infrastructure")
-    shutil.rmtree("demo\src\main\java\org\enspy\snappy\server\presentation")
-    clean_generator = CleanCodeGenerator(
-        project, "templates/java-clean", "demo\src\main\java\org\enspy\snappy\server")
+    # project = Project("org.enspy.snappy.server", classes, [])
+    # shutil.rmtree("demo\src\main\java\org\enspy\snappy\server\domain")
+    # shutil.rmtree("demo\src\main\java\org\enspy\snappy\server\infrastructure")
+    # shutil.rmtree("demo\src\main\java\org\enspy\snappy\server\presentation")
+    # clean_generator = CleanCodeGenerator(
+    #     project, "templates/java-clean", "demo\src\main\java\org\enspy\snappy\server")
 
-    clean_generator.execute()
+    # clean_generator.execute()
 
 
 """pom.xml

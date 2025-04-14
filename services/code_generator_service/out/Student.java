@@ -1,4 +1,4 @@
-
+import java.util.List;
 
 public class Student  extends Person  {
 
@@ -22,7 +22,7 @@ public class Student  extends Person  {
     
     // Methods
     
-    public bool isEligibleToEnroll() {
+    public boolean isEligibleToEnroll() {
         // To implement
     }
     
