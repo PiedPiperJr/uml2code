@@ -19,7 +19,9 @@ class Factories:
             "source": mxcell.get("@source"),
             "target": mxcell.get("@target"),
             "edge": mxcell.get("@edge"),
+            "vertex": mxcell.get("@vertex"),
             "style": mxcell.get("@style"),
+            "args":[],
             "type": "",
             "multiplicity": ""
         }
