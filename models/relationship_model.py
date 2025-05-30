@@ -26,4 +26,3 @@ class Relationship:
     target_multiplicity: Optional[str]
     is_navigable_to_source: bool = False 
     is_navigable_to_target: bool = False
-    style_str: Optional[str] = None 

@@ -28,7 +28,10 @@ class Factories:
             "source_role": None,
             "target_role": None,
             "source_multiplicity": None,
-            "target_multiplicity": None
+            "target_multiplicity": None,
+            "edge_labels": [],
+            "is_navigable_to_source": False,
+            "is_navigable_to_target": False
         }
 
     @staticmethod
