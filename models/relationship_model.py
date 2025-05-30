@@ -9,6 +9,8 @@ class RelationshipType(Enum):
     AGGREGATION = 3
     COMPOSITION = 4
     ATTRIBUTE = 5
+    DEPENDENCY = 6
+    ASSOCIATION = 7
 
 @dataclass
 class Relationship:
@@ -22,3 +24,6 @@ class Relationship:
     target_role: Optional[str]
     source_multiplicity: Optional[str]
     target_multiplicity: Optional[str]
+    is_navigable_to_source: bool = False 
+    is_navigable_to_target: bool = False
+    style_str: Optional[str] = None 

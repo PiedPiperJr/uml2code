@@ -1,5 +1,5 @@
 import re
-from typing import List
+from typing import List, Optional, Tuple
 from helpers.utils import Utils
 from models.class_model import Class
 from models.relationship_model import Relationship, RelationshipType
@@ -88,3 +88,62 @@ class Interpreter:
                             pass
 
         return classes
+    
+    @staticmethod
+    def interpret_relationship_style(style_str: str, relationship_name: Optional[str]) -> Tuple[RelationshipType, Optional[str], bool, bool]:
+        
+        styles = Utils.parse_style_string(style_str)
+        
+        end_arrow = styles.get("endarrow")
+        start_arrow = styles.get("startarrow")
+        end_fill = styles.get("endfill", "1") == "1" 
+        start_fill = styles.get("startfill", "1") == "1"
+        dashed = styles.get("dashed", "0") == "1"
+
+        stereotype = None
+
+        if relationship_name and relationship_name.startswith("<<") and relationship_name.endswith(">>"):
+            stereotype = relationship_name
+            
+        # Composition (losange plein)
+        if start_arrow == "diamondthin" and start_fill:
+            return RelationshipType.COMPOSITION, stereotype, (end_arrow == "open"), False
+        if end_arrow == "diamondthin" and end_fill:
+            return RelationshipType.COMPOSITION, stereotype, False, (start_arrow == "open")
+
+        # Agrégation (losange vide)
+        if start_arrow == "diamondthin" and not start_fill:
+            return RelationshipType.AGGREGATION, stereotype, (end_arrow == "open"), False
+        if end_arrow == "diamondthin" and not end_fill:
+            return RelationshipType.AGGREGATION, stereotype, False, (start_arrow == "open")
+
+        # Héritage (Generalization) ou Réalisation d'interface
+        if end_arrow == "block" or end_arrow == "triangle": # 'triangle' est aussi commun pour l'héritage
+            if dashed:
+                return RelationshipType.INTERFACE, stereotype, False, False
+            else:
+                return RelationshipType.INHERITANCE, stereotype, False, False
+            
+        # Si la flèche d'héritage est à la source (moins courant mais possible dans certains outils)
+        if start_arrow == "block" or start_arrow == "triangle":
+            if dashed: # Moins probable pour une réalisation, mais pour être complet
+                return RelationshipType.INTERFACE, stereotype, False, False
+            else: # Moins probable pour un héritage, mais pour être complet
+                return RelationshipType.INHERITANCE, stereotype, False, False
+
+        # Dépendance (ligne pointillée, flèche ouverte)
+        if dashed and (end_arrow == "open" or end_arrow == "classic" or end_arrow == "blockthin"): # classic/blockthin sont aussi des flèches ouvertes
+            return RelationshipType.DEPENDENCY, stereotype, True, False # Dépendance est généralement dirigée
+        if dashed and (start_arrow == "open" or start_arrow == "classic" or start_arrow == "blockthin"):
+             return RelationshipType.DEPENDENCY, stereotype, False, True
+
+
+        # Association (ligne pleine, peut avoir des flèches ouvertes pour navigabilité)
+        if not dashed:
+            nav_to_target = (end_arrow == "open" or end_arrow == "classic" or end_arrow == "blockthin")
+            nav_to_source = (start_arrow == "open" or start_arrow == "classic" or start_arrow == "blockthin")
+            
+            # Si pas d'autres types identifiés, c'est une association
+            return RelationshipType.ASSOCIATION, stereotype, nav_to_target, nav_to_source
+            
+        return RelationshipType.NONE, stereotype, False, False   

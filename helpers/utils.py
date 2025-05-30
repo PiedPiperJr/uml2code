@@ -1,4 +1,4 @@
-from typing import Any, Union
+from typing import Any, Dict, Union
 import json
 
 class Utils:
@@ -29,3 +29,15 @@ class Utils:
             return input_str
         return input_str[0].upper() + input_str[1:]
 
+    @staticmethod
+    def parse_style_string(style_str: str) -> Dict[str, str]:
+        """Helper pour parser la chaîne de style en dictionnaire."""
+        if not style_str:
+            return {}
+        parts = style_str.strip(';').split(';')
+        style_dict = {}
+        for part in parts:
+            if '=' in part:
+                key, value = part.split('=', 1)
+                style_dict[key.lower()] = value
+        return style_dict
