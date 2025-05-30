@@ -5,3 +5,6 @@ out
 out_clean
 demo
 .idea
+cat*
+arbores*
+contenu_fichier*
