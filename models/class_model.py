@@ -13,6 +13,7 @@ class Class(object):
     aggregations: List[Attribute]
     compositions: List[Attribute]
     parent: Optional[str]
+    implements: List[str] = field(default_factory=list)
 
     @classmethod
     def from_dict(cls, data: Dict) -> 'Class':
