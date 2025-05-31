@@ -16,14 +16,19 @@ class ModelsFactory:
                             relationship['_type'],
                             ModelsFactory._get_class_name_by_id(
                                 structured_data, relationship["source"]),
-                            ModelsFactory._get_class_name_by_id(structured_data, relationship["target"]))
+                            ModelsFactory._get_class_name_by_id(
+                                structured_data, relationship["target"]), 
+                            relationship['source_role'],
+                            relationship['target_role'],
+                            relationship['source_multiplicity'],
+                            relationship['target_multiplicity'])
 
     @staticmethod
     def _get_class_name_by_id(structured_data: Dict, id: str) -> str:
         for class_id in structured_data['classes'].keys():
             if class_id == id:
                 return structured_data['classes'][class_id]['name']
-            
+
         return ""
 
     @staticmethod

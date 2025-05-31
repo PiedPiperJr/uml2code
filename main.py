@@ -13,14 +13,16 @@ import shutil
 def main():
 
     diagram = Path("data/class-diagram-example.drawio")
-    lexer = Lexer(diagram.read_text("utf-8"))
 
     result = Path("lexer.json")
+    lexer = Lexer(diagram.read_text("utf-8"))
     lexer_result = lexer.execute()
-    result.write_text(json.dumps(lexer_result))
+    result.write_text(json.dumps(lexer_result, indent=4, default=str))
 
+    result = Path("semantic.json")
     semantic_analyzer = SemanticAnalyzer(lexer_result)
     classes = semantic_analyzer.execute()
+    result.write_text(json.dumps(classes, indent=4, default=str))
 
     # pojo_generator = PoJoCodeGenerator(
     #     classes, "templates/java/simple_class.html", "out")

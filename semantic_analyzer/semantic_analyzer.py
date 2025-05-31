@@ -32,7 +32,7 @@ class SemanticAnalyzer:
     def build_relationships(self) -> List[Relationship]:
         relationships: List[Relationship] = list()
         for relationship in self.structured_data['relationships']:
-            relationship["_type"] = Interpreter.interpret_relationship_style(relationship["style"])
+            relationship["_type"] = Interpreter.interpret_relationship_style(relationship["style"], relationship["name"])
             relationships.append(ModelsFactory.build_relationship_model(
                 relationship, self.structured_data))
 
