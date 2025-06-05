@@ -2,6 +2,7 @@ from enum import Enum
 from dataclasses import dataclass
 from typing import Optional
 
+
 class RelationshipType(Enum):
     NONE = 0
     INTERFACE = 1
@@ -26,3 +27,4 @@ class Relationship:
     target_multiplicity: Optional[str]
     is_navigable_to_source: bool = False 
     is_navigable_to_target: bool = False
+    
