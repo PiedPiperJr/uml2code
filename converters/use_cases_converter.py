@@ -403,7 +403,6 @@ def generate_repository_methods_with_gemini(name: str, dto: Dto, action: str, en
     
     client = genai.Client(api_key="AIzaSyBfCOw1YjmEB-Ed-AonWIpF7BjhE60_aL8")
     
-    # Préparer les informations sur les attributs du DTO
     dto_attributes = [
         {"name": attr.name, "type": attr.type} 
         for attr in dto.attributes
@@ -461,11 +460,9 @@ def generate_repository_methods_with_gemini(name: str, dto: Dto, action: str, en
             contents=prompt,
         )
         
-        # Nettoyer la réponse et parser le JSON
         json_text = response.text.replace("```json", "").replace("```", "").strip()
         methods_data = json.loads(json_text)
         
-        # Convertir en objets Method
         methods = []
         for method_data in methods_data:
             args = [
@@ -488,7 +485,6 @@ def generate_repository_methods_with_gemini(name: str, dto: Dto, action: str, en
         
     except Exception as e:
         print(f"Erreur lors de la génération des méthodes de repository avec Gemini: {e}")
-        # Fallback simple en cas d'erreur
         fallback_methods = [
             Method(
                 name="save",
@@ -508,7 +504,6 @@ def generate_repository_methods_with_gemini(name: str, dto: Dto, action: str, en
 
 def resolve_usecase_relationships(usecases: List[UseCase], original_data: List[Dict]):
     """Résout les relations entre cas d'utilisation basées sur les données Gemini"""
-    # Créer un mapping nom -> UseCase pour la résolution
     usecase_map = {uc.name.lower().strip(): uc for uc in usecases}
     
     for i, usecase in enumerate(usecases):
@@ -516,15 +511,12 @@ def resolve_usecase_relationships(usecases: List[UseCase], original_data: List[D
             continue
             
         original = original_data[i]
-        
-        # Résoudre les relations 'uses' (supposées déterminées par Gemini)
         uses_data = original.get('uses', '')
         if uses_data and isinstance(uses_data, str):
             # Chercher des noms de cas d'utilisation dans le texte 'uses'
             uses_names = find_referenced_usecases(uses_data, usecase_map)
             usecase.uses = [usecase_map[name] for name in uses_names if name in usecase_map]
         
-        # Résoudre les relations 'extends' (supposées déterminées par Gemini)
         extends_data = original.get('extends', '')
         if extends_data and isinstance(extends_data, str):
             extends_names = find_referenced_usecases(extends_data, usecase_map.keys())
@@ -539,7 +531,6 @@ def find_referenced_usecases(usecase: UseCase, all_usecases: Dict[str, UseCase])
     
     client = genai.Client(api_key="AIzaSyBfCOw1YjmEB-Ed-AonWIpF7BjhE60_aL8")
     
-    # Préparer le contexte complet du cas d'utilisation à analyser
     usecase_context = {
         "nom": usecase.name,
         "action_http": usecase.action,
@@ -550,12 +541,8 @@ def find_referenced_usecases(usecase: UseCase, all_usecases: Dict[str, UseCase])
         "postconditions": usecase.postconditions
     }
     
-    # Récupérer tous les autres cas d'utilisation disponibles pour comparaison
-    # Note: Cette liste devrait être passée en paramètre ou accessible globalement
-    # Pour l'implémentation, on suppose qu'elle est disponible via une variable globale
     try:
         
-        # Préparer les informations des autres cas d'utilisation pour l'analyse
         other_usecases_info = []
         usecase_objects_map = {}
         
@@ -685,8 +672,6 @@ def fallback_find_relations(current_usecase: UseCase, all_usecases: List[UseCase
     
     return referenced
 
-
-# Fonction utilitaire pour capitaliser
 def capitalize(text: str) -> str:
     """Capitalise la première lettre de chaque mot et supprime les espaces"""
     return ''.join(word.capitalize() for word in text.replace('-', ' ').replace('_', ' ').split())
