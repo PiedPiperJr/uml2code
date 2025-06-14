@@ -9,7 +9,7 @@ from models.project_model import UseCase
 def use_cases_to_json(use_cases: str):
     # CONFIGURATION DE GEMINI
     genai.configure(api_key="AIzaSyBfCOw1YjmEB-Ed-AonWIpF7BjhE60_aL8")
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-flash')
 
     prompt = f"""convertit ce fichier sous ce format: 
                 {USECASE_PATTERN} mon texte  {use_cases} Ensuite convertit en JSON. 
