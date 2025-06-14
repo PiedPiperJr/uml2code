@@ -1,4 +1,4 @@
-import google as genai
+from google import genai
 from config import *
 import json
 from typing import List, Dict
