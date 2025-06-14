@@ -2,6 +2,7 @@ import re
 from typing import List, Optional, Tuple
 from helpers.utils import Utils
 from models.class_model import Class
+from models.interpreted_relationship_model import InterpretedRelationShip
 from models.relationship_model import Relationship, RelationshipType
 from semantic_analyzer.models_factory import ModelsFactory
 
@@ -9,7 +10,7 @@ from semantic_analyzer.models_factory import ModelsFactory
 class Interpreter:
 
     @staticmethod
-    def interpret_relationship_style(style: str) -> RelationshipType:
+    def interpret_relationship_style_old(style: str) -> RelationshipType:
         style = style.lower()
         pattern = r"(?<=\bendarrow=)[^;]+"
         matched = re.search(pattern, style)
@@ -59,6 +60,33 @@ class Interpreter:
                     method.visibility)
 
         return classes
+
+    @staticmethod
+    def interpret_relationships_new(classes: List[Class], relationships: List[Relationship]) -> List[Relationship]:
+        for relationship in relationships:
+            source_class = next((cls for cls in classes if cls.name == relationship.source_name), None)
+            target_class = next((cls for cls in classes if cls.name == relationship.target_name), None)
+
+            if not source_class or not target_class:
+                continue
+
+            if RelationshipType.INHERITANCE:
+                source_class.parent = target_class.name
+                continue
+
+            ## Interpretation de la relation proprement dite
+            source_interpretation = Interpreter._interpret_relationship_source(relationship, source_class)
+
+    @staticmethod
+    def _interpret_relationship_source(relationship: Relationship, source_class: Class) -> InterpretedRelationShip:
+        
+        if relationship.source_multiplicity is not None:
+            pass
+        
+        
+        
+
+        return None, None
 
     @staticmethod
     def interpret_relationships(classes: List[Class], relationships: List[Relationship]) -> List[Class]:

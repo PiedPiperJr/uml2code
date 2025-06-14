@@ -9,7 +9,8 @@ class Factories:
             "name": mxcell.get("@value"),
             "type": "class",
             "attributes": [],
-            "methods": []
+            "methods": [],
+            "geometry":mxcell.get("mxgeometry"),
         }
 
     @staticmethod

@@ -1,7 +1,97 @@
 [
-    "Class(name='Person', attributes=[Attribute(visibility='public', name='name', _type='String'), Attribute(visibility='public', name='phoneNumber', _type='String'), Attribute(visibility='public', name='emailAddress', _type='String')], methods=[Method(visibility='public', name='purchaseParkingPass', _type='void', args=[])], aggregations=[], compositions=[], parent=None, implements=[])",
-    "Class(name='Student', attributes=[Attribute(visibility='public', name='studentNumber', _type='int'), Attribute(visibility='public', name='averageMark', _type='int')], methods=[Method(visibility='public', name='isEligibleToEnroll', _type='boolean', args=[]), Method(visibility='public', name='getSeminarsTaken', _type='int', args=[Arg(name='papa', _type='String')])], aggregations=[], compositions=[], parent=None, implements=[])",
-    "Class(name='Professor', attributes=[Attribute(visibility='private', name='salary', _type='int'), Attribute(visibility='protected', name='staffNumber', _type='int'), Attribute(visibility='private', name='yearsOfService', _type='int'), Attribute(visibility='public', name='numberOfClasses', _type='int')], methods=[], aggregations=[], compositions=[], parent=None, implements=[])",
-    "Class(name='Address', attributes=[Attribute(visibility='public', name='street', _type='String'), Attribute(visibility='public', name='city', _type='String'), Attribute(visibility='public', name='state', _type='String'), Attribute(visibility='public', name='postalCode', _type='int'), Attribute(visibility='public', name='country', _type='String')], methods=[Method(visibility='public', name='outputAsLabel', _type='String', args=[])], aggregations=[], compositions=[], parent=None, implements=[])",
-    "Class(name='Adresses', attributes=[Attribute(visibility='public', name='city', _type='String'), Attribute(visibility='public', name='state', _type='String'), Attribute(visibility='public', name='postalCode', _type='int'), Attribute(visibility='public', name='country', _type='String')], methods=[Method(visibility='public', name='outputAsLabel', _type='String', args=[])], aggregations=[], compositions=[], parent=None, implements=[])"
+    {
+        "name": "",
+        "source": "pzczP67oPYf6B7buiO8z-8",
+        "target": "pzczP67oPYf6B7buiO8z-2",
+        "_type": [
+            "RelationshipType.INHERITANCE",
+            null,
+            false,
+            false
+        ],
+        "source_name": "Student",
+        "target_name": "Person",
+        "source_role": null,
+        "target_role": null,
+        "source_multiplicity": null,
+        "target_multiplicity": null,
+        "is_navigable_to_source": false,
+        "is_navigable_to_target": false
+    },
+    {
+        "name": "",
+        "source": "pzczP67oPYf6B7buiO8z-15",
+        "target": "pzczP67oPYf6B7buiO8z-2",
+        "_type": [
+            "RelationshipType.INHERITANCE",
+            null,
+            false,
+            false
+        ],
+        "source_name": "Professor",
+        "target_name": "Person",
+        "source_role": null,
+        "target_role": null,
+        "source_multiplicity": null,
+        "target_multiplicity": null,
+        "is_navigable_to_source": false,
+        "is_navigable_to_target": false
+    },
+    {
+        "name": "",
+        "source": "pzczP67oPYf6B7buiO8z-2",
+        "target": "pzczP67oPYf6B7buiO8z-19",
+        "_type": [
+            "RelationshipType.ASSOCIATION",
+            null,
+            true,
+            false
+        ],
+        "source_name": "Person",
+        "target_name": "Address",
+        "source_role": null,
+        "target_role": null,
+        "source_multiplicity": null,
+        "target_multiplicity": null,
+        "is_navigable_to_source": false,
+        "is_navigable_to_target": false
+    },
+    {
+        "name": "supervises",
+        "source": "pzczP67oPYf6B7buiO8z-16",
+        "target": "pzczP67oPYf6B7buiO8z-9",
+        "_type": [
+            "RelationshipType.ASSOCIATION",
+            null,
+            true,
+            false
+        ],
+        "source_name": "",
+        "target_name": "",
+        "source_role": null,
+        "target_role": null,
+        "source_multiplicity": null,
+        "target_multiplicity": null,
+        "is_navigable_to_source": false,
+        "is_navigable_to_target": false
+    },
+    {
+        "name": "",
+        "source": "aZciTYqOEJMMC_ZfQV8L-3",
+        "target": "4",
+        "_type": [
+            "RelationshipType.ASSOCIATION",
+            null,
+            false,
+            false
+        ],
+        "source_name": "",
+        "target_name": "Adresses",
+        "source_role": null,
+        "target_role": null,
+        "source_multiplicity": null,
+        "target_multiplicity": null,
+        "is_navigable_to_source": false,
+        "is_navigable_to_target": false
+    }
 ]

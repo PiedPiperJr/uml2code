@@ -22,10 +22,31 @@ class Class(object):
 
     @classmethod
     def from_dict(cls, data: Dict) -> 'Class':
-        instance = cls(name=data['name'])
-        instance.attributes = [Attribute(**attr)
-                               for attr in data['attributes']]
-        instance.methods = [Method(**method) for method in data['methods']]
+        instance = cls(name=data['name'],
+                       attributes=[],
+                       methods=[],
+                       aggregations=[],
+                       compositions=[],
+                       parent=data.get('parent'),
+                       implements=data.get('implements', []))
+        instance.attributes = [Attribute(**attr) for attr in data.get('attributes', [])]
+        instance.methods = [Method(**method) for method in data.get('methods', [])]
+        instance.aggregations = [Attribute(**attr) for attr in data.get('aggregations', [])]
+        instance.compositions = [Attribute(**attr) for attr in data.get('compositions', [])]
+        instance.parent = data.get('parent')
+        instance.implements = data.get('implements', [])
+        instance.oneToManyRelationships = [
+            InterpretedRelationShip(rel["role"], rel["comodel"], rel["mapped_by_property"]) for rel in data.get('oneToManyRelationships', [])
+        ]
+        instance.manyToOneRelationships = [
+            InterpretedRelationShip(rel["role"], rel["comodel"], rel["mapped_by_property"]) for rel in data.get('manyToOneRelationships', [])
+        ]
+        instance.manyToManyRelationships = [
+            InterpretedRelationShip(rel["role"], rel["comodel"], rel["mapped_by_property"]) for rel in data.get('manyToManyRelationships', [])
+        ]
+        instance.oneToOneRelationships = [
+            InterpretedRelationShip(rel["role"], rel["comodel"], rel["mapped_by_property"]) for rel in data.get('oneToOneRelationships', [])
+        ]
         return instance
 
     @classmethod

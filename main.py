@@ -1,3 +1,4 @@
+from dataclasses import asdict
 from code_generator.clean.clean_code_generator import CleanCodeGenerator
 from code_generator.pojo.pojo_code_generator import PoJoCodeGenerator
 from lexer.lexer import Lexer
@@ -8,8 +9,9 @@ from models.project_model import Project
 from semantic_analyzer.semantic_analyzer import SemanticAnalyzer
 import os
 import shutil
+import logging
 
-
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 def main():
 
     diagram = Path("data/class-diagram-example.drawio")
@@ -19,10 +21,12 @@ def main():
     lexer_result = lexer.execute()
     result.write_text(json.dumps(lexer_result, indent=4, default=str))
 
-    result = Path("semantic.json")
+    result_cls = Path("classes.json")
+    result_rel = Path("relations.json")
     semantic_analyzer = SemanticAnalyzer(lexer_result)
-    classes = semantic_analyzer.execute()
-    result.write_text(json.dumps(classes, indent=4, default=str))
+    classes, relationships = semantic_analyzer.execute()
+    result_cls.write_text(json.dumps([asdict(_class) for _class in classes], indent=4, default=str))
+    result_rel.write_text(json.dumps([r for r in relationships], indent=4, default=str))
 
     # pojo_generator = PoJoCodeGenerator(
     #     classes, "templates/java/simple_class.html", "out")

@@ -4,6 +4,7 @@ from typing import Dict, List, Optional
 from helpers.utils import Utils
 from models.class_model import Class
 from models.relationship_model import Relationship, RelationshipType
+from semantic_analyzer.ai.ai_relationship_interpreter import AIRelationshipInterpreter
 from semantic_analyzer.interpreters import Interpreter
 from semantic_analyzer.validators import SemanticValidator
 from semantic_analyzer.models_factory import ModelsFactory
@@ -25,14 +26,15 @@ class SemanticAnalyzer:
                 classes, self.api_key, self.language)
 
         relationships = self.build_relationships()
-        classes = Interpreter.interpret_relationships(classes, relationships)
 
-        return classes
+        classes = Interpreter.interpret_relationships(classes, relationships)
+        classes, dict_relationships = AIRelationshipInterpreter.execute(classes, relationships)
+        return classes, dict_relationships
 
     def build_relationships(self) -> List[Relationship]:
         relationships: List[Relationship] = list()
         for relationship in self.structured_data['relationships']:
-            relationship["_type"] = Interpreter.interpret_relationship_style(relationship["style"], relationship["name"])
+            relationship["_type"] = Interpreter.interpret_relationship_style_old(relationship["style"])
             relationships.append(ModelsFactory.build_relationship_model(
                 relationship, self.structured_data))
 

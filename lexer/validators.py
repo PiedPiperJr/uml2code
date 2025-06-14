@@ -36,7 +36,7 @@ class Validators:
 
 
     @staticmethod
-    def is_relationship_argument(parent: str, relationships: List[Dict]) -> Tuple[bool, str]:
+    def is_relationship_argument(parent: str, relationships: List[Dict]) -> Tuple[bool, Dict]:
         for relationship in relationships:
             if relationship.get("id") == parent :
                 return True, relationship

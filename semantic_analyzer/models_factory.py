@@ -21,7 +21,9 @@ class ModelsFactory:
                             relationship['source_role'],
                             relationship['target_role'],
                             relationship['source_multiplicity'],
-                            relationship['target_multiplicity'])
+                            relationship['target_multiplicity'],
+                            False, False,
+                            relationship['args'])
 
     @staticmethod
     def _get_class_name_by_id(structured_data: Dict, id: str) -> str:

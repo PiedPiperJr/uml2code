@@ -63,13 +63,11 @@ class Lexer:
         # Deuxième passage : attributs et méthodes
         for mxcell in remaining_cells:
             parent_id = mxcell.get("@parent")
-            if parent_id not in self.structured_data["classes"]:
-                continue
                 
-            is_relationship_argument, relationship_id = Validators.is_relationship_argument(parent_id, self.structured_data["relationships"])
+            is_relationship_argument, relationship = Validators.is_relationship_argument(parent_id, self.structured_data["relationships"])
             
             if is_relationship_argument :
-                self.structured_data[relationship_id]["args"].append(mxcell)
+                relationship["args"].append(mxcell)
                 
             elif Validators.is_method(mxcell, self.sub_root_id):
                 visibility, name, type_, _args = Parsers.parse_method_value(mxcell.get("@value", ""))
