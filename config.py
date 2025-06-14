@@ -49,6 +49,9 @@ use_cases:
       alternatif:
         - "L'administrateur tente de supprimer un utilisateur administrateur."
         - "Le système refuse la demande."
+    uses:
+      - "L'utilisateur doit s'autheinfier"
+    extends: none
   - name: "Gestion des contenus"
     actors:
       - "Auteur"
