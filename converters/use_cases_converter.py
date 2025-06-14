@@ -5,9 +5,14 @@ from typing import List, Dict
 from utils.utils import dump
 from models.project_model import UseCase
 
+def gemini(prompt:str):
+    client = genai.Client(api_key="AIzaSyBfCOw1YjmEB-Ed-AonWIpF7BjhE60_aL8")
+    return client.models.generate_content(
+        model="gemini-2.5-flash-preview-05-20",
+        contents=prompt,
+    )
 
 def use_cases_to_json(use_cases: str):
-    # CONFIGURATION DE GEMINI
     client = genai.Client(api_key="AIzaSyBfCOw1YjmEB-Ed-AonWIpF7BjhE60_aL8")
 
     prompt1 = f"""**Modèle de Formatage :**
@@ -19,22 +24,14 @@ def use_cases_to_json(use_cases: str):
                     * Identifie et établis les **relations possibles** entre les différents cas d'utilisation.
                     * Matérialise ces relations en remplissant les champs `uses` et `extends` pour chaque cas d'utilisation, conformément au modèle.
                     * Le résultat final doit être **strictement le texte reformaté**, sans aucune introduction, explication ou autre texte additionnel."""
+    response = gemini(prompt1)
 
-    response = client.models.generate_content(
-        model="gemini-2.5-flash-preview-05-20",
-        contents=prompt1,
-    )
-    
     prompt2 = f"""Convertit le texte (dictionnaire) suivant en JSON. Le résultat doit être *uniquement* le texte sous format JSON, sans aucun préambule, explication ou texte additionnel. 
                 
                 **Texte à convertir
                 {str(response.to_dict())}"""
 
-
-    json_response = client.models.generate_content(
-        model="gemini-2.5-flash-preview-05-20",
-        contents=prompt2,
-    )
+    json_response = gemini(prompt2)
     json_store = json.loads(json_response.text.replace(
         "json", "").replace("```", "").strip().replace("\n", ""))
 
@@ -50,32 +47,31 @@ def interprete_usecase(usecases: List[Dict]) -> List[UseCase]:
     """
     parsed_usecases = []
     
-    # Première passe : créer tous les cas d'utilisation de base
+
     for usecase_data in usecases:
         try:
-            # Extraction des données de base du cas d'utilisation
+
             name = usecase_data.get('name', '').strip()
             action = determine_http_action(usecase_data)
             actors = extract_actors(usecase_data.get('actors', []))
             
-            # Extraction des scénarios (principal/alternatif selon le pattern)
+
             scenarios = extract_scenarios(usecase_data.get('scenarios', {}))
             
-            # Extraction des conditions
+
             preconditions = extract_conditions(usecase_data.get('preconditions', []))
             postconditions = extract_conditions(usecase_data.get('postconditions', []))
             
-            # Génération des composants techniques via Gemini
+
             scenarios = extract_scenarios(usecase_data.get('scenarios', {}))
             dto = generate_dto(name, usecase_data, action)
             resource = generate_resource(name, dto)
             services = generate_services(name, scenarios, action)
             repositories = generate_repositories(name, dto, action)
-            
-            # Relations entre cas d'utilisation (vides pour l'instant)
-            uses = []  # Sera rempli dans la seconde passe
-            extends = []  # Sera rempli dans la seconde passe  
-            include = []  # Pattern ne mentionne pas include, on le laisse vide
+
+            uses = []
+            extends = []  
+            include = []
             
             # Création de l'objet UseCase
             usecase = UseCase(
@@ -99,8 +95,7 @@ def interprete_usecase(usecases: List[Dict]) -> List[UseCase]:
         except Exception as e:
             print(f"Erreur lors du parsing du cas d'utilisation {usecase_data}: {e}")
             continue
-    
-    # Seconde passe : résoudre les relations entre cas d'utilisation
+
     resolve_usecase_relationships(parsed_usecases, usecases)
     
     return parsed_usecases
@@ -110,15 +105,13 @@ def determine_http_action(usecase_data: Dict) -> str:
     """Détermine l'action HTTP basée sur le nom et les scénarios du cas d'utilisation"""
     name = usecase_data.get('name', '').lower()
     scenarios = usecase_data.get('scenarios', {})
-    
-    # Récupérer le scénario principal selon le pattern YAML
+
     principal_scenario = scenarios.get('principal', [])
     if isinstance(principal_scenario, list):
         principal_text = ' '.join(principal_scenario).lower()
     else:
         principal_text = str(principal_scenario).lower()
-    
-    # Mots-clés pour déterminer l'action HTTP
+
     create_keywords = ['crée', 'créer', 'ajouter', 'nouveau', 'enregistrer', 'sauvegarder', 'create', 'add', 'insert', 'register', 'submit']
     update_keywords = ['modifie', 'modifier', 'mettre à jour', 'éditer', 'changer', 'update', 'modify', 'edit', 'change']
     delete_keywords = ['supprimer', 'supprime', 'effacer', 'retirer', 'delete', 'remove', 'cancel']
@@ -148,17 +141,14 @@ def extract_scenarios(scenarios_data: Dict) -> Scenario:
     alternative = []
     
     if isinstance(scenarios_data, dict):
-        # Le pattern utilise 'principal' et 'alternatif'
         main = scenarios_data.get('principal', [])
         alternative = scenarios_data.get('alternatif', [])
-        
-        # Fallback pour autres variantes possibles
+
         if not main:
             main = scenarios_data.get('main', [])
         if not alternative:
             alternative = scenarios_data.get('alternative', [])
-    
-    # S'assurer que ce sont des listes
+
     if isinstance(main, str):
         main = [main]
     if isinstance(alternative, str):
@@ -179,11 +169,9 @@ def extract_conditions(conditions_data) -> List[str]:
 def generate_dto(name: str, usecase_data: Dict, action: str) -> Dto:
     """Génère le DTO basé sur le cas d'utilisation en utilisant Gemini"""
     dto_name = f"{capitalize(name)}Dto"
-    
-    # Utiliser la fonction d'extraction des scénarios déjà définie
+
     scenarios = extract_scenarios(usecase_data.get('scenarios', {}))
-    
-    # Générer les attributs via Gemini
+
     attributes = generate_dto_attributes_with_gemini(name, usecase_data, scenarios, action)
     
     return Dto(name=dto_name, attributes=attributes)
@@ -193,8 +181,7 @@ def generate_dto_attributes_with_gemini(name: str, usecase_data: Dict, scenarios
     """Génère les attributs du DTO en utilisant Gemini pour l'analyse contextuelle"""
     
     client = genai.Client(api_key="AIzaSyBfCOw1YjmEB-Ed-AonWIpF7BjhE60_aL8")
-    
-    # Préparer le contexte pour Gemini
+
     context = {
         "nom_cas_utilisation": name,
         "action_http": action,
@@ -234,16 +221,11 @@ def generate_dto_attributes_with_gemini(name: str, usecase_data: Dict, scenarios
             Réponds uniquement avec le JSON, sans explication, ni texe superflus."""
 
     try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash-preview-05-20",
-            contents=prompt,
-        )
-        
-        # Nettoyer la réponse et parser le JSON
+        response = gemini(prompt)
+
         json_text = response.text.replace("```json", "").replace("```", "").strip()
         attributes_data = json.loads(json_text)
-        
-        # Convertir en objets DtoAttribute
+
         dto_attributes = []
         for attr_data in attributes_data:
             decorators = [
@@ -290,8 +272,7 @@ def generate_resource(name: str, dto: Dto) -> Resource:
 def generate_services(name: str, scenarios: Scenario, action: str) -> List[Service]:
     """Génère les services nécessaires pour le cas d'utilisation en utilisant Gemini"""
     service_name = f"{capitalize(name)}Service"
-    
-    # Générer les méthodes via Gemini
+
     methods = generate_service_methods_with_gemini(name, scenarios, action)
     
     return [Service(name=service_name, methods=methods)]
@@ -299,9 +280,6 @@ def generate_services(name: str, scenarios: Scenario, action: str) -> List[Servi
 
 def generate_service_methods_with_gemini(name: str, scenarios: Scenario, action: str) -> List[Method]:
     """Génère les méthodes de service en utilisant Gemini pour l'analyse contextuelle"""
-    import google as genai
-    
-    client = genai.Client(api_key="AIzaSyBfCOw1YjmEB-Ed-AonWIpF7BjhE60_aL8")
     
     context = {
         "nom_cas_utilisation": name,
@@ -347,10 +325,7 @@ def generate_service_methods_with_gemini(name: str, scenarios: Scenario, action:
                 Réponds uniquement avec le JSON, sans explication, ni texte superflus."""
 
     try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash-preview-05-20",
-            contents=prompt,
-        )
+        response = gemini(prompt)
         
         json_text = response.text.replace("```json", "").replace("```", "").strip()
         methods_data = json.loads(json_text)
@@ -399,10 +374,6 @@ def generate_repositories(name: str, dto: Dto, action: str) -> List[Repository]:
 
 def generate_repository_methods_with_gemini(name: str, dto: Dto, action: str, entity_name: str) -> List[Method]:
     """Génère les méthodes de repository en utilisant Gemini pour l'analyse contextuelle"""
-    import google as genai
-    
-    client = genai.Client(api_key="AIzaSyBfCOw1YjmEB-Ed-AonWIpF7BjhE60_aL8")
-    
     dto_attributes = [
         {"name": attr.name, "type": attr.type} 
         for attr in dto.attributes
@@ -455,10 +426,7 @@ def generate_repository_methods_with_gemini(name: str, dto: Dto, action: str, en
                 Réponds uniquement avec le JSON, sans explication, ni texte superflus."""
 
     try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash-preview-05-20",
-            contents=prompt,
-        )
+        response = gemini(prompt)
         
         json_text = response.text.replace("```json", "").replace("```", "").strip()
         methods_data = json.loads(json_text)
@@ -529,8 +497,6 @@ def find_referenced_usecases(usecase: UseCase, all_usecases: Dict[str, UseCase])
     entre cas d'utilisation basées sur l'analyse sémantique du contenu
     """
     
-    client = genai.Client(api_key="AIzaSyBfCOw1YjmEB-Ed-AonWIpF7BjhE60_aL8")
-    
     usecase_context = {
         "nom": usecase.name,
         "action_http": usecase.action,
@@ -547,7 +513,7 @@ def find_referenced_usecases(usecase: UseCase, all_usecases: Dict[str, UseCase])
         usecase_objects_map = {}
         
         for uc in all_usecases:
-            if uc.name != usecase.name:  # Exclure le cas d'utilisation courant
+            if uc.name != usecase.name:
                 uc_info = {
                     "nom": uc.name,
                     "action_http": uc.action,
@@ -563,7 +529,6 @@ def find_referenced_usecases(usecase: UseCase, all_usecases: Dict[str, UseCase])
         if not other_usecases_info:
             return []
         
-        # Construire le prompt pour Gemini
         analysis_context = {
             "cas_utilisation_analyse": usecase_context,
             "autres_cas_utilisation": other_usecases_info
@@ -609,21 +574,15 @@ def find_referenced_usecases(usecase: UseCase, all_usecases: Dict[str, UseCase])
 
                     Réponds uniquement avec le JSON, sans explication additionnelle, ni texte superflus."""
 
-        response = client.models.generate_content(
-            model="gemini-2.5-flash-preview-05-20",
-            contents=prompt,
-        )
+        response = gemini(prompt)
         
-        # Parser la réponse JSON
         json_text = response.text.replace("```json", "").replace("```", "").strip()
         analysis_result = json.loads(json_text)
         
-        # Extraire les cas d'utilisation référencés
         referenced_usecases = []
         relations = analysis_result.get("relations_identifiees", [])
         
         for relation in relations:
-            # Ne conserver que les relations fortes et moyennes
             if relation.get("force_relation") in ["forte", "moyenne"]:
                 referenced_name = relation.get("nom_cas_utilisation")
                 if referenced_name in usecase_objects_map:
@@ -633,7 +592,6 @@ def find_referenced_usecases(usecase: UseCase, all_usecases: Dict[str, UseCase])
         
     except Exception as e:
         print(f"Erreur lors de l'analyse des relations avec Gemini: {e}")
-        # Fallback: utiliser l'ancienne méthode basique en cas d'erreur
         return fallback_find_relations(usecase, all_usecases)
 
 
@@ -657,16 +615,13 @@ def fallback_find_relations(current_usecase: UseCase, all_usecases: List[UseCase
     for other_usecase in all_usecases:
         if other_usecase.name == current_usecase.name:
             continue
-            
-        # Vérifier les similarités d'acteurs
+
         other_actors = [actor.lower() for actor in other_usecase.actors]
         common_actors = set(current_actors) & set(other_actors)
         
-        # Vérifier les références dans les scénarios
         other_name_words = other_usecase.name.lower().split()
         scenario_references = any(word in current_scenarios_text for word in other_name_words if len(word) > 3)
         
-        # Relation détectée si acteurs communs OU référence dans scénarios
         if len(common_actors) > 0 or scenario_references:
             referenced.append(other_usecase)
     
