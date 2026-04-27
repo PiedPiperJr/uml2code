@@ -1,0 +1,33 @@
+package {{ ir.package }}.presentation.rest;
+
+import {{ ir.package }}.domain.exceptions.EntityAlreadyExistsException;
+import {{ ir.package }}.domain.exceptions.EntityNotFoundException;
+import io.swagger.v3.oas.annotations.Hidden;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import java.util.Map;
+
+@Hidden
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleNotFound(EntityNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleAlreadyExists(EntityAlreadyExistsException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+            .body(Map.of("error", ex.getMessage()));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, String>> handleGeneral(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(Map.of("error", ex.getMessage()));
+    }
+}
