@@ -2,61 +2,27 @@ from core.ir.er_diagram import ERDiagram, RelationshipKind
 from core.ir.project_ir import IREntity, IRField, ProjectIR
 from helpers.utils import capitalize
 
-# Maps common type aliases to canonical Java types
-_JAVA_TYPE_MAP: dict[str, str] = {
-    'int':       'Integer',
-    'integer':   'Integer',
-    'string':    'String',
-    'str':       'String',
-    'bool':      'Boolean',
-    'boolean':   'Boolean',
-    'float':     'Float',
-    'double':    'Double',
-    'long':      'Long',
-    'char':      'Character',
-    'byte':      'Byte',
-    'short':     'Short',
-    'void':      'void',
-    'date':      'LocalDate',
-    'datetime':  'LocalDateTime',
-    'timestamp': 'LocalDateTime',
-    'uuid':      'UUID',
-    'object':    'Object',
-    'list':      'List',
-    'set':       'Set',
-    'map':       'Map',
-}
-
-
-def _normalize_type(raw: str) -> str:
-    stripped = raw.strip()
-    return _JAVA_TYPE_MAP.get(stripped.lower(), stripped)
-
 
 class SemanticAnalyzer:
-    """Transforms an ERDiagram AST into a target-agnostic ProjectIR."""
+    """
+    Transforms an ERDiagram AST into a target-agnostic ProjectIR.
+
+    This stage is intentionally blind to both the input format (draw.io,
+    PlantUML, Mermaid…) and the output target (Spring Boot, Django, NestJS…).
+    It only resolves entity structure and relationships; type names are passed
+    through as-is so each backend can normalize them to its own type system.
+    """
 
     def analyze(self, diagram: ERDiagram, package: str) -> ProjectIR:
         ir_by_id: dict[str, IREntity] = {}
 
-        # Build one IREntity per diagram entity
         for entity_id, er_entity in diagram.entities.items():
             fields = [
-                IRField(
-                    name=er_entity.name,
-                    type=_normalize_type(f.type),
-                    visibility=f.visibility,
-                )
-                for f in er_entity.fields
-            ]
-            # Fix: use f.name not er_entity.name for each field
-            fields = [
-                IRField(name=f.name, type=_normalize_type(f.type), visibility=f.visibility)
+                IRField(name=f.name, type=f.type, visibility=f.visibility)
                 for f in er_entity.fields
             ]
             ir_by_id[entity_id] = IREntity(name=capitalize(er_entity.name), fields=fields)
 
-        # Apply relationships
         for rel in diagram.relationships:
             source = ir_by_id.get(rel.source_id)
             target = ir_by_id.get(rel.target_id)
@@ -65,7 +31,7 @@ class SemanticAnalyzer:
 
             match rel.kind:
                 case RelationshipKind.INHERITANCE:
-                    if source.parent is None:  # first wins
+                    if source.parent is None:
                         source.parent = target
                 case RelationshipKind.COMPOSITION:
                     if target not in source.compositions:

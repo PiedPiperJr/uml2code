@@ -6,8 +6,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 from backend.spring_boot.generator import SpringBootGenerator
-from frontend.drawio.lexer import DrawIOLexer
-from frontend.drawio.parser import DrawIOParser
+from frontend.drawio.drawio_frontend import DrawIOFrontend
 from middleend.semantic_analyzer import SemanticAnalyzer
 from pipeline.pipeline import Pipeline
 
@@ -19,14 +18,14 @@ def main() -> None:
         prog="uml2code",
         description="ER-to-Spring-Boot-CRUD generator",
     )
-    parser.add_argument("input", help="Path to the draw.io (.drawio) file")
+    parser.add_argument("input", help="Path to the input diagram file")
     parser.add_argument(
         "--package", required=True,
         help="Java base package (e.g. com.example.myapp)",
     )
     parser.add_argument(
         "--output", required=True,
-        help="Root output directory for generated Java source files",
+        help="Root output directory for generated source files",
     )
     args = parser.parse_args()
 
@@ -38,10 +37,9 @@ def main() -> None:
         sys.exit(1)
 
     pipeline = Pipeline(
-        lexer=DrawIOLexer(),
-        parser=DrawIOParser(),
+        frontend=DrawIOFrontend(),
         analyzer=SemanticAnalyzer(),
-        generator=SpringBootGenerator(TEMPLATE_DIR),
+        backend=SpringBootGenerator(TEMPLATE_DIR),
     )
 
     files = pipeline.run(
@@ -50,7 +48,7 @@ def main() -> None:
         output_dir=output_dir,
     )
 
-    print(f"✓ Generated {len(files)} files → {output_dir}")
+    print(f"Generated {len(files)} files -> {output_dir}")
 
 
 if __name__ == "__main__":

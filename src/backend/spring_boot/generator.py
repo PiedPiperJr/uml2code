@@ -4,7 +4,43 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from core.ir.project_ir import IREntity, ProjectIR
+from core.ports.backend_port import IBackend
 from helpers.utils import lower_first
+
+# Java-specific type mapping — kept here in the backend where it belongs.
+# The middle-end passes raw type names through; this filter resolves them
+# to canonical Java types inside the templates.
+_JAVA_TYPE_MAP: dict[str, str] = {
+    'int':       'Integer',
+    'integer':   'Integer',
+    'string':    'String',
+    'str':       'String',
+    'bool':      'Boolean',
+    'boolean':   'Boolean',
+    'float':     'Float',
+    'double':    'Double',
+    'long':      'Long',
+    'char':      'Character',
+    'byte':      'Byte',
+    'short':     'Short',
+    'void':      'void',
+    'date':      'LocalDate',
+    'datetime':  'LocalDateTime',
+    'timestamp': 'LocalDateTime',
+    'uuid':      'UUID',
+    'object':    'Object',
+    'list':      'List',
+    'set':       'Set',
+    'map':       'Map',
+}
+
+
+def _java_type(raw: str) -> str:
+    return _JAVA_TYPE_MAP.get(raw.strip().lower(), raw.strip())
+
+
+def _pkg_to_path(package: str) -> str:
+    return package.replace('.', '/')
 
 
 @dataclass
@@ -13,11 +49,7 @@ class GeneratedFile:
     content: str
 
 
-def _pkg_to_path(package: str) -> str:
-    return package.replace('.', '/')
-
-
-class SpringBootGenerator:
+class SpringBootGenerator(IBackend):
     """Generates a full Spring Boot CRUD application from a ProjectIR."""
 
     def __init__(self, template_dir: Path):
@@ -30,13 +62,12 @@ class SpringBootGenerator:
         )
         self.env.filters['lower_first'] = lower_first
         self.env.filters['pkg_path'] = _pkg_to_path
+        self.env.filters['java_type'] = _java_type
 
     def generate(self, ir: ProjectIR) -> list[GeneratedFile]:
         files: list[GeneratedFile] = []
-
         for entity in ir.entities:
             files.extend(self._gen_entity_files(ir, entity))
-
         files.extend(self._gen_global_files(ir))
         return files
 
@@ -45,10 +76,6 @@ class SpringBootGenerator:
             dest = output_dir / f.relative_path
             dest.parent.mkdir(parents=True, exist_ok=True)
             dest.write_text(f.content, encoding='utf-8')
-
-    # ------------------------------------------------------------------ #
-    # Private helpers
-    # ------------------------------------------------------------------ #
 
     def _render(self, template_name: str, **ctx) -> str:
         return self.env.get_template(template_name).render(**ctx)
@@ -61,7 +88,6 @@ class SpringBootGenerator:
     def _gen_entity_files(self, ir: ProjectIR, entity: IREntity) -> list[GeneratedFile]:
         ctx = dict(ir=ir, entity=entity)
         return [
-            # Domain
             GeneratedFile(
                 self._path(ir, entity, 'domain', 'entities'),
                 self._render('domain/entity.j2', **ctx),
@@ -82,7 +108,6 @@ class SpringBootGenerator:
                 self._path(ir, entity, 'domain', 'exceptions', suffix='AlreadyExistsException'),
                 self._render('domain/exceptions/entity_already_exists.j2', **ctx),
             ),
-            # Infrastructure
             GeneratedFile(
                 self._path(ir, entity, 'infrastructure', 'adapters/persistence', suffix='Repository'),
                 self._render('infrastructure/jpa_repository.j2', **ctx),
@@ -91,7 +116,6 @@ class SpringBootGenerator:
                 self._path(ir, entity, 'infrastructure', 'adapters/services', suffix='ServiceImpl'),
                 self._render('infrastructure/service_impl.j2', **ctx),
             ),
-            # Presentation
             GeneratedFile(
                 self._path(ir, entity, 'presentation', 'rest', suffix='Controller'),
                 self._render('presentation/controller.j2', **ctx),

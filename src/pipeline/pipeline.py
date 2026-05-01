@@ -1,23 +1,27 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-from backend.spring_boot.generator import GeneratedFile, SpringBootGenerator
-from frontend.drawio.lexer import DrawIOLexer
-from frontend.drawio.parser import DrawIOParser
+from core.ports.backend_port import IBackend
+from core.ports.frontend_port import IFrontend
 from middleend.semantic_analyzer import SemanticAnalyzer
 
 
 @dataclass
 class Pipeline:
-    lexer: DrawIOLexer
-    parser: DrawIOParser
-    analyzer: SemanticAnalyzer
-    generator: SpringBootGenerator
+    """
+    Orchestrates the three stages of the transpiler:
+      frontend  →  middle-end  →  backend
 
-    def run(self, source: str, package: str, output_dir: Path) -> list[GeneratedFile]:
-        cells   = self.lexer.tokenize(source)
-        diagram = self.parser.parse(cells)
+    Depends only on the abstract port interfaces, so any frontend or backend
+    implementation can be injected without touching this class.
+    """
+    frontend: IFrontend
+    analyzer: SemanticAnalyzer
+    backend: IBackend
+
+    def run(self, source: str, package: str, output_dir: Path) -> list:
+        diagram = self.frontend.parse(source)
         ir      = self.analyzer.analyze(diagram, package)
-        files   = self.generator.generate(ir)
-        self.generator.write(files, output_dir)
+        files   = self.backend.generate(ir)
+        self.backend.write(files, output_dir)
         return files

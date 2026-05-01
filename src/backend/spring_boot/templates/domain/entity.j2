@@ -39,7 +39,7 @@ public class {{ entity.name }}{% if entity.parent %} extends {{ entity.parent.na
 {% for field in entity.fields %}
 {% if field.name != 'id' %}
     @Column
-    private {{ field.type }} {{ field.name }};
+    private {{ field.type | java_type }} {{ field.name }};
 
 {% endif %}
 {% endfor %}
