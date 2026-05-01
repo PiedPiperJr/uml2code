@@ -3,13 +3,15 @@ import argparse
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent / "src"))
+
 from backend.spring_boot.generator import SpringBootGenerator
 from frontend.drawio.lexer import DrawIOLexer
 from frontend.drawio.parser import DrawIOParser
 from middleend.semantic_analyzer import SemanticAnalyzer
 from pipeline.pipeline import Pipeline
 
-TEMPLATE_DIR = Path(__file__).parent / "backend" / "spring_boot" / "templates"
+TEMPLATE_DIR = Path(__file__).parent / "src" / "backend" / "spring_boot" / "templates"
 
 
 def main() -> None:
