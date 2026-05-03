@@ -16,6 +16,12 @@ sudo apt-get install -y openjdk-21-jdk
 echo "=== Installing Maven ==="
 sudo apt-get install -y maven
 
+echo "=== Configuring JAVA_HOME ==="
+export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
+# ou directement :
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+export PATH=$JAVA_HOME/bin:$PATH
+
 echo "=== Installing Python dependencies ==="
 pip install -r "$PROJECT_ROOT/requirements.txt"
 
