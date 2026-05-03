@@ -20,8 +20,8 @@ class Pipeline:
     backend: IBackend
 
     def run(self, source: str, package: str, output_dir: Path) -> list:
-        diagram = self.frontend.parse(source)
-        ir      = self.analyzer.analyze(diagram, package)
+        bundle  = self.frontend.parse(source)
+        ir      = self.analyzer.analyze(bundle, package)
         files   = self.backend.generate(ir)
         self.backend.write(files, output_dir)
         return files

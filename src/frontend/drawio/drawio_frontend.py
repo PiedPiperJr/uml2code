@@ -1,4 +1,5 @@
-from core.ir.er_diagram import ERDiagram
+from core.ir.class_diagram import ClassDiagram
+from core.ir.diagram_bundle import DiagramBundle
 from core.ports.frontend_port import IFrontend
 from frontend.drawio.lexer import DrawIOLexer
 from frontend.drawio.parser import DrawIOParser
@@ -11,10 +12,10 @@ class DrawIOFrontend(IFrontend):
         self._lexer  = DrawIOLexer()
         self._parser = DrawIOParser()
 
-    def parse(self, source: str) -> ERDiagram:
-        merged = ERDiagram()
+    def parse(self, source: str) -> DiagramBundle:
+        merged = ClassDiagram()
         for page_cells in self._lexer.tokenize(source):
             page = self._parser.parse(page_cells)
-            merged.entities.update(page.entities)
+            merged.classes.update(page.classes)
             merged.relationships.extend(page.relationships)
-        return merged
+        return DiagramBundle(class_diagrams=[merged])

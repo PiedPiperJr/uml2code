@@ -1,8 +1,9 @@
 import re
 from typing import Optional
 
-from core.ir.er_diagram import (
-    ERDiagram, EREntity, ERField, ERMethod, ERParam, ERRelationship, RelationshipKind,
+from core.ir.class_diagram import (
+    ClassDiagram, UMLClass, ClassField, ClassMethod, ClassParam,
+    ClassRelationship, RelationshipKind,
 )
 from helpers.utils import capitalize
 
@@ -23,33 +24,33 @@ def _visibility(symbol: str) -> str:
     return _VISIBILITY_MAP.get(symbol, 'public')
 
 
-def _parse_param(raw: str) -> Optional[ERParam]:
+def _parse_param(raw: str) -> Optional[ClassParam]:
     raw = raw.strip()
     if not raw:
         return None
     parts = raw.split()
     if len(parts) >= 2:
-        return ERParam(name=parts[1], type=parts[0])
-    return ERParam(name=parts[0], type='Object')
+        return ClassParam(name=parts[1], type=parts[0])
+    return ClassParam(name=parts[0], type='Object')
 
 
-def _parse_field(value: str) -> Optional[ERField]:
+def _parse_field(value: str) -> Optional[ClassField]:
     m = _FIELD_RE.match(value.strip())
     if not m:
         return None
-    return ERField(
+    return ClassField(
         name=m.group('name').strip(),
         type=m.group('type').strip(),
         visibility=_visibility(m.group('vis')),
     )
 
 
-def _parse_method(value: str) -> Optional[ERMethod]:
+def _parse_method(value: str) -> Optional[ClassMethod]:
     m = _METHOD_RE.match(value.strip())
     if not m:
         return None
     params = [p for p in (_parse_param(p) for p in m.group('params').split(',')) if p]
-    return ERMethod(
+    return ClassMethod(
         name=m.group('name').strip(),
         return_type=m.group('type').strip(),
         visibility=_visibility(m.group('vis')),
@@ -81,28 +82,28 @@ def _interpret_style(style: str) -> RelationshipKind:
 
 
 class DrawIOParser:
-    """Builds an ERDiagram AST from a flat list of draw.io cell dicts."""
+    """Builds a ClassDiagram from a flat list of draw.io cell dicts."""
 
-    def parse(self, cells: list[dict]) -> ERDiagram:
-        diagram = ERDiagram()
+    def parse(self, cells: list[dict]) -> ClassDiagram:
+        diagram = ClassDiagram()
         root_id, sub_root_id = self._find_roots(cells)
 
         # O(1) lookup by cell id
         cell_index: dict[str, dict] = {c.get('@id'): c for c in cells if c.get('@id')}
 
-        # Pass 1: extract entities
+        # Pass 1: extract classes
         for cell in cells:
             if self._is_entity(cell, sub_root_id):
-                entity = EREntity(
+                cls = UMLClass(
                     id=cell['@id'],
                     name=capitalize(cell.get('@value', '').strip()),
                 )
-                diagram.entities[entity.id] = entity
+                diagram.classes[cls.id] = cls
 
         # Pass 2: extract fields and methods
         for cell in cells:
             parent_id = cell.get('@parent')
-            if parent_id not in diagram.entities:
+            if parent_id not in diagram.classes:
                 continue
             value = cell.get('@value', '').strip()
             if not value:
@@ -111,19 +112,19 @@ class DrawIOParser:
             if '(' in value and ')' in value:
                 method = _parse_method(value)
                 if method:
-                    diagram.entities[parent_id].methods.append(method)
+                    diagram.classes[parent_id].methods.append(method)
             else:
                 field = _parse_field(value)
                 if field:
-                    diagram.entities[parent_id].fields.append(field)
+                    diagram.classes[parent_id].fields.append(field)
 
         # Pass 3: extract relationships
         for cell in cells:
             if not self._is_relationship(cell, sub_root_id):
                 continue
 
-            source_id = self._resolve_to_entity(cell.get('@source', ''), cell_index, diagram.entities)
-            target_id = self._resolve_to_entity(cell.get('@target', ''), cell_index, diagram.entities)
+            source_id = self._resolve_to_class(cell.get('@source', ''), cell_index, diagram.classes)
+            target_id = self._resolve_to_class(cell.get('@target', ''), cell_index, diagram.classes)
 
             if not source_id or not target_id or source_id == target_id:
                 continue
@@ -132,7 +133,7 @@ class DrawIOParser:
             if kind == RelationshipKind.NONE:
                 continue
 
-            diagram.relationships.append(ERRelationship(
+            diagram.relationships.append(ClassRelationship(
                 source_id=source_id,
                 target_id=target_id,
                 kind=kind,
@@ -165,12 +166,12 @@ class DrawIOParser:
             and bool(cell.get('@target'))
         )
 
-    def _resolve_to_entity(self, cell_id: str, cell_index: dict, entities: dict) -> str:
-        """Walk the parent chain until an entity is found."""
+    def _resolve_to_class(self, cell_id: str, cell_index: dict, classes: dict) -> str:
+        """Walk the parent chain until a known class is found."""
         visited: set[str] = set()
         current = cell_id
         while current and current not in visited:
-            if current in entities:
+            if current in classes:
                 return current
             visited.add(current)
             parent = (cell_index.get(current) or {}).get('@parent')

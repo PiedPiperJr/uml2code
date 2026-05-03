@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
-from core.ir.er_diagram import ERDiagram
+
+from core.ir.diagram_bundle import DiagramBundle
 
 
 class IFrontend(ABC):
     @abstractmethod
-    def parse(self, source: str) -> ERDiagram:
+    def parse(self, source: str) -> DiagramBundle:
         ...
