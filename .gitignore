@@ -4,4 +4,4 @@ __pycache__
 out
 out_clean
 demo
-examples/spring_boot/snappy-server/
+examples/spring_boot/*/

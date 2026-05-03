@@ -1,7 +1,7 @@
 # Spring Boot example — Quick start
 
-This example shows how to generate and run a full Spring Boot CRUD application
-from a draw.io ER diagram in a single command.
+This example shows how to generate and run a full Clean-Architecture Spring Boot CRUD
+application from a draw.io ER diagram in two commands.
 
 ## Prerequisites
 
@@ -12,10 +12,10 @@ from a draw.io ER diagram in a single command.
 | Maven | 3.8+ |
 | curl + unzip | any |
 
-Install Python dependencies from the project root:
+Install all prerequisites with the bundled setup script:
 
 ```bash
-pip install -r ../../requirements.txt
+bash setup.sh
 ```
 
 ---
@@ -46,22 +46,23 @@ bash init.sh \
 ```bash
 bash init.sh \
   --diagram ../../data/class-diagram-example.drawio \
-  --package org.enspy.snappy.server \
-  --app-name snappy-server \
+  --package com.example.server \
+  --app-name example-server \
   --port 8080
 ```
 
 This will:
 
 1. Download a Spring Boot 3.5 project from Spring Initializr (web, JPA, H2, Lombok, Validation)
-2. Add the `springdoc-openapi` dependency for Swagger UI
+2. Patch `pom.xml` with `springdoc-openapi` (Swagger UI) and `mapstruct` (mapping)
 3. Write a pre-configured `application.properties`
 4. Generate all Java source files from the diagram
+5. Compile the project to catch errors immediately
 
 Then start the application:
 
 ```bash
-cd snappy-server
+cd example-server
 ./mvnw spring-boot:run
 ```
 
@@ -69,21 +70,23 @@ cd snappy-server
 
 ## What is generated
 
-For each entity in the diagram, the generator produces:
+For each entity in the diagram, the generator produces 21 files across 4 layers:
 
 ```
 src/main/java/{package}/
 ├── domain/
-│   ├── entities/            # JPA entities
-│   ├── ports/driven/        # Repository interfaces (driven ports)
-│   ├── ports/driving/       # Service interfaces (driving ports)
-│   └── exceptions/          # Typed exceptions (404, 422)
+│   ├── entities/              # Pure Java POJOs (zero framework dependency)
+│   ├── ports/                 # I{E}Repository driven-port interfaces
+│   └── exceptions/            # EntityNotFoundException, EntityAlreadyExistsException
+├── application/
+│   ├── ports/                 # ICreate{E}, IFindById{E}, IFindAll{E}, IUpdate{E}, IDelete{E}
+│   ├── usecases/              # Use-case implementations (execute() + private methods)
+│   └── dto/                   # {E}Request, {E}Response, {E}SummaryResponse, {E}DtoMapper
 ├── infrastructure/
-│   ├── adapters/persistence/ # Spring Data JPA repositories
-│   ├── adapters/services/    # CRUD service implementations
-│   └── config/              # JacksonConfig (LocalDateTime serialization)
+│   ├── persistence/           # {E}JpaEntity, {E}JpaRepository, {E}EntityMapper, {E}RepositoryAdapter
+│   └── config/                # BeanConfig (use-case wiring), JacksonConfig
 └── presentation/
-    └── rest/                # REST controllers + GlobalExceptionHandler
+    └── rest/                  # {E}Controller, GlobalExceptionHandler, ApiError
 ```
 
 ---
@@ -92,11 +95,11 @@ src/main/java/{package}/
 
 | Method | Path | Description |
 |---|---|---|
-| `POST` | `/api/{entity}` | Create |
-| `GET` | `/api/{entity}/{id}` | Find by ID |
-| `GET` | `/api/{entity}?page=0&size=20` | Find all (paginated) |
-| `PUT` | `/api/{entity}/{id}` | Update |
-| `DELETE` | `/api/{entity}/{id}` | Delete |
+| `POST` | `/api/v1/{entity}s` | Create |
+| `GET` | `/api/v1/{entity}s/{id}` | Find by ID |
+| `GET` | `/api/v1/{entity}s?page=0&size=20` | Find all (paginated) |
+| `PUT` | `/api/v1/{entity}s/{id}` | Full update |
+| `DELETE` | `/api/v1/{entity}s/{id}` | Delete |
 
 ---
 

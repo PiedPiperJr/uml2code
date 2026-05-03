@@ -8,8 +8,8 @@
 # Example:
 #   bash init.sh \
 #     --diagram ../../data/class-diagram-example.drawio \
-#     --package org.enspy.snappy.server \
-#     --app-name snappy-server \
+#     --package com.example.server \
+#     --app-name example-server \
 #     --port 8080
 # ---------------------------------------------------------------------------
 set -e
