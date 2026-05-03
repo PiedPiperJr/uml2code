@@ -1,0 +1,10 @@
+package {{ ir.package }}.infrastructure.persistence;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.UUID;
+
+/** Spring Data JPA repository — infrastructure detail, never exposed beyond the adapter. */
+@Repository
+public interface {{ entity.name }}JpaRepository extends JpaRepository<{{ entity.name }}JpaEntity, UUID> {
+}
