@@ -1,6 +1,6 @@
 #!/bin/bash
 # ---------------------------------------------------------------------------
-# init.sh — Bootstrap a Spring Boot CRUD app from a draw.io diagram
+# init.sh — Bootstrap a Clean-Architecture Spring Boot CRUD app from a draw.io diagram
 #
 # Usage:
 #   bash init.sh --diagram <path> --package <java.package> [--app-name <name>] [--port <port>]
@@ -21,6 +21,7 @@ APP_NAME="generated-app"
 PORT=8080
 BOOT_VERSION="3.5.0"
 JAVA_VERSION="21"
+MAPSTRUCT_VERSION="1.6.3"
 
 # ── Parse arguments ─────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
@@ -47,7 +48,7 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 OUTPUT_DIR="$SCRIPT_DIR/$APP_NAME"
 
 echo "============================================================"
-echo "  uml2code — Spring Boot init"
+echo "  uml2code — Spring Boot Clean Architecture init"
 echo "  Diagram  : $DIAGRAM"
 echo "  Package  : $PACKAGE"
 echo "  App name : $APP_NAME"
@@ -56,7 +57,7 @@ echo "============================================================"
 echo ""
 
 # ── Step 1: Download Spring Boot project from Spring Initializr ─────────────
-echo "[1/4] Downloading Spring Boot $BOOT_VERSION project..."
+echo "[1/5] Downloading Spring Boot $BOOT_VERSION project..."
 
 curl -sL \
   "https://start.spring.io/starter.zip?\
@@ -74,26 +75,61 @@ unzip -q /tmp/spring-init.zip -d "$OUTPUT_DIR"
 rm /tmp/spring-init.zip
 echo "    -> $OUTPUT_DIR"
 
-# ── Step 2: Add springdoc-openapi dependency to pom.xml ─────────────────────
-echo "[2/4] Patching pom.xml (springdoc-openapi)..."
+# ── Step 2: Patch pom.xml (springdoc-openapi + MapStruct) ───────────────────
+echo "[2/5] Patching pom.xml (springdoc-openapi + MapStruct)..."
 
-python3 - "$OUTPUT_DIR/pom.xml" <<'PYEOF'
-import sys
+python3 - "$OUTPUT_DIR/pom.xml" "$MAPSTRUCT_VERSION" <<'PYEOF'
+import sys, re
 
-path = sys.argv[1]
-dep = """\t\t<dependency>
+pom_path   = sys.argv[1]
+ms_version = sys.argv[2]
+
+content = open(pom_path).read()
+
+# ── extra <dependency> entries ───────────────────────────────────────────────
+extra_deps = f"""\t\t<dependency>
 \t\t\t<groupId>org.springdoc</groupId>
 \t\t\t<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 \t\t\t<version>2.6.0</version>
+\t\t</dependency>
+\t\t<dependency>
+\t\t\t<groupId>org.mapstruct</groupId>
+\t\t\t<artifactId>mapstruct</artifactId>
+\t\t\t<version>{ms_version}</version>
 \t\t</dependency>"""
 
-content = open(path).read()
-patched = content.replace("</dependencies>", dep + "\n\t</dependencies>", 1)
-open(path, "w").write(patched)
+content = content.replace("</dependencies>", extra_deps + "\n\t</dependencies>", 1)
+
+# ── annotationProcessorPaths in maven-compiler-plugin ───────────────────────
+# Lombok must come before MapStruct so generated getters/setters are visible.
+processor_paths = f"""
+\t\t\t\t\t<annotationProcessorPaths>
+\t\t\t\t\t\t<path>
+\t\t\t\t\t\t\t<groupId>org.projectlombok</groupId>
+\t\t\t\t\t\t\t<artifactId>lombok</artifactId>
+\t\t\t\t\t\t</path>
+\t\t\t\t\t\t<path>
+\t\t\t\t\t\t\t<groupId>org.mapstruct</groupId>
+\t\t\t\t\t\t\t<artifactId>mapstruct-processor</artifactId>
+\t\t\t\t\t\t\t<version>{ms_version}</version>
+\t\t\t\t\t\t</path>
+\t\t\t\t\t</annotationProcessorPaths>"""
+
+# Insert before the closing </configuration> of maven-compiler-plugin
+content = re.sub(
+    r'(maven-compiler-plugin.*?<configuration>)(.*?)(</configuration>)',
+    lambda m: m.group(1) + m.group(2) + processor_paths + "\n\t\t\t\t" + m.group(3),
+    content,
+    count=1,
+    flags=re.DOTALL,
+)
+
+open(pom_path, "w").write(content)
+print("    pom.xml patched.")
 PYEOF
 
 # ── Step 3: Patch application.properties ────────────────────────────────────
-echo "[3/4] Writing application.properties..."
+echo "[3/5] Writing application.properties..."
 
 cat > "$OUTPUT_DIR/src/main/resources/application.properties" <<EOF
 # Server
@@ -119,12 +155,17 @@ springdoc.api-docs.path=/api-docs
 EOF
 
 # ── Step 4: Generate Java source files ──────────────────────────────────────
-echo "[4/4] Generating Java source files from diagram..."
+echo "[4/5] Generating Java source files from diagram..."
 
 python3 "$PROJECT_ROOT/main.py" \
   "$DIAGRAM" \
   --package "$PACKAGE" \
   --output "$OUTPUT_DIR/src/main/java"
+
+# ── Step 5: Compile ──────────────────────────────────────────────────────────
+echo "[5/5] Compiling (mvn compile)..."
+
+(cd "$OUTPUT_DIR" && ./mvnw -q compile)
 
 echo ""
 echo "============================================================"
