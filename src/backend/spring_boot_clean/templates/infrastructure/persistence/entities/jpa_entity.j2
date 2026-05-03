@@ -1,4 +1,4 @@
-package {{ ir.package }}.infrastructure.persistence;
+package {{ ir.package }}.infrastructure.persistence.entities;
 {% set ns = namespace(need_date=false, need_datetime=false, need_list=false) %}
 {% for field in entity.fields if field.name != 'id' %}
 {% if field.type | java_type == 'LocalDate' %}{% set ns.need_date = true %}{% endif %}

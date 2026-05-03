@@ -1,8 +1,8 @@
-package {{ ir.package }}.application.ports;
+package {{ ir.package }}.application.ports.crud.{{ entity.name | lower }};
 
 import java.util.UUID;
 
-/** Driving port — use-case contract for deleting a {{ entity.name }}. */
+/** Entry point into the application — use-case contract for deleting a {{ entity.name }}. */
 public interface IDelete{{ entity.name }} {
     void execute(UUID id);
 }

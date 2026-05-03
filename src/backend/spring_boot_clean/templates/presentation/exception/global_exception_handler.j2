@@ -1,4 +1,4 @@
-package {{ ir.package }}.presentation.rest;
+package {{ ir.package }}.presentation.exception;
 
 import {{ ir.package }}.domain.exceptions.EntityAlreadyExistsException;
 import {{ ir.package }}.domain.exceptions.EntityNotFoundException;
@@ -12,27 +12,19 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Centralised exception-to-HTTP mapping for all controllers.
- * Each handler is intentionally granular so the client always receives
- * a precise status code and a descriptive message.
- */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /** 404 — resource does not exist */
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ApiError> handleNotFound(EntityNotFoundException ex) {
         return respond(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    /** 409 — uniqueness constraint violated */
     @ExceptionHandler(EntityAlreadyExistsException.class)
     public ResponseEntity<ApiError> handleConflict(EntityAlreadyExistsException ex) {
         return respond(HttpStatus.CONFLICT, ex.getMessage());
     }
 
-    /** 422 — bean validation failure; exposes per-field messages */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException ex) {
         Map<String, String> fieldErrors = new HashMap<>();
@@ -44,7 +36,6 @@ public class GlobalExceptionHandler {
                 .body(ApiError.of(HttpStatus.UNPROCESSABLE_ENTITY, "Validation failed", fieldErrors));
     }
 
-    /** 400 — path/query param type mismatch (e.g. non-UUID id) */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ApiError> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
         String msg = String.format("Parameter '%s' has an invalid value: '%s'",
@@ -52,7 +43,6 @@ public class GlobalExceptionHandler {
         return respond(HttpStatus.BAD_REQUEST, msg);
     }
 
-    /** 500 — catch-all for unhandled exceptions */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneric(Exception ex) {
         return respond(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");

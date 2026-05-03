@@ -16,12 +16,9 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 {% endif %}
 
-/**
- * Input payload for creating or replacing a {{ entity.name }}.
- * All fields are accepted as-is; domain validation is enforced by the use case.
- */
-@Schema(description = "Payload for creating or updating a {{ entity.name }}")
-public record {{ entity.name }}Request(
+/** Input payload for the Update{{ entity.name }} use case. */
+@Schema(description = "Payload for updating a {{ entity.name }}")
+public record Update{{ entity.name }}Request(
 {% set own_fields = entity.fields | selectattr('name', 'ne', 'id') | list %}
 {% for field in own_fields %}
         @Schema(description = "{{ field.name | upper_first }} of the {{ entity.name | lower }}")

@@ -1,4 +1,4 @@
-package {{ ir.package }}.infrastructure.persistence;
+package {{ ir.package }}.infrastructure.persistence.mappers;
 
 import {{ ir.package }}.domain.entities.{{ entity.name }};
 {% for comp in entity.compositions %}
@@ -7,22 +7,24 @@ import {{ ir.package }}.domain.entities.{{ comp.name }};
 {% for agg in entity.aggregations %}
 import {{ ir.package }}.domain.entities.{{ agg.name }};
 {% endfor %}
+import {{ ir.package }}.infrastructure.persistence.entities.{{ entity.name }}JpaEntity;
+{% for comp in entity.compositions %}
+import {{ ir.package }}.infrastructure.persistence.entities.{{ comp.name }}JpaEntity;
+{% endfor %}
+{% for agg in entity.aggregations %}
+import {{ ir.package }}.infrastructure.persistence.entities.{{ agg.name }}JpaEntity;
+{% endfor %}
 import org.mapstruct.Mapper;
 {% if entity.compositions or entity.aggregations %}
 import org.mapstruct.Mapping;
 {% endif %}
 
-/**
- * MapStruct mapper — Infrastructure layer (Spring component model).
- * Translates between the JPA persistence model and the domain entity.
-{% if entity.compositions or entity.aggregations %}
- * Delegates nested entity mappings to the relevant sibling mappers.
-{% endif %}
- */
 @Mapper(componentModel = "spring"{% if entity.compositions or entity.aggregations %}, uses = {
 {% for comp in entity.compositions %}        {{ comp.name }}EntityMapper.class{% if not loop.last or entity.aggregations %},{% endif %}
+
 {% endfor %}
 {% for agg in entity.aggregations %}        {{ agg.name }}EntityMapper.class{% if not loop.last %},{% endif %}
+
 {% endfor %}
 }{% endif %})
 public interface {{ entity.name }}EntityMapper {

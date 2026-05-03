@@ -1,19 +1,18 @@
 package {{ ir.package }}.infrastructure.config;
 
 {% for entity in ir.entities %}
-import {{ ir.package }}.application.dto.{{ entity.name }}DtoMapper;
-import {{ ir.package }}.domain.ports.I{{ entity.name }}Repository;
+import {{ ir.package }}.application.mappers.{{ entity.name }}DtoMapper;
+import {{ ir.package }}.application.usecases.crud.{{ entity.name | lower }}.Create{{ entity.name }}UseCase;
+import {{ ir.package }}.application.usecases.crud.{{ entity.name | lower }}.FindById{{ entity.name }}UseCase;
+import {{ ir.package }}.application.usecases.crud.{{ entity.name | lower }}.FindAll{{ entity.name }}UseCase;
+import {{ ir.package }}.application.usecases.crud.{{ entity.name | lower }}.Update{{ entity.name }}UseCase;
+import {{ ir.package }}.application.usecases.crud.{{ entity.name | lower }}.Delete{{ entity.name }}UseCase;
+import {{ ir.package }}.domain.repositories.I{{ entity.name }}Repository;
 {% endfor %}
-import {{ ir.package }}.application.usecases.*;
 import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * DI wiring for use cases and their application-layer mappers.
- * Use cases are plain Java classes (no @Service), so Spring cannot discover them by itself.
- * BeanConfig is the single place that owns this wiring — change it here, not in the use cases.
- */
 @Configuration
 public class BeanConfig {
 {% for entity in ir.entities %}

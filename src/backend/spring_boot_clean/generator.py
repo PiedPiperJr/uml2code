@@ -84,57 +84,62 @@ class SpringBootCleanGenerator(IBackend):
         ctx  = dict(ir=ir, entity=entity)
         base = _pkg_to_path(ir.package)
         name = entity.name
+        e    = name.lower()
 
         return [
             # Domain
             self._f(f"{base}/domain/entities/{name}.java",
                     'domain/entity.j2', **ctx),
-            self._f(f"{base}/domain/ports/I{name}Repository.java",
-                    'domain/ports/repository_port.j2', **ctx),
+            self._f(f"{base}/domain/repositories/I{name}Repository.java",
+                    'domain/repositories/repository.j2', **ctx),
 
-            # Application — ports (use-case interfaces)
-            self._f(f"{base}/application/ports/ICreate{name}.java",
+            # Application — ports grouped by operation family then entity
+            self._f(f"{base}/application/ports/crud/{e}/ICreate{name}.java",
                     'application/ports/create_port.j2', **ctx),
-            self._f(f"{base}/application/ports/IFindById{name}.java",
+            self._f(f"{base}/application/ports/crud/{e}/IFindById{name}.java",
                     'application/ports/find_by_id_port.j2', **ctx),
-            self._f(f"{base}/application/ports/IFindAll{name}.java",
+            self._f(f"{base}/application/ports/crud/{e}/IFindAll{name}.java",
                     'application/ports/find_all_port.j2', **ctx),
-            self._f(f"{base}/application/ports/IUpdate{name}.java",
+            self._f(f"{base}/application/ports/crud/{e}/IUpdate{name}.java",
                     'application/ports/update_port.j2', **ctx),
-            self._f(f"{base}/application/ports/IDelete{name}.java",
+            self._f(f"{base}/application/ports/crud/{e}/IDelete{name}.java",
                     'application/ports/delete_port.j2', **ctx),
 
-            # Application — use cases
-            self._f(f"{base}/application/usecases/Create{name}UseCase.java",
+            # Application — use cases grouped by operation family then entity
+            self._f(f"{base}/application/usecases/crud/{e}/Create{name}UseCase.java",
                     'application/usecases/create_use_case.j2', **ctx),
-            self._f(f"{base}/application/usecases/FindById{name}UseCase.java",
+            self._f(f"{base}/application/usecases/crud/{e}/FindById{name}UseCase.java",
                     'application/usecases/find_by_id_use_case.j2', **ctx),
-            self._f(f"{base}/application/usecases/FindAll{name}UseCase.java",
+            self._f(f"{base}/application/usecases/crud/{e}/FindAll{name}UseCase.java",
                     'application/usecases/find_all_use_case.j2', **ctx),
-            self._f(f"{base}/application/usecases/Update{name}UseCase.java",
+            self._f(f"{base}/application/usecases/crud/{e}/Update{name}UseCase.java",
                     'application/usecases/update_use_case.j2', **ctx),
-            self._f(f"{base}/application/usecases/Delete{name}UseCase.java",
+            self._f(f"{base}/application/usecases/crud/{e}/Delete{name}UseCase.java",
                     'application/usecases/delete_use_case.j2', **ctx),
 
-            # Application — DTOs and mapper
-            self._f(f"{base}/application/dto/{name}Request.java",
-                    'application/dto/request.j2', **ctx),
+            # Application — use-case-centric DTOs
+            self._f(f"{base}/application/dto/Create{name}Request.java",
+                    'application/dto/create_request.j2', **ctx),
+            self._f(f"{base}/application/dto/Update{name}Request.java",
+                    'application/dto/update_request.j2', **ctx),
             self._f(f"{base}/application/dto/{name}Response.java",
                     'application/dto/response.j2', **ctx),
             self._f(f"{base}/application/dto/{name}SummaryResponse.java",
                     'application/dto/summary_response.j2', **ctx),
-            self._f(f"{base}/application/dto/{name}DtoMapper.java",
-                    'application/dto/dto_mapper.j2', **ctx),
 
-            # Infrastructure — persistence
-            self._f(f"{base}/infrastructure/persistence/{name}JpaEntity.java",
-                    'infrastructure/persistence/jpa_entity.j2', **ctx),
-            self._f(f"{base}/infrastructure/persistence/{name}JpaRepository.java",
-                    'infrastructure/persistence/jpa_repository.j2', **ctx),
-            self._f(f"{base}/infrastructure/persistence/{name}EntityMapper.java",
-                    'infrastructure/persistence/entity_mapper.j2', **ctx),
-            self._f(f"{base}/infrastructure/persistence/{name}RepositoryAdapter.java",
-                    'infrastructure/persistence/repository_adapter.j2', **ctx),
+            # Application — mapper (in its own sub-package)
+            self._f(f"{base}/application/mappers/{name}DtoMapper.java",
+                    'application/mappers/dto_mapper.j2', **ctx),
+
+            # Infrastructure — persistence split into 4 sub-packages
+            self._f(f"{base}/infrastructure/persistence/entities/{name}JpaEntity.java",
+                    'infrastructure/persistence/entities/jpa_entity.j2', **ctx),
+            self._f(f"{base}/infrastructure/persistence/repositories/{name}JpaRepository.java",
+                    'infrastructure/persistence/repositories/jpa_repository.j2', **ctx),
+            self._f(f"{base}/infrastructure/persistence/mappers/{name}EntityMapper.java",
+                    'infrastructure/persistence/mappers/entity_mapper.j2', **ctx),
+            self._f(f"{base}/infrastructure/persistence/adapters/{name}RepositoryAdapter.java",
+                    'infrastructure/persistence/adapters/repository_adapter.j2', **ctx),
 
             # Presentation
             self._f(f"{base}/presentation/rest/{name}Controller.java",
@@ -155,10 +160,10 @@ class SpringBootCleanGenerator(IBackend):
                     'infrastructure/config/bean_config.j2', **ctx),
             self._f(f"{base}/infrastructure/config/JacksonConfig.java",
                     'infrastructure/config/jackson_config.j2', **ctx),
-            self._f(f"{base}/presentation/rest/GlobalExceptionHandler.java",
-                    'presentation/rest/global_exception_handler.j2', **ctx),
-            self._f(f"{base}/presentation/rest/ApiError.java",
-                    'presentation/rest/api_error.j2', **ctx),
+            self._f(f"{base}/presentation/exception/GlobalExceptionHandler.java",
+                    'presentation/exception/global_exception_handler.j2', **ctx),
+            self._f(f"{base}/presentation/exception/ApiError.java",
+                    'presentation/exception/api_error.j2', **ctx),
         ]
 
     # ── Helpers ───────────────────────────────────────────────────────────────

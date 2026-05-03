@@ -1,13 +1,15 @@
 package {{ ir.package }}.presentation.rest;
 
-import {{ ir.package }}.application.dto.{{ entity.name }}Request;
+import {{ ir.package }}.application.dto.Create{{ entity.name }}Request;
+import {{ ir.package }}.application.dto.Update{{ entity.name }}Request;
 import {{ ir.package }}.application.dto.{{ entity.name }}Response;
 import {{ ir.package }}.application.dto.{{ entity.name }}SummaryResponse;
-import {{ ir.package }}.application.ports.ICreate{{ entity.name }};
-import {{ ir.package }}.application.ports.IDelete{{ entity.name }};
-import {{ ir.package }}.application.ports.IFindAll{{ entity.name }};
-import {{ ir.package }}.application.ports.IFindById{{ entity.name }};
-import {{ ir.package }}.application.ports.IUpdate{{ entity.name }};
+import {{ ir.package }}.application.ports.crud.{{ entity.name | lower }}.ICreate{{ entity.name }};
+import {{ ir.package }}.application.ports.crud.{{ entity.name | lower }}.IDelete{{ entity.name }};
+import {{ ir.package }}.application.ports.crud.{{ entity.name | lower }}.IFindAll{{ entity.name }};
+import {{ ir.package }}.application.ports.crud.{{ entity.name | lower }}.IFindById{{ entity.name }};
+import {{ ir.package }}.application.ports.crud.{{ entity.name | lower }}.IUpdate{{ entity.name }};
+import {{ ir.package }}.presentation.exception.ApiError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -49,7 +51,7 @@ public class {{ entity.name }}Controller {
     })
     @PostMapping
     public ResponseEntity<{{ entity.name }}Response> create(
-            @Valid @RequestBody {{ entity.name }}Request request) {
+            @Valid @RequestBody Create{{ entity.name }}Request request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(createUseCase.execute(request));
     }
 
@@ -94,7 +96,7 @@ public class {{ entity.name }}Controller {
     @PutMapping("/{id}")
     public ResponseEntity<{{ entity.name }}Response> update(
             @Parameter(description = "UUID of the {{ entity.name | lower }}") @PathVariable UUID id,
-            @Valid @RequestBody {{ entity.name }}Request request) {
+            @Valid @RequestBody Update{{ entity.name }}Request request) {
         return ResponseEntity.ok(updateUseCase.execute(id, request));
     }
 

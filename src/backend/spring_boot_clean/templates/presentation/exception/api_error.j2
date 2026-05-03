@@ -1,4 +1,4 @@
-package {{ ir.package }}.presentation.rest;
+package {{ ir.package }}.presentation.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -6,10 +6,6 @@ import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-/**
- * Uniform error envelope returned for all 4xx/5xx responses.
- * {@code details} is omitted from the JSON when null (e.g. non-validation errors).
- */
 @Schema(description = "Error response envelope")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record ApiError(

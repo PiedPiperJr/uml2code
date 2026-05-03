@@ -1,9 +1,9 @@
-package {{ ir.package }}.application.ports;
+package {{ ir.package }}.application.ports.crud.{{ entity.name | lower }};
 
 import {{ ir.package }}.application.dto.{{ entity.name }}Response;
 import java.util.UUID;
 
-/** Driving port — use-case contract for fetching a {{ entity.name }} by its identifier. */
+/** Entry point into the application — use-case contract for fetching a {{ entity.name }} by id. */
 public interface IFindById{{ entity.name }} {
     {{ entity.name }}Response execute(UUID id);
 }
