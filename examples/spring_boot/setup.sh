@@ -2,9 +2,9 @@
 # ---------------------------------------------------------------------------
 # setup.sh — Install prerequisites for the Spring Boot example
 #
-# Run this once before using init.sh.
+# Run this once before using init.sh:
+#   bash setup.sh
 # ---------------------------------------------------------------------------
-set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
@@ -17,8 +17,6 @@ echo "=== Installing Maven ==="
 sudo apt-get install -y maven
 
 echo "=== Configuring JAVA_HOME ==="
-export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
-# ou directement :
 export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 export PATH=$JAVA_HOME/bin:$PATH
 
