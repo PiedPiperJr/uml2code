@@ -90,7 +90,7 @@ content = open(pom_path).read()
 extra_deps = f"""\t\t<dependency>
 \t\t\t<groupId>org.springdoc</groupId>
 \t\t\t<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-\t\t\t<version>2.6.0</version>
+\t\t\t<version>2.8.3</version>
 \t\t</dependency>
 \t\t<dependency>
 \t\t\t<groupId>org.mapstruct</groupId>
