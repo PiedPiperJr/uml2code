@@ -1,0 +1,10 @@
+package {{ ir.package }}.application.ports;
+
+import {{ ir.package }}.application.dto.{{ entity.name }}Request;
+import {{ ir.package }}.application.dto.{{ entity.name }}Response;
+import java.util.UUID;
+
+/** Driving port — use-case contract for updating an existing {{ entity.name }}. */
+public interface IUpdate{{ entity.name }} {
+    {{ entity.name }}Response execute(UUID id, {{ entity.name }}Request request);
+}

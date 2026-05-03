@@ -1,0 +1,9 @@
+package {{ ir.package }}.application.ports;
+
+import {{ ir.package }}.application.dto.{{ entity.name }}Request;
+import {{ ir.package }}.application.dto.{{ entity.name }}Response;
+
+/** Driving port — use-case contract for creating a {{ entity.name }}. */
+public interface ICreate{{ entity.name }} {
+    {{ entity.name }}Response execute({{ entity.name }}Request request);
+}

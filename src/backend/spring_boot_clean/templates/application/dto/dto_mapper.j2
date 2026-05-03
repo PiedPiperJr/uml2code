@@ -1,0 +1,28 @@
+package {{ ir.package }}.application.dto;
+
+import {{ ir.package }}.domain.entities.{{ entity.name }};
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+
+/**
+ * MapStruct mapper — Application layer (no Spring component model, wired via BeanConfig).
+ * Maps between the domain entity and the application-layer DTOs.
+ */
+@Mapper
+public interface {{ entity.name }}DtoMapper {
+
+    /** Map an inbound request to a transient domain entity (id is always null on creation). */
+    @Mapping(target = "id", ignore = true)
+    {{ entity.name }} toDomain({{ entity.name }}Request request);
+
+    /** Overwrite all mutable fields of an existing domain entity from a request (used on update). */
+    @Mapping(target = "id", ignore = true)
+    void updateDomain(@MappingTarget {{ entity.name }} target, {{ entity.name }}Request request);
+
+    /** Produce the full read model. The JPA entity exposes createdAt/updatedAt via the mapper chain. */
+    {{ entity.name }}Response toResponse({{ entity.name }} entity);
+
+    /** Produce a lightweight summary for list endpoints. */
+    {{ entity.name }}SummaryResponse toSummaryResponse({{ entity.name }} entity);
+}

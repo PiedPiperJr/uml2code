@@ -1,0 +1,10 @@
+package {{ ir.package }}.application.ports;
+
+import {{ ir.package }}.application.dto.{{ entity.name }}SummaryResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+/** Driving port — use-case contract for paginated listing of {{ entity.name }}. */
+public interface IFindAll{{ entity.name }} {
+    Page<{{ entity.name }}SummaryResponse> execute(Pageable pageable);
+}

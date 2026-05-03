@@ -1,0 +1,12 @@
+package {{ ir.package }}.domain.exceptions;
+
+/**
+ * Thrown when an entity with a unique field value already exists.
+ * Generic: one class covers all entity types.
+ */
+public class EntityAlreadyExistsException extends RuntimeException {
+
+    public EntityAlreadyExistsException(String entity, String field, Object value) {
+        super(String.format("%s with %s '%s' already exists", entity, field, value));
+    }
+}

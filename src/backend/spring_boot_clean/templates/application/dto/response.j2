@@ -1,0 +1,27 @@
+package {{ ir.package }}.application.dto;
+{% set ns = namespace(need_date=false, need_datetime=false) %}
+{% for field in entity.fields if field.name != 'id' %}
+{% if field.type | java_type == 'LocalDate' %}{% set ns.need_date = true %}{% endif %}
+{% if field.type | java_type == 'LocalDateTime' %}{% set ns.need_datetime = true %}{% endif %}
+{% endfor %}
+import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDateTime;
+import java.util.UUID;
+{% if ns.need_date %}
+import java.time.LocalDate;
+{% endif %}
+
+/**
+ * Full read model for a {{ entity.name }}, including audit timestamps.
+ */
+@Schema(description = "Full representation of a {{ entity.name }}")
+public record {{ entity.name }}Response(
+        @Schema(description = "Unique identifier") UUID id,
+{% set own_fields = entity.fields | selectattr('name', 'ne', 'id') | list %}
+{% for field in own_fields %}
+        @Schema(description = "{{ field.name | upper_first }} of the {{ entity.name | lower }}")
+        {{ field.type | java_type }} {{ field.name }},
+{% endfor %}
+        @Schema(description = "Creation timestamp") LocalDateTime createdAt,
+        @Schema(description = "Last update timestamp") LocalDateTime updatedAt
+) {}

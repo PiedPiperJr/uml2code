@@ -1,0 +1,8 @@
+package {{ ir.package }}.application.ports;
+
+import java.util.UUID;
+
+/** Driving port — use-case contract for deleting a {{ entity.name }}. */
+public interface IDelete{{ entity.name }} {
+    void execute(UUID id);
+}

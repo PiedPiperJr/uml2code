@@ -1,0 +1,44 @@
+package {{ ir.package }}.application.usecases;
+
+import {{ ir.package }}.application.dto.{{ entity.name }}DtoMapper;
+import {{ ir.package }}.application.dto.{{ entity.name }}SummaryResponse;
+import {{ ir.package }}.application.ports.IFindAll{{ entity.name }};
+import {{ ir.package }}.domain.entities.{{ entity.name }};
+import {{ ir.package }}.domain.ports.I{{ entity.name }}Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import java.util.List;
+
+public class FindAll{{ entity.name }}UseCase implements IFindAll{{ entity.name }} {
+
+    private final I{{ entity.name }}Repository repository;
+    private final {{ entity.name }}DtoMapper mapper;
+
+    public FindAll{{ entity.name }}UseCase(I{{ entity.name }}Repository repository, {{ entity.name }}DtoMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
+
+    @Override
+    public Page<{{ entity.name }}SummaryResponse> execute(Pageable pageable) {
+        List<{{ entity.name }}> entities = fetchPage(pageable);
+        long total = countAll();
+        return toPage(entities, total, pageable);
+    }
+
+    private List<{{ entity.name }}> fetchPage(Pageable pageable) {
+        return repository.findAll(pageable.getPageNumber(), pageable.getPageSize());
+    }
+
+    private long countAll() {
+        return repository.count();
+    }
+
+    private Page<{{ entity.name }}SummaryResponse> toPage(List<{{ entity.name }}> entities, long total, Pageable pageable) {
+        List<{{ entity.name }}SummaryResponse> summaries = entities.stream()
+                .map(mapper::toSummaryResponse)
+                .toList();
+        return new PageImpl<>(summaries, pageable, total);
+    }
+}

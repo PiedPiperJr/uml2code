@@ -1,0 +1,9 @@
+package {{ ir.package }}.application.ports;
+
+import {{ ir.package }}.application.dto.{{ entity.name }}Response;
+import java.util.UUID;
+
+/** Driving port — use-case contract for fetching a {{ entity.name }} by its identifier. */
+public interface IFindById{{ entity.name }} {
+    {{ entity.name }}Response execute(UUID id);
+}
