@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://piedpiperjr.github.io/uml2code/</loc>
+         <lastmod>2026-05-03</lastmod>
+    </url>
+    <url>
+         <loc>https://piedpiperjr.github.io/uml2code/architecture/generated-structure/</loc>
+         <lastmod>2026-05-03</lastmod>
+    </url>
+    <url>
+         <loc>https://piedpiperjr.github.io/uml2code/architecture/pipeline/</loc>
+         <lastmod>2026-05-03</lastmod>
+    </url>
+    <url>
+         <loc>https://piedpiperjr.github.io/uml2code/extending/new-generator/</loc>
+         <lastmod>2026-05-03</lastmod>
+    </url>
+</urlset>
