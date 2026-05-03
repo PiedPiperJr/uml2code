@@ -43,6 +43,26 @@ fi
 ARTIFACT=$(echo "$APP_NAME" | tr '.' '-')
 GROUP=$(echo "$PACKAGE" | rev | cut -d'.' -f2- | rev)
 
+# ── Ensure JAVA_HOME points to Java 21 ───────────────────────────────────────
+# Maven uses JAVA_HOME, not necessarily the java on PATH.
+# Try common installation paths used by apt / SDKMAN / Codespaces.
+if ! java -version 2>&1 | grep -q '"21'; then
+  for candidate in \
+      /usr/lib/jvm/java-21-openjdk-amd64 \
+      /usr/lib/jvm/java-21-openjdk \
+      /usr/lib/jvm/temurin-21 \
+      /usr/local/sdkman/candidates/java/21*/; do
+    if [ -x "$candidate/bin/java" ]; then
+      export JAVA_HOME="$candidate"
+      export PATH="$JAVA_HOME/bin:$PATH"
+      break
+    fi
+  done
+fi
+
+JAVA_ACTUAL=$(java -version 2>&1 | head -1)
+echo "  Java : $JAVA_ACTUAL"
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 OUTPUT_DIR="$SCRIPT_DIR/$APP_NAME"
