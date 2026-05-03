@@ -1,0 +1,66 @@
+project
+├─ domain
+│  ├─ entities
+│  │  ├─ Address.java
+│  │  ├─ Adresses.java
+│  │  ├─ Person.java
+│  │  ├─ Professor.java
+│  │  └─ Student.java
+│  ├─ exceptions
+│  │  ├─ already_exists
+│  │  │  ├─ AddressAlreadyExistsException.java
+│  │  │  ├─ AdressesAlreadyExistsException.java
+│  │  │  ├─ EntityAlreadyExistsException.java
+│  │  │  ├─ PersonAlreadyExistsException.java
+│  │  │  ├─ ProfessorAlreadyExistsException.java
+│  │  │  └─ StudentAlreadyExistsException.java
+│  │  └─ not_found
+│  │     ├─ AddressNotFoundException.java
+│  │     ├─ AdressesNotFoundException.java
+│  │     ├─ EntityNotFoundException.java
+│  │     ├─ PersonNotFoundException.java
+│  │     ├─ ProfessorNotFoundException.java
+│  │     └─ StudentNotFoundException.java
+│  ├─ repositories
+│  │  ├─ IAddressRepository.java
+│  │  ├─ IAdressesRepository.java
+│  │  ├─ IPersonRepository.java
+│  │  ├─ IProfessorRepository.java
+│  │  └─ IStudentRepository.java
+│  ├─ services
+│  │  └─ crud
+│  │     ├─ IAddressCrudService.java
+│  │     ├─ IAdressesCrudService.java
+│  │     ├─ IPersonCrudService.java
+│  │     ├─ IProfessorCrudService.java
+│  │     └─ IStudentCrudService.java
+│  └─ usecases
+│     └─ UseCase.java
+├─ infrastructure
+│  ├─ config
+│  │  └─ Config.java
+│  ├─ repositories
+│  │  ├─ AddressRepository.java
+│  │  ├─ AdressesRepository.java
+│  │  ├─ PersonRepository.java
+│  │  ├─ ProfessorRepository.java
+│  │  └─ StudentRepository.java
+│  ├─ services
+│  │  └─ crud
+│  │     ├─ AddressCrudService.java
+│  │     ├─ AdressesCrudService.java
+│  │     ├─ PersonCrudService.java
+│  │     ├─ ProfessorCrudService.java
+│  │     └─ StudentCrudService.java
+│  └─ utils
+│     └─ Utils.java
+└─ presentation
+   └─ api
+      ├─ AppController.java
+      ├─ crud
+      │  ├─ AddressController.java
+      │  ├─ AdressesController.java
+      │  ├─ PersonController.java
+      │  ├─ ProfessorController.java
+      │  └─ StudentController.java
+      └─ GlobalExceptionHandler.java

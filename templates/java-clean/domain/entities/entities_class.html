@@ -1,7 +1,7 @@
 package {{route}}.domain.entities;
 
 {% if data.parent %} 
-import {{route}}.domain.entities.{{ data.parent | capitalize }}; 
+import {{route}}.domain.entities.{{ data.parent }}; 
 {% endif %}
 import lombok.*;
 import jakarta.persistence.*;
@@ -16,13 +16,16 @@ import {{route}}.infrastructure.helpers.LocalDateTimeDeserializer;
 import {{route}}.infrastructure.helpers.LocalDateTimeSerializer;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class {{ data.name | capitalize }} {% if data.parent %} extends {{ data.parent | capitalize }} {% endif %} {
+public class {{ data.name }} {% if data.parent %} extends {{ data.parent }} {% endif %} {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false) // Bonne pratique pour les IDs
     private UUID id;
 
     {% for attr in data.attributes %}
@@ -32,16 +35,50 @@ public class {{ data.name | capitalize }} {% if data.parent %} extends {{ data.p
     {% endif %}
     {% endfor %}
 
-    // TODO: Add relationships here
-    // Aggregation: List of related elements
-    {% for aggregation in data.aggregations %}
-    {{ aggregation.visibility }} List<{{ aggregation._type }}> {{ aggregation.name }};
-    {% endfor %}
-    
-    // Composition: List of owned elements
-    {% for composition in data.compositions %}
-    {{ composition.visibility }} List<{{ composition._type | capitalize }}> {{ composition.name }};
-    {% endfor %}
+
+    // DONE: One To One relationships
+{% for rel in data.oneToOneRelationships %}
+    {% if rel.mapped_by_property %}
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "{{ rel.mapped_by_property }}")
+    {% else %}
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "{{ rel.role }}_id") // Côté propriétaire : nom de colonne par défaut
+    {% endif %}
+    private {{ rel.comodel }} {{ rel.role }};
+{% endfor %}
+
+    // DONE: many To One relationships
+{% for rel in data.manyToOneRelationships %}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "{{ rel.role }}_id") // Toujours propriétaire, nom de colonne par défaut
+    private {{ rel.comodel }} {{ rel.role }};
+{% endfor %}
+
+    // DONE: One To many relationships
+{% for rel in data.oneToManyRelationships %}
+    {% if rel.mapped_by_property %}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "{{ rel.mapped_by_property }}") // Relation bidirectionnelle
+    {% else %}
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "{{ data.name | lower }}_id") // Relation Unidirectionnelle: FK sur la table "Many"
+    {% endif %}
+    private List<{{ rel.comodel }}> {{ rel.role }};
+{% endfor %}
+
+    // DONE: Many To many relationships
+{% for rel in data.manyToManyRelationships %}
+    {% if rel.mapped_by_property %}
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "{{ rel.mapped_by_property }}") // Côté inverse d'une bidirectionnelle
+    {% else %}
+    @ManyToMany(fetch = FetchType.LAZY) // Côté propriétaire ou unidirectionnelle
+    @JoinTable(
+        name = "{{ data.name | lower }}_{{ rel.role | lower }}", // Nom de table de jointure par défaut
+        joinColumns = @JoinColumn(name = "{{ data.name | lower }}_id"),
+        inverseJoinColumns = @JoinColumn(name = "{{ rel.comodel | lower }}_id")
+    )
+    {% endif %}
+    private List<{{ rel.comodel }}> {{ rel.role }};
+{% endfor %}
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

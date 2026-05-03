@@ -1,0 +1,427 @@
+{
+    "classes": {
+        "pzczP67oPYf6B7buiO8z-2": {
+            "name": "Person",
+            "type": "class",
+            "attributes": [
+                {
+                    "visibility": "+",
+                    "name": "name",
+                    "type": "String"
+                },
+                {
+                    "visibility": "+",
+                    "name": "phoneNumber",
+                    "type": "String"
+                },
+                {
+                    "visibility": "+",
+                    "name": "emailAddress",
+                    "type": "String"
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": "+",
+                    "name": "purchaseParkingPass",
+                    "type": "void",
+                    "args": []
+                }
+            ],
+            "geometry": {
+                "@x": "200",
+                "@y": "20",
+                "@width": "180",
+                "@height": "138",
+                "@as": "geometry",
+                "mxrectangle": {
+                    "@x": "230",
+                    "@y": "140",
+                    "@width": "160",
+                    "@height": "26",
+                    "@as": "alternateBounds"
+                }
+            }
+        },
+        "pzczP67oPYf6B7buiO8z-8": {
+            "name": "Student",
+            "type": "class",
+            "attributes": [
+                {
+                    "visibility": "+",
+                    "name": "studentNumber",
+                    "type": "int"
+                },
+                {
+                    "visibility": "+",
+                    "name": "averageMark",
+                    "type": "int"
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": "+",
+                    "name": "isEligibleToEnroll",
+                    "type": "boolean",
+                    "args": []
+                },
+                {
+                    "visibility": "+",
+                    "name": "getSeminarsTaken",
+                    "type": "int",
+                    "args": [
+                        {
+                            "type": "String",
+                            "name": "papa"
+                        }
+                    ]
+                }
+            ],
+            "geometry": {
+                "@x": "60",
+                "@y": "280",
+                "@width": "160",
+                "@height": "138",
+                "@as": "geometry",
+                "mxrectangle": {
+                    "@x": "130",
+                    "@y": "380",
+                    "@width": "160",
+                    "@height": "26",
+                    "@as": "alternateBounds"
+                }
+            }
+        },
+        "pzczP67oPYf6B7buiO8z-15": {
+            "name": "Professor",
+            "type": "class",
+            "attributes": [
+                {
+                    "visibility": "-",
+                    "name": "salary",
+                    "type": "int"
+                },
+                {
+                    "visibility": "#",
+                    "name": "staffNumber",
+                    "type": "int"
+                },
+                {
+                    "visibility": "-",
+                    "name": "yearsOfService",
+                    "type": "int"
+                },
+                {
+                    "visibility": "+",
+                    "name": "numberOfClasses",
+                    "type": "int"
+                }
+            ],
+            "methods": [],
+            "geometry": {
+                "@x": "360",
+                "@y": "280",
+                "@width": "160",
+                "@height": "138",
+                "@as": "geometry",
+                "mxrectangle": {
+                    "@x": "340",
+                    "@y": "380",
+                    "@width": "170",
+                    "@height": "26",
+                    "@as": "alternateBounds"
+                }
+            }
+        },
+        "pzczP67oPYf6B7buiO8z-19": {
+            "name": "Address",
+            "type": "class",
+            "attributes": [
+                {
+                    "visibility": "+",
+                    "name": "street",
+                    "type": "String"
+                },
+                {
+                    "visibility": "+",
+                    "name": "city",
+                    "type": "String"
+                },
+                {
+                    "visibility": "+",
+                    "name": "state",
+                    "type": "String"
+                },
+                {
+                    "visibility": "+",
+                    "name": "postalCode",
+                    "type": "int"
+                },
+                {
+                    "visibility": "+",
+                    "name": "country",
+                    "type": "String"
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": "+",
+                    "name": "outputAsLabel",
+                    "type": "String",
+                    "args": []
+                }
+            ],
+            "geometry": {
+                "@x": "488",
+                "@y": "20",
+                "@width": "160",
+                "@height": "216",
+                "@as": "geometry",
+                "mxrectangle": {
+                    "@x": "550",
+                    "@y": "140",
+                    "@width": "160",
+                    "@height": "26",
+                    "@as": "alternateBounds"
+                }
+            }
+        },
+        "4": {
+            "name": "Adresses",
+            "type": "class",
+            "attributes": [
+                {
+                    "visibility": "+",
+                    "name": "city",
+                    "type": "String"
+                },
+                {
+                    "visibility": "+",
+                    "name": "state",
+                    "type": "String"
+                },
+                {
+                    "visibility": "+",
+                    "name": "postalCode",
+                    "type": "int"
+                },
+                {
+                    "visibility": "+",
+                    "name": "country",
+                    "type": "String"
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": "+",
+                    "name": "outputAsLabel",
+                    "type": "String",
+                    "args": []
+                }
+            ],
+            "geometry": {
+                "@x": "570",
+                "@y": "280",
+                "@width": "160",
+                "@height": "216",
+                "@as": "geometry",
+                "mxrectangle": {
+                    "@x": "550",
+                    "@y": "140",
+                    "@width": "160",
+                    "@height": "26",
+                    "@as": "alternateBounds"
+                }
+            }
+        }
+    },
+    "relationships": [
+        {
+            "id": "pzczP67oPYf6B7buiO8z-14",
+            "name": "",
+            "source": "pzczP67oPYf6B7buiO8z-8",
+            "target": "pzczP67oPYf6B7buiO8z-2",
+            "edge": "1",
+            "vertex": null,
+            "style": "endArrow=block;endSize=10;endFill=0;shadow=0;strokeWidth=1;rounded=0;edgeStyle=elbowEdgeStyle;elbow=vertical;",
+            "args": [],
+            "type": "",
+            "multiplicity": "",
+            "source_role": null,
+            "target_role": null,
+            "source_multiplicity": null,
+            "target_multiplicity": null,
+            "edge_labels": [],
+            "is_navigable_to_source": false,
+            "is_navigable_to_target": false
+        },
+        {
+            "id": "pzczP67oPYf6B7buiO8z-18",
+            "name": "",
+            "source": "pzczP67oPYf6B7buiO8z-15",
+            "target": "pzczP67oPYf6B7buiO8z-2",
+            "edge": "1",
+            "vertex": null,
+            "style": "endArrow=block;endSize=10;endFill=0;shadow=0;strokeWidth=1;rounded=0;edgeStyle=elbowEdgeStyle;elbow=vertical;",
+            "args": [],
+            "type": "",
+            "multiplicity": "",
+            "source_role": null,
+            "target_role": null,
+            "source_multiplicity": null,
+            "target_multiplicity": null,
+            "edge_labels": [],
+            "is_navigable_to_source": false,
+            "is_navigable_to_target": false
+        },
+        {
+            "id": "pzczP67oPYf6B7buiO8z-28",
+            "name": "",
+            "source": "pzczP67oPYf6B7buiO8z-2",
+            "target": "pzczP67oPYf6B7buiO8z-19",
+            "edge": "1",
+            "vertex": null,
+            "style": "endArrow=open;shadow=0;strokeWidth=1;rounded=0;endFill=1;edgeStyle=elbowEdgeStyle;elbow=vertical;",
+            "args": [
+                {
+                    "@id": "pzczP67oPYf6B7buiO8z-29",
+                    "@value": "0..1",
+                    "@style": "resizable=0;align=left;verticalAlign=bottom;labelBackgroundColor=none;fontSize=12;",
+                    "@parent": "pzczP67oPYf6B7buiO8z-28",
+                    "@connectable": "0",
+                    "@vertex": "1",
+                    "mxgeometry": {
+                        "@x": "-1",
+                        "@relative": "1",
+                        "@as": "geometry",
+                        "mxpoint": {
+                            "@y": "1",
+                            "@as": "offset"
+                        }
+                    }
+                },
+                {
+                    "@id": "pzczP67oPYf6B7buiO8z-30",
+                    "@value": "1",
+                    "@style": "resizable=0;align=right;verticalAlign=bottom;labelBackgroundColor=none;fontSize=12;",
+                    "@parent": "pzczP67oPYf6B7buiO8z-28",
+                    "@connectable": "0",
+                    "@vertex": "1",
+                    "mxgeometry": {
+                        "@x": "1",
+                        "@relative": "1",
+                        "@as": "geometry",
+                        "mxpoint": {
+                            "@x": "-7",
+                            "@y": "21",
+                            "@as": "offset"
+                        }
+                    }
+                },
+                {
+                    "@id": "pzczP67oPYf6B7buiO8z-31",
+                    "@value": "lives at",
+                    "@style": "text;html=1;resizable=0;points=[];;align=center;verticalAlign=middle;labelBackgroundColor=none;rounded=0;shadow=0;strokeWidth=1;fontSize=12;",
+                    "@parent": "pzczP67oPYf6B7buiO8z-28",
+                    "@vertex": "1",
+                    "@connectable": "0",
+                    "mxgeometry": {
+                        "@x": "0.5",
+                        "@y": "49",
+                        "@relative": "1",
+                        "@as": "geometry",
+                        "mxpoint": {
+                            "@x": "-38",
+                            "@y": "40",
+                            "@as": "offset"
+                        }
+                    }
+                }
+            ],
+            "type": "",
+            "multiplicity": "",
+            "source_role": null,
+            "target_role": null,
+            "source_multiplicity": null,
+            "target_multiplicity": null,
+            "edge_labels": [],
+            "is_navigable_to_source": false,
+            "is_navigable_to_target": false
+        },
+        {
+            "id": "aZciTYqOEJMMC_ZfQV8L-0",
+            "name": "supervises",
+            "source": "pzczP67oPYf6B7buiO8z-16",
+            "target": "pzczP67oPYf6B7buiO8z-9",
+            "edge": "1",
+            "vertex": null,
+            "style": "edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=open;endFill=0;",
+            "args": [
+                {
+                    "@id": "aZciTYqOEJMMC_ZfQV8L-1",
+                    "@value": "0...*",
+                    "@style": "edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];",
+                    "@parent": "aZciTYqOEJMMC_ZfQV8L-0",
+                    "@vertex": "1",
+                    "@connectable": "0",
+                    "mxgeometry": {
+                        "@x": "0.8857",
+                        "@y": "-2",
+                        "@relative": "1",
+                        "@as": "geometry",
+                        "mxpoint": {
+                            "@x": "12",
+                            "@y": "-11",
+                            "@as": "offset"
+                        }
+                    }
+                },
+                {
+                    "@id": "aZciTYqOEJMMC_ZfQV8L-2",
+                    "@value": "1...5",
+                    "@style": "edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];",
+                    "@parent": "aZciTYqOEJMMC_ZfQV8L-0",
+                    "@vertex": "1",
+                    "@connectable": "0",
+                    "mxgeometry": {
+                        "@x": "-0.8286",
+                        "@relative": "1",
+                        "@as": "geometry",
+                        "mxpoint": {
+                            "@y": "11",
+                            "@as": "offset"
+                        }
+                    }
+                }
+            ],
+            "type": "",
+            "multiplicity": "",
+            "source_role": null,
+            "target_role": null,
+            "source_multiplicity": null,
+            "target_multiplicity": null,
+            "edge_labels": [],
+            "is_navigable_to_source": false,
+            "is_navigable_to_target": false
+        },
+        {
+            "id": "17",
+            "name": "",
+            "source": "aZciTYqOEJMMC_ZfQV8L-3",
+            "target": "4",
+            "edge": "1",
+            "vertex": null,
+            "style": "endArrow=diamondThin;endFill=1;endSize=24;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;",
+            "args": [],
+            "type": "",
+            "multiplicity": "",
+            "source_role": null,
+            "target_role": null,
+            "source_multiplicity": null,
+            "target_multiplicity": null,
+            "edge_labels": [],
+            "is_navigable_to_source": false,
+            "is_navigable_to_target": false
+        }
+    ]
+}

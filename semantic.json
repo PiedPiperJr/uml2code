@@ -1,0 +1,97 @@
+[
+    {
+        "name": "",
+        "source": "pzczP67oPYf6B7buiO8z-8",
+        "target": "pzczP67oPYf6B7buiO8z-2",
+        "_type": [
+            "RelationshipType.INHERITANCE",
+            null,
+            false,
+            false
+        ],
+        "source_name": "Student",
+        "target_name": "Person",
+        "source_role": null,
+        "target_role": null,
+        "source_multiplicity": null,
+        "target_multiplicity": null,
+        "is_navigable_to_source": false,
+        "is_navigable_to_target": false
+    },
+    {
+        "name": "",
+        "source": "pzczP67oPYf6B7buiO8z-15",
+        "target": "pzczP67oPYf6B7buiO8z-2",
+        "_type": [
+            "RelationshipType.INHERITANCE",
+            null,
+            false,
+            false
+        ],
+        "source_name": "Professor",
+        "target_name": "Person",
+        "source_role": null,
+        "target_role": null,
+        "source_multiplicity": null,
+        "target_multiplicity": null,
+        "is_navigable_to_source": false,
+        "is_navigable_to_target": false
+    },
+    {
+        "name": "",
+        "source": "pzczP67oPYf6B7buiO8z-2",
+        "target": "pzczP67oPYf6B7buiO8z-19",
+        "_type": [
+            "RelationshipType.ASSOCIATION",
+            null,
+            true,
+            false
+        ],
+        "source_name": "Person",
+        "target_name": "Address",
+        "source_role": null,
+        "target_role": null,
+        "source_multiplicity": null,
+        "target_multiplicity": null,
+        "is_navigable_to_source": false,
+        "is_navigable_to_target": false
+    },
+    {
+        "name": "supervises",
+        "source": "pzczP67oPYf6B7buiO8z-16",
+        "target": "pzczP67oPYf6B7buiO8z-9",
+        "_type": [
+            "RelationshipType.ASSOCIATION",
+            null,
+            true,
+            false
+        ],
+        "source_name": "",
+        "target_name": "",
+        "source_role": null,
+        "target_role": null,
+        "source_multiplicity": null,
+        "target_multiplicity": null,
+        "is_navigable_to_source": false,
+        "is_navigable_to_target": false
+    },
+    {
+        "name": "",
+        "source": "aZciTYqOEJMMC_ZfQV8L-3",
+        "target": "4",
+        "_type": [
+            "RelationshipType.ASSOCIATION",
+            null,
+            false,
+            false
+        ],
+        "source_name": "",
+        "target_name": "Adresses",
+        "source_role": null,
+        "target_role": null,
+        "source_multiplicity": null,
+        "target_multiplicity": null,
+        "is_navigable_to_source": false,
+        "is_navigable_to_target": false
+    }
+]

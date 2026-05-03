@@ -9,19 +9,30 @@ class Factories:
             "name": mxcell.get("@value"),
             "type": "class",
             "attributes": [],
-            "methods": []
+            "methods": [],
+            "geometry":mxcell.get("mxgeometry"),
         }
 
     @staticmethod
     def create_relationship_structure(mxcell: Dict) -> Dict:
         return {
+            "id": mxcell.get("@id"),
             "name": mxcell.get("@value"),
             "source": mxcell.get("@source"),
             "target": mxcell.get("@target"),
             "edge": mxcell.get("@edge"),
+            "vertex": mxcell.get("@vertex"),
             "style": mxcell.get("@style"),
+            "args":[],
             "type": "",
-            "multiplicity": ""
+            "multiplicity": "",
+            "source_role": None,
+            "target_role": None,
+            "source_multiplicity": None,
+            "target_multiplicity": None,
+            "edge_labels": [],
+            "is_navigable_to_source": False,
+            "is_navigable_to_target": False
         }
 
     @staticmethod

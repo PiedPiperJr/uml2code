@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, Tuple, List
 import google.generativeai as genai
 
 
@@ -33,3 +33,12 @@ class Validators:
             return False
         value: str = object.get("@value", "")
         return "(" in value and ")" in value
+
+
+    @staticmethod
+    def is_relationship_argument(parent: str, relationships: List[Dict]) -> Tuple[bool, Dict]:
+        for relationship in relationships:
+            if relationship.get("id") == parent :
+                return True, relationship
+            
+        return False, None
