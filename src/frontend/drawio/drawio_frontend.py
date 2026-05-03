@@ -8,9 +8,13 @@ class DrawIOFrontend(IFrontend):
     """Facade that wires the DrawIO lexer and parser behind the IFrontend port."""
 
     def __init__(self):
-        self._lexer = DrawIOLexer()
+        self._lexer  = DrawIOLexer()
         self._parser = DrawIOParser()
 
     def parse(self, source: str) -> ERDiagram:
-        cells = self._lexer.tokenize(source)
-        return self._parser.parse(cells)
+        merged = ERDiagram()
+        for page_cells in self._lexer.tokenize(source):
+            page = self._parser.parse(page_cells)
+            merged.entities.update(page.entities)
+            merged.relationships.extend(page.relationships)
+        return merged

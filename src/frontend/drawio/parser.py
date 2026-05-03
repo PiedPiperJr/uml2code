@@ -150,7 +150,13 @@ class DrawIOParser:
         return root_id, sub_root_id
 
     def _is_entity(self, cell: dict, sub_root_id: str) -> bool:
-        return bool(cell.get('@vertex')) and cell.get('@parent') == sub_root_id
+        style = cell.get('@style', '')
+        return (
+            bool(cell.get('@vertex'))
+            and cell.get('@parent') == sub_root_id
+            and 'swimlane' in style
+            and 'childLayout=stackLayout' in style
+        )
 
     def _is_relationship(self, cell: dict, sub_root_id: str) -> bool:
         return (
