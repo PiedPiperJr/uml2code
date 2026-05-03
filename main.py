@@ -5,18 +5,18 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-from backend.spring_boot.generator import SpringBootGenerator
+from backend.spring_boot_clean.generator import SpringBootCleanGenerator
 from frontend.drawio.drawio_frontend import DrawIOFrontend
 from middleend.semantic_analyzer import SemanticAnalyzer
 from pipeline.pipeline import Pipeline
 
-TEMPLATE_DIR = Path(__file__).parent / "src" / "backend" / "spring_boot" / "templates"
+TEMPLATE_DIR = Path(__file__).parent / "src" / "backend" / "spring_boot_clean" / "templates"
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
         prog="uml2code",
-        description="ER-to-Spring-Boot-CRUD generator",
+        description="ER-to-Spring-Boot-CRUD generator (Clean Architecture)",
     )
     parser.add_argument("input", help="Path to the input diagram file")
     parser.add_argument(
@@ -39,7 +39,7 @@ def main() -> None:
     pipeline = Pipeline(
         frontend=DrawIOFrontend(),
         analyzer=SemanticAnalyzer(),
-        backend=SpringBootGenerator(TEMPLATE_DIR),
+        backend=SpringBootCleanGenerator(TEMPLATE_DIR),
     )
 
     files = pipeline.run(
