@@ -1,0 +1,12 @@
+package {{ ir.package }}.domain.exceptions;
+
+/**
+ * Thrown when a requested entity cannot be found in the repository.
+ * Generic: one class covers all entity types.
+ */
+public class EntityNotFoundException extends RuntimeException {
+
+    public EntityNotFoundException(String entity, Object id) {
+        super(String.format("%s with id '%s' was not found", entity, id));
+    }
+}

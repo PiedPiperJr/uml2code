@@ -1,0 +1,28 @@
+package {{ ir.package }}.application.dto;
+{% set ns = namespace(need_date=false, need_datetime=false, need_uuid=false) %}
+{% for field in entity.fields if field.name != 'id' %}
+{% if field.type | java_type == 'LocalDate' %}{% set ns.need_date = true %}{% endif %}
+{% if field.type | java_type == 'LocalDateTime' %}{% set ns.need_datetime = true %}{% endif %}
+{% if field.type | java_type == 'UUID' %}{% set ns.need_uuid = true %}{% endif %}
+{% endfor %}
+import io.swagger.v3.oas.annotations.media.Schema;
+{% if ns.need_date %}
+import java.time.LocalDate;
+{% endif %}
+{% if ns.need_datetime %}
+import java.time.LocalDateTime;
+{% endif %}
+{% if ns.need_uuid %}
+import java.util.UUID;
+{% endif %}
+
+/** Input payload for the Update{{ entity.name }} use case. */
+@Schema(description = "Payload for updating a {{ entity.name }}")
+public record Update{{ entity.name }}Request(
+{% set own_fields = entity.fields | selectattr('name', 'ne', 'id') | list %}
+{% for field in own_fields %}
+        @Schema(description = "{{ field.name | upper_first }} of the {{ entity.name | lower }}")
+        {{ field.type | java_type }} {{ field.name }}{% if not loop.last %},{% endif %}
+
+{% endfor %}
+) {}

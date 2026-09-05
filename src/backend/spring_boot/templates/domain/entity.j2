@@ -1,0 +1,66 @@
+package {{ ir.package }}.domain.entities;
+{% if entity.parent %}
+import {{ ir.package }}.domain.entities.{{ entity.parent.name }};
+{% endif %}
+import jakarta.persistence.*;
+import lombok.*;
+{% if entity.is_root %}
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import java.time.LocalDateTime;
+import java.util.UUID;
+{% endif %}
+{% if entity.compositions or entity.aggregations %}
+import java.util.List;
+import java.util.ArrayList;
+{% endif %}
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+{% if entity.parent %}
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+{% else %}
+@EqualsAndHashCode
+@ToString
+{% endif %}
+public class {{ entity.name }}{% if entity.parent %} extends {{ entity.parent.name }}{% endif %} {
+
+{% if entity.is_root %}
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(updatable = false, nullable = false)
+    private UUID id;
+
+{% endif %}
+{% for field in entity.fields %}
+{% if field.name != 'id' %}
+    @Column
+    private {{ field.type | java_type }} {{ field.name }};
+
+{% endif %}
+{% endfor %}
+{% for comp in entity.compositions %}
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "{{ entity.name | lower }}_id")
+    private List<{{ comp.name }}> {{ comp.name | lower_first }}s = new ArrayList<>();
+
+{% endfor %}
+{% for agg in entity.aggregations %}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "{{ agg.name | lower }}_id")
+    private {{ agg.name }} {{ agg.name | lower_first }};
+
+{% endfor %}
+{% if entity.is_root %}
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+{% endif %}
+}

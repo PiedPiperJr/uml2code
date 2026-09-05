@@ -1,0 +1,55 @@
+package {{ ir.package }}.infrastructure.persistence.adapters;
+
+import {{ ir.package }}.domain.entities.{{ entity.name }};
+import {{ ir.package }}.domain.repositories.I{{ entity.name }}Repository;
+import {{ ir.package }}.infrastructure.persistence.entities.{{ entity.name }}JpaEntity;
+import {{ ir.package }}.infrastructure.persistence.mappers.{{ entity.name }}EntityMapper;
+import {{ ir.package }}.infrastructure.persistence.repositories.{{ entity.name }}JpaRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Component;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Component
+@RequiredArgsConstructor
+public class {{ entity.name }}RepositoryAdapter implements I{{ entity.name }}Repository {
+
+    private final {{ entity.name }}JpaRepository jpaRepository;
+    private final {{ entity.name }}EntityMapper mapper;
+
+    @Override
+    public {{ entity.name }} save({{ entity.name }} entity) {
+        {{ entity.name }}JpaEntity jpaEntity = mapper.toJpaEntity(entity);
+        return mapper.toDomain(jpaRepository.save(jpaEntity));
+    }
+
+    @Override
+    public Optional<{{ entity.name }}> findById(UUID id) {
+        return jpaRepository.findById(id).map(mapper::toDomain);
+    }
+
+    @Override
+    public List<{{ entity.name }}> findAll(int page, int size) {
+        return jpaRepository.findAll(PageRequest.of(page, size))
+                .stream()
+                .map(mapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public long count() {
+        return jpaRepository.count();
+    }
+
+    @Override
+    public boolean existsById(UUID id) {
+        return jpaRepository.existsById(id);
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        jpaRepository.deleteById(id);
+    }
+}

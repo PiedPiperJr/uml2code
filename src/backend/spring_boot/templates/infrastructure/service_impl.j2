@@ -1,0 +1,58 @@
+package {{ ir.package }}.infrastructure.adapters.services;
+
+import {{ ir.package }}.domain.entities.{{ entity.name }};
+import {{ ir.package }}.domain.exceptions.{{ entity.name }}NotFoundException;
+import {{ ir.package }}.domain.ports.driven.I{{ entity.name }}Repository;
+import {{ ir.package }}.domain.ports.driving.I{{ entity.name }}Service;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class {{ entity.name }}ServiceImpl implements I{{ entity.name }}Service {
+
+    private final I{{ entity.name }}Repository repository;
+
+    @Override
+    public {{ entity.name }} create({{ entity.name }} entity) {
+        return repository.save(entity);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public {{ entity.name }} findById(UUID id) {
+        return repository.findById(id)
+            .orElseThrow(() -> new {{ entity.name }}NotFoundException(
+                "{{ entity.name }} not found with id: " + id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<{{ entity.name }}> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    @Override
+    public {{ entity.name }} update(UUID id, {{ entity.name }} updated) {
+        {{ entity.name }} existing = repository.findById(id)
+            .orElseThrow(() -> new {{ entity.name }}NotFoundException(
+                "{{ entity.name }} not found with id: " + id));
+        updated.setId(existing.getId());
+        updated.setCreatedAt(existing.getCreatedAt());
+        return repository.save(updated);
+    }
+
+    @Override
+    public void delete(UUID id) {
+        if (!repository.existsById(id)) {
+            throw new {{ entity.name }}NotFoundException(
+                "{{ entity.name }} not found with id: " + id);
+        }
+        repository.deleteById(id);
+    }
+}

@@ -1,0 +1,15 @@
+package {{ ir.package }}.domain.ports.driven;
+
+import {{ ir.package }}.domain.entities.{{ entity.name }};
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import java.util.Optional;
+import java.util.UUID;
+
+public interface I{{ entity.name }}Repository {
+    {{ entity.name }} save({{ entity.name }} entity);
+    Optional<{{ entity.name }}> findById(UUID id);
+    Page<{{ entity.name }}> findAll(Pageable pageable);
+    void deleteById(UUID id);
+    boolean existsById(UUID id);
+}

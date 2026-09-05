@@ -1,0 +1,101 @@
+package {{ ir.package }}.domain.entities;
+{% set ns = namespace(need_date=false, need_datetime=false, need_list=false) %}
+{% for field in entity.fields if field.name != 'id' %}
+{% if field.type | java_type == 'LocalDate' %}{% set ns.need_date = true %}{% endif %}
+{% if field.type | java_type == 'LocalDateTime' %}{% set ns.need_datetime = true %}{% endif %}
+{% endfor %}
+{% if entity.compositions %}{% set ns.need_list = true %}{% endif %}
+import java.time.LocalDateTime;
+import java.util.UUID;
+{% if ns.need_date %}
+import java.time.LocalDate;
+{% endif %}
+{% if ns.need_list %}
+import java.util.ArrayList;
+import java.util.List;
+{% endif %}
+
+/**
+ * Domain entity — pure POJO, zero framework dependency.
+ * Audit fields (createdAt, updatedAt) are populated by the persistence adapter.
+ */
+public class {{ entity.name }}{% if entity.parent %} extends {{ entity.parent.name }}{% endif %} {
+
+{% if entity.is_root %}
+    private UUID id;
+{% endif %}
+{% for field in entity.fields if field.name != 'id' %}
+    private {{ field.type | java_type }} {{ field.name }};
+{% endfor %}
+{% for comp in entity.compositions %}
+    private List<{{ comp.name }}> {{ comp.name | lower_first }}s = new ArrayList<>();
+{% endfor %}
+{% for agg in entity.aggregations %}
+    private {{ agg.name }} {{ agg.name | lower_first }};
+{% endfor %}
+{% if entity.is_root %}
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+{% endif %}
+
+    public {{ entity.name }}() {}
+
+{% set ctor_params = [] %}
+{% if entity.is_root %}{% do ctor_params.append('UUID id') %}{% endif %}
+{% for field in entity.fields if field.name != 'id' %}{% do ctor_params.append(field.type | java_type ~ ' ' ~ field.name) %}{% endfor %}
+{% for comp in entity.compositions %}{% do ctor_params.append('List<' ~ comp.name ~ '> ' ~ (comp.name | lower_first) ~ 's') %}{% endfor %}
+{% for agg in entity.aggregations %}{% do ctor_params.append(agg.name ~ ' ' ~ (agg.name | lower_first)) %}{% endfor %}
+{% if entity.is_root %}{% do ctor_params.append('LocalDateTime createdAt') %}{% do ctor_params.append('LocalDateTime updatedAt') %}{% endif %}
+    public {{ entity.name }}(
+{% for p in ctor_params %}
+            {{ p }}{% if not loop.last %},{% endif %}
+
+{% endfor %}
+    ) {
+{% if entity.is_root %}
+        this.id = id;
+{% endif %}
+{% for field in entity.fields if field.name != 'id' %}
+        this.{{ field.name }} = {{ field.name }};
+{% endfor %}
+{% for comp in entity.compositions %}
+        this.{{ comp.name | lower_first }}s = {{ comp.name | lower_first }}s;
+{% endfor %}
+{% for agg in entity.aggregations %}
+        this.{{ agg.name | lower_first }} = {{ agg.name | lower_first }};
+{% endfor %}
+{% if entity.is_root %}
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+{% endif %}
+    }
+
+{% if entity.is_root %}
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
+
+{% endif %}
+{% for field in entity.fields if field.name != 'id' %}
+    public {{ field.type | java_type }} get{{ field.name | upper_first }}() { return {{ field.name }}; }
+    public void set{{ field.name | upper_first }}({{ field.type | java_type }} {{ field.name }}) { this.{{ field.name }} = {{ field.name }}; }
+
+{% endfor %}
+{% for comp in entity.compositions %}
+    public List<{{ comp.name }}> get{{ comp.name }}s() { return {{ comp.name | lower_first }}s; }
+    public void set{{ comp.name }}s(List<{{ comp.name }}> {{ comp.name | lower_first }}s) { this.{{ comp.name | lower_first }}s = {{ comp.name | lower_first }}s; }
+
+{% endfor %}
+{% for agg in entity.aggregations %}
+    public {{ agg.name }} get{{ agg.name }}() { return {{ agg.name | lower_first }}; }
+    public void set{{ agg.name }}({{ agg.name }} {{ agg.name | lower_first }}) { this.{{ agg.name | lower_first }} = {{ agg.name | lower_first }}; }
+
+{% endfor %}
+{% if entity.is_root %}
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+{% endif %}
+}

@@ -1,60 +1,55 @@
-from code_generator.clean.clean_code_generator import CleanCodeGenerator
-from code_generator.pojo.pojo_code_generator import PoJoCodeGenerator
-from lexer.lexer import Lexer
+#!/usr/bin/env python3
+import argparse
+import sys
 from pathlib import Path
-import json
 
-from models.project_model import Project
-from semantic_analyzer.semantic_analyzer import SemanticAnalyzer
-import os
-import shutil
+sys.path.insert(0, str(Path(__file__).parent / "src"))
 
+from backend.spring_boot_clean.generator import SpringBootCleanGenerator
+from frontend.drawio.drawio_frontend import DrawIOFrontend
+from middleend.semantic_analyzer import SemanticAnalyzer
+from pipeline.pipeline import Pipeline
 
-def main():
-
-    diagram = Path("data/class-diagram-example.drawio")
-    lexer = Lexer(diagram.read_text("utf-8"))
-
-    result = Path("lexer.json")
-    lexer_result = lexer.execute()
-    result.write_text(json.dumps(lexer_result))
-
-    semantic_analyzer = SemanticAnalyzer(lexer_result)
-    classes = semantic_analyzer.execute()
-
-    pojo_generator = PoJoCodeGenerator(
-        classes, "templates/java/simple_class.html", "out")
-
-    pojo_generator.execute()
-
-    project = Project("org.enspy.snappy.server", classes, [])
-    shutil.rmtree("demo\src\main\java\org\enspy\snappy\server\domain")
-    shutil.rmtree("demo\src\main\java\org\enspy\snappy\server\infrastructure")
-    shutil.rmtree("demo\src\main\java\org\enspy\snappy\server\presentation")
-    clean_generator = CleanCodeGenerator(
-        project, "templates/java-clean", "demo\src\main\java\org\enspy\snappy\server")
-
-    clean_generator.execute()
+TEMPLATE_DIR = Path(__file__).parent / "src" / "backend" / "spring_boot_clean" / "templates"
 
 
-"""pom.xml
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        prog="uml2code",
+        description="ER-to-Spring-Boot-CRUD generator (Clean Architecture)",
+    )
+    parser.add_argument("input", help="Path to the input diagram file")
+    parser.add_argument(
+        "--package", required=True,
+        help="Java base package (e.g. com.example.myapp)",
+    )
+    parser.add_argument(
+        "--output", required=True,
+        help="Root output directory for generated source files",
+    )
+    args = parser.parse_args()
 
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.17.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.5.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-        </dependency>
-"""
+    input_path = Path(args.input)
+    output_dir = Path(args.output)
+
+    if not input_path.exists():
+        print(f"Error: input file '{input_path}' not found", file=sys.stderr)
+        sys.exit(1)
+
+    pipeline = Pipeline(
+        frontend=DrawIOFrontend(),
+        analyzer=SemanticAnalyzer(),
+        backend=SpringBootCleanGenerator(TEMPLATE_DIR),
+    )
+
+    files = pipeline.run(
+        source=input_path.read_text("utf-8"),
+        package=args.package,
+        output_dir=output_dir,
+    )
+
+    print(f"Generated {len(files)} files -> {output_dir}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

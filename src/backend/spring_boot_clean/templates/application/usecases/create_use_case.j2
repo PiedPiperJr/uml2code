@@ -1,0 +1,38 @@
+package {{ ir.package }}.application.usecases.crud.{{ entity.name | lower }};
+
+import {{ ir.package }}.application.dto.Create{{ entity.name }}Request;
+import {{ ir.package }}.application.dto.{{ entity.name }}Response;
+import {{ ir.package }}.application.mappers.{{ entity.name }}DtoMapper;
+import {{ ir.package }}.application.ports.crud.{{ entity.name | lower }}.ICreate{{ entity.name }};
+import {{ ir.package }}.domain.entities.{{ entity.name }};
+import {{ ir.package }}.domain.repositories.I{{ entity.name }}Repository;
+
+public class Create{{ entity.name }}UseCase implements ICreate{{ entity.name }} {
+
+    private final I{{ entity.name }}Repository repository;
+    private final {{ entity.name }}DtoMapper mapper;
+
+    public Create{{ entity.name }}UseCase(I{{ entity.name }}Repository repository, {{ entity.name }}DtoMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
+
+    @Override
+    public {{ entity.name }}Response execute(Create{{ entity.name }}Request request) {
+        {{ entity.name }} entity = toDomain(request);
+        {{ entity.name }} saved  = persist(entity);
+        return toResponse(saved);
+    }
+
+    private {{ entity.name }} toDomain(Create{{ entity.name }}Request request) {
+        return mapper.toDomain(request);
+    }
+
+    private {{ entity.name }} persist({{ entity.name }} entity) {
+        return repository.save(entity);
+    }
+
+    private {{ entity.name }}Response toResponse({{ entity.name }} entity) {
+        return mapper.toResponse(entity);
+    }
+}

@@ -1,0 +1,61 @@
+package {{ ir.package }}.infrastructure.config;
+
+{% for entity in ir.entities %}
+import {{ ir.package }}.application.mappers.{{ entity.name }}DtoMapper;
+import {{ ir.package }}.application.usecases.crud.{{ entity.name | lower }}.Create{{ entity.name }}UseCase;
+import {{ ir.package }}.application.usecases.crud.{{ entity.name | lower }}.FindById{{ entity.name }}UseCase;
+import {{ ir.package }}.application.usecases.crud.{{ entity.name | lower }}.FindAll{{ entity.name }}UseCase;
+import {{ ir.package }}.application.usecases.crud.{{ entity.name | lower }}.Update{{ entity.name }}UseCase;
+import {{ ir.package }}.application.usecases.crud.{{ entity.name | lower }}.Delete{{ entity.name }}UseCase;
+import {{ ir.package }}.domain.repositories.I{{ entity.name }}Repository;
+{% endfor %}
+import org.mapstruct.factory.Mappers;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class BeanConfig {
+{% for entity in ir.entities %}
+
+    // ── {{ entity.name }} ─────────────────────────────────────────────────────
+
+    @Bean
+    public {{ entity.name }}DtoMapper {{ entity.name | lower_first }}DtoMapper() {
+        return Mappers.getMapper({{ entity.name }}DtoMapper.class);
+    }
+
+    @Bean
+    public Create{{ entity.name }}UseCase create{{ entity.name }}UseCase(
+            I{{ entity.name }}Repository repository,
+            {{ entity.name }}DtoMapper mapper) {
+        return new Create{{ entity.name }}UseCase(repository, mapper);
+    }
+
+    @Bean
+    public FindById{{ entity.name }}UseCase findById{{ entity.name }}UseCase(
+            I{{ entity.name }}Repository repository,
+            {{ entity.name }}DtoMapper mapper) {
+        return new FindById{{ entity.name }}UseCase(repository, mapper);
+    }
+
+    @Bean
+    public FindAll{{ entity.name }}UseCase findAll{{ entity.name }}UseCase(
+            I{{ entity.name }}Repository repository,
+            {{ entity.name }}DtoMapper mapper) {
+        return new FindAll{{ entity.name }}UseCase(repository, mapper);
+    }
+
+    @Bean
+    public Update{{ entity.name }}UseCase update{{ entity.name }}UseCase(
+            I{{ entity.name }}Repository repository,
+            {{ entity.name }}DtoMapper mapper) {
+        return new Update{{ entity.name }}UseCase(repository, mapper);
+    }
+
+    @Bean
+    public Delete{{ entity.name }}UseCase delete{{ entity.name }}UseCase(
+            I{{ entity.name }}Repository repository) {
+        return new Delete{{ entity.name }}UseCase(repository);
+    }
+{% endfor %}
+}

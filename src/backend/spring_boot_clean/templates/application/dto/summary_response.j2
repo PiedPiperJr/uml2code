@@ -1,0 +1,29 @@
+package {{ ir.package }}.application.dto;
+{% set ns = namespace(need_date=false, need_datetime=false) %}
+{% for field in entity.fields if field.name != 'id' %}
+{% if field.type | java_type == 'LocalDate' %}{% set ns.need_date = true %}{% endif %}
+{% if field.type | java_type == 'LocalDateTime' %}{% set ns.need_datetime = true %}{% endif %}
+{% endfor %}
+import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
+{% if ns.need_date %}
+import java.time.LocalDate;
+{% endif %}
+{% if ns.need_datetime %}
+import java.time.LocalDateTime;
+{% endif %}
+
+/**
+ * Lightweight read model for {{ entity.name }} list views.
+ * Contains identity and the primary descriptive fields; omits audit fields.
+ */
+@Schema(description = "Summary representation of a {{ entity.name }}")
+public record {{ entity.name }}SummaryResponse(
+        @Schema(description = "Unique identifier") UUID id{% set own_fields = entity.fields | selectattr('name', 'ne', 'id') | list %}{% if own_fields %},{% endif %}
+
+{% for field in own_fields %}
+        @Schema(description = "{{ field.name | upper_first }} of the {{ entity.name | lower }}")
+        {{ field.type | java_type }} {{ field.name }}{% if not loop.last %},{% endif %}
+
+{% endfor %}
+) {}

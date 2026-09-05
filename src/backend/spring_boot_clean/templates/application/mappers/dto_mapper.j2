@@ -1,0 +1,24 @@
+package {{ ir.package }}.application.mappers;
+
+import {{ ir.package }}.application.dto.Create{{ entity.name }}Request;
+import {{ ir.package }}.application.dto.Update{{ entity.name }}Request;
+import {{ ir.package }}.application.dto.{{ entity.name }}Response;
+import {{ ir.package }}.application.dto.{{ entity.name }}SummaryResponse;
+import {{ ir.package }}.domain.entities.{{ entity.name }};
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+
+@Mapper
+public interface {{ entity.name }}DtoMapper {
+
+    @Mapping(target = "id", ignore = true)
+    {{ entity.name }} toDomain(Create{{ entity.name }}Request request);
+
+    @Mapping(target = "id", ignore = true)
+    void updateDomain(@MappingTarget {{ entity.name }} target, Update{{ entity.name }}Request request);
+
+    {{ entity.name }}Response toResponse({{ entity.name }} entity);
+
+    {{ entity.name }}SummaryResponse toSummaryResponse({{ entity.name }} entity);
+}

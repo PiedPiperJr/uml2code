@@ -1,0 +1,10 @@
+package {{ ir.package }}.application.ports.crud.{{ entity.name | lower }};
+
+import {{ ir.package }}.application.dto.Update{{ entity.name }}Request;
+import {{ ir.package }}.application.dto.{{ entity.name }}Response;
+import java.util.UUID;
+
+/** Entry point into the application — use-case contract for updating a {{ entity.name }}. */
+public interface IUpdate{{ entity.name }} {
+    {{ entity.name }}Response execute(UUID id, Update{{ entity.name }}Request request);
+}

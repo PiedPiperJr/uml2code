@@ -1,0 +1,25 @@
+package {{ ir.package }}.domain.repositories;
+
+import {{ ir.package }}.domain.entities.{{ entity.name }};
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+/**
+ * Contract defined by the domain — what the application requires from any persistence mechanism.
+ * Implemented in infrastructure; the domain never knows how.
+ */
+public interface I{{ entity.name }}Repository {
+
+    {{ entity.name }} save({{ entity.name }} entity);
+
+    Optional<{{ entity.name }}> findById(UUID id);
+
+    List<{{ entity.name }}> findAll(int page, int size);
+
+    long count();
+
+    boolean existsById(UUID id);
+
+    void deleteById(UUID id);
+}

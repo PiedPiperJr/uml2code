@@ -1,0 +1,118 @@
+package {{ ir.package }}.presentation.rest;
+
+import {{ ir.package }}.application.dto.Create{{ entity.name }}Request;
+import {{ ir.package }}.application.dto.Update{{ entity.name }}Request;
+import {{ ir.package }}.application.dto.{{ entity.name }}Response;
+import {{ ir.package }}.application.dto.{{ entity.name }}SummaryResponse;
+import {{ ir.package }}.application.ports.crud.{{ entity.name | lower }}.ICreate{{ entity.name }};
+import {{ ir.package }}.application.ports.crud.{{ entity.name | lower }}.IDelete{{ entity.name }};
+import {{ ir.package }}.application.ports.crud.{{ entity.name | lower }}.IFindAll{{ entity.name }};
+import {{ ir.package }}.application.ports.crud.{{ entity.name | lower }}.IFindById{{ entity.name }};
+import {{ ir.package }}.application.ports.crud.{{ entity.name | lower }}.IUpdate{{ entity.name }};
+import {{ ir.package }}.presentation.exception.ApiError;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.UUID;
+
+@Tag(name = "{{ entity.name }}", description = "CRUD operations for {{ entity.name }} resources")
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/{{ entity.name | lower }}s")
+public class {{ entity.name }}Controller {
+
+    private final ICreate{{ entity.name }}    createUseCase;
+    private final IFindById{{ entity.name }}  findByIdUseCase;
+    private final IFindAll{{ entity.name }}   findAllUseCase;
+    private final IUpdate{{ entity.name }}    updateUseCase;
+    private final IDelete{{ entity.name }}    deleteUseCase;
+
+    // ── Create ───────────────────────────────────────────────────────────────
+
+    @Operation(summary = "Create a {{ entity.name }}",
+               description = "Persists a new {{ entity.name }} and returns the created resource.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Created",
+                     content = @Content(schema = @Schema(implementation = {{ entity.name }}Response.class))),
+        @ApiResponse(responseCode = "422", description = "Validation failed",
+                     content = @Content(schema = @Schema(implementation = ApiError.class)))
+    })
+    @PostMapping
+    public ResponseEntity<{{ entity.name }}Response> create(
+            @Valid @RequestBody Create{{ entity.name }}Request request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(createUseCase.execute(request));
+    }
+
+    // ── Read ─────────────────────────────────────────────────────────────────
+
+    @Operation(summary = "Get a {{ entity.name }} by ID",
+               description = "Returns the full representation of a single {{ entity.name }}.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Found",
+                     content = @Content(schema = @Schema(implementation = {{ entity.name }}Response.class))),
+        @ApiResponse(responseCode = "404", description = "{{ entity.name }} not found",
+                     content = @Content(schema = @Schema(implementation = ApiError.class)))
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<{{ entity.name }}Response> findById(
+            @Parameter(description = "UUID of the {{ entity.name | lower }}") @PathVariable UUID id) {
+        return ResponseEntity.ok(findByIdUseCase.execute(id));
+    }
+
+    @Operation(summary = "List all {{ entity.name }}s",
+               description = "Returns a paginated list of {{ entity.name }} summaries. "
+                           + "Use `page`, `size`, and `sort` query parameters to control pagination.")
+    @ApiResponse(responseCode = "200", description = "OK")
+    @GetMapping
+    public ResponseEntity<Page<{{ entity.name }}SummaryResponse>> findAll(
+            @ParameterObject Pageable pageable) {
+        return ResponseEntity.ok(findAllUseCase.execute(pageable));
+    }
+
+    // ── Update ────────────────────────────────────────────────────────────────
+
+    @Operation(summary = "Replace a {{ entity.name }}",
+               description = "Full update — all fields in the request body overwrite the stored values.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Updated",
+                     content = @Content(schema = @Schema(implementation = {{ entity.name }}Response.class))),
+        @ApiResponse(responseCode = "404", description = "{{ entity.name }} not found",
+                     content = @Content(schema = @Schema(implementation = ApiError.class))),
+        @ApiResponse(responseCode = "422", description = "Validation failed",
+                     content = @Content(schema = @Schema(implementation = ApiError.class)))
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<{{ entity.name }}Response> update(
+            @Parameter(description = "UUID of the {{ entity.name | lower }}") @PathVariable UUID id,
+            @Valid @RequestBody Update{{ entity.name }}Request request) {
+        return ResponseEntity.ok(updateUseCase.execute(id, request));
+    }
+
+    // ── Delete ────────────────────────────────────────────────────────────────
+
+    @Operation(summary = "Delete a {{ entity.name }}",
+               description = "Permanently removes the {{ entity.name }}. Returns 204 on success, 404 if not found.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "204", description = "Deleted"),
+        @ApiResponse(responseCode = "404", description = "{{ entity.name }} not found",
+                     content = @Content(schema = @Schema(implementation = ApiError.class)))
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(
+            @Parameter(description = "UUID of the {{ entity.name | lower }}") @PathVariable UUID id) {
+        deleteUseCase.execute(id);
+        return ResponseEntity.noContent().build();
+    }
+}

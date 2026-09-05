@@ -1,0 +1,12 @@
+package {{ ir.package }}.infrastructure.adapters.persistence;
+
+import {{ ir.package }}.domain.entities.{{ entity.name }};
+import {{ ir.package }}.domain.ports.driven.I{{ entity.name }}Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import java.util.UUID;
+
+@Repository
+public interface {{ entity.name }}Repository
+        extends JpaRepository<{{ entity.name }}, UUID>, I{{ entity.name }}Repository {
+}

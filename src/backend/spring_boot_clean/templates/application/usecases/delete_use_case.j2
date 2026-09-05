@@ -1,0 +1,31 @@
+package {{ ir.package }}.application.usecases.crud.{{ entity.name | lower }};
+
+import {{ ir.package }}.application.ports.crud.{{ entity.name | lower }}.IDelete{{ entity.name }};
+import {{ ir.package }}.domain.exceptions.EntityNotFoundException;
+import {{ ir.package }}.domain.repositories.I{{ entity.name }}Repository;
+import java.util.UUID;
+
+public class Delete{{ entity.name }}UseCase implements IDelete{{ entity.name }} {
+
+    private final I{{ entity.name }}Repository repository;
+
+    public Delete{{ entity.name }}UseCase(I{{ entity.name }}Repository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public void execute(UUID id) {
+        assertExists(id);
+        remove(id);
+    }
+
+    private void assertExists(UUID id) {
+        if (!repository.existsById(id)) {
+            throw new EntityNotFoundException("{{ entity.name }}", id);
+        }
+    }
+
+    private void remove(UUID id) {
+        repository.deleteById(id);
+    }
+}
